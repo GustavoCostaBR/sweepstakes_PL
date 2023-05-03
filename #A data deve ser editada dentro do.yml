@@ -1,0 +1,10 @@
+#A data deve ser editada dentro do formato pré-estabelecido, aconselho usar o dia imediatamente anterior ao início da rodada, tendo em vista que a versào atual do programa considera todos os jogos começando meia noite (exato início do dia), apesar dele jogar a informação certa de hora no forms (falta ajustar o horário de verão). O formato da data é ano, mês (sem o zero, abril é 4 e não 04), dia (sem o zero), hora, minutos.
+Inicio_Rodada: datetime(2023, 7, 29, 20, 30, tzinfo=gmt)
+
+
+#Para o fim recomendo usar o dia imediatamente posterior, zerado na hora, podemos testar.
+Fim_Rodada: datetime(2023, 8, 1, 20, 30, tzinfo=gmt)
+
+#Sempre use a URL do schedule.
+URL_FACS: 'https://www.worldfootball.net/all_matches/eng-fa-community-shield-2022/'
+

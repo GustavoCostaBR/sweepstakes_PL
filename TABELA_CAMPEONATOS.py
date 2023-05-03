@@ -1,0 +1,133 @@
+import sqlite3
+import urllib.request
+from bs4 import BeautifulSoup
+import ssl
+import pdb
+
+# Ignore SSL certificate errors
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+
+# connect to the database
+conn = sqlite3.connect('championships.db')
+
+# https://sco.worldfootball.net/schedule/sco-premiership-2022-aufstieg-spieltag/5/
+# 'https://sco.worldfootball.net/schedule/sco-premiership-2023-championship-spieltag/38'
+
+# create a cursor object
+cursor = conn.cursor()
+links = ['https://www.worldfootball.net/schedule/eng-premier-league-2022-2023-spieltag/38/', 'https://sco.worldfootball.net/schedule/sco-premiership-2022-2023-spieltag/33/', 'https://www.worldfootball.net/schedule/eng-championship-2022-2023-spieltag/46/', 'https://sco.worldfootball.net/schedule/sco-premiership-2023-championship-spieltag/38', 'https://sco.worldfootball.net/schedule/sco-premiership-2023-relegation-spieltag/38/']
+table_names = ['premiere_league_table', 'scottish_premiership_table', 'eng_championship_table', 'scottish_premiership_table_championship', 'scottish_premiership_table_relegation']
+
+for index2,table in enumerate(table_names):
+	# create the table with an auto-generated position column
+	cursor.execute(f'''CREATE TABLE IF NOT EXISTS {table}
+					(position INTEGER PRIMARY KEY,
+					[Nome do time] TEXT UNIQUE,
+					[Número de jogos] INTEGER,
+					vitórias INTEGER,
+					empates INTEGER,
+					derrotas INTEGER,
+					[gols pró] INTEGER,
+					[gols contra] INTEGER,
+					[saldo de gols] INTEGER,
+					pontos INTEGER)''')
+
+	headers = {
+	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/110.0'}
+	url = links[index2]
+
+	req = urllib.request.Request(url, headers=headers)
+	html1 = urllib.request.urlopen(req, context=ctx).read()
+
+	f=0
+	soup = BeautifulSoup(html1, 'lxml')
+	body = soup.findAll('table')
+	infos_tab = {}
+	contador1 = 0
+	for tags in body:
+		# try:
+		# print(tags)
+		# pdb.set_trace()
+
+		# pdb.set_trace()
+		t2 = tags.find_all('tr')
+		for index, it in enumerate(t2):
+			it2 = it.find_all('td')
+			if index < len(t2) and t2[index] is not None and t2[index].find_next_sibling() is not None:
+				p2=t2[index].find_next_sibling()
+				p3=p2.find('td')
+				# print(p3)
+
+			try:
+				if int(it2[0].text) < 100 and int(it2[0].text) > 0:
+					f=1
+			except:
+				try:
+					if int(p3.text) < 100 and int(p3.text) > 0 :
+						# print("aboboras")
+						f=1
+					else:
+						# print('a' + it2[0].text + 'a')
+						f=0
+				except:
+					continue
+			for contador in range(len(it2)):
+				# pdb.set_trace()
+				if f == 1:
+					try:
+						times = it2[contador].find('a').text
+						if times is not None:
+							if "AFC " in times:
+								times2 = times.replace("AFC ", "")
+							elif " AFC" in times:
+								times2 = times.replace(" AFC", "")
+							elif "FC " in times:
+								times2 = times.replace("FC ", "")
+							elif " FC" in times:
+								times2 = times.replace(" FC", "")
+							else:
+								times2 = times
+						infos_tab[(contador1)] = []
+						infos_tab[(contador1)].append(times2)
+					except:
+						try:
+							if ":" in it2[contador].text:
+								parts = it2[contador].text.split(":")
+								infos_tab[(contador1)].append(parts[0])
+								infos_tab[(contador1)].append(parts[1])
+							else:
+								infos_tab[(contador1)].append(it2[contador].text)
+						except:
+							continue
+			contador1 = contador1 + 1
+
+	cursor.execute(f"SELECT COUNT(*) FROM {table}")
+	result = cursor.fetchone()[0]
+	# Only verify if the table exists
+	if result > 0:
+		# If exists, update the value
+		for row in range(len(infos_tab)):
+			values = infos_tab[row+1][1:] + [infos_tab[row+1][0]]
+			cursor.execute(f'UPDATE {table} SET ([Número de jogos], vitórias, empates, derrotas, [gols pró], [gols contra], [saldo de gols], pontos) = (?, ?, ?, ?, ?, ?, ?, ?) WHERE [Nome do time] = ?', values)
+			print(values)
+			conn.commit()
+	else:
+		for row in range(len(infos_tab)):
+			cursor.execute(f"INSERT INTO {table} ([Nome do time], [Número de jogos], vitórias, empates, derrotas, [gols pró], [gols contra], [saldo de gols], pontos) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", infos_tab[(row+1)])
+			conn.commit()
+
+
+	# # # select the data from the table with an ordered position column
+	cursor.execute(f"SELECT row_number() OVER (ORDER BY pontos DESC, [saldo de gols] DESC, [gols pró] DESC) AS position, [Nome do time], pontos, [saldo de gols] FROM {table}")
+
+	#print the results
+	rows = cursor.fetchall()
+	for row in rows:
+		print(row)
+
+	# # commit the changes and close the connection
+	conn.commit()
+conn.commit
+conn.close()

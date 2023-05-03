@@ -1,0 +1,385 @@
+Rivalidades da Inglaterra:
+
+Aldershot Town
+
+Rivais: Reading
+
+Arsenal
+
+Rivais: Chelsea, Manchester United e Tottenham Hotspur
+
+Aston Villa
+
+Rivais: Birmingham City, West Bromwich Albion e Wolverhampton Wanderers
+
+Barnet
+
+Rivais: Wycombe Wanderers
+
+Barnsley
+
+Rivais: Doncaster Rovers e Rotherham United
+
+Birmingham City
+
+Rivais: Aston Villa, West Bromwich Albion e Wolverhamtpon Wanderers
+
+Blackburn Rovers
+
+Rivais: Burnley
+
+Blackpool
+
+Rivais: Preston North End
+
+Bolton Wanderers
+
+Rivais: Bury
+
+Bournemouth
+
+Rivais: Southampton
+
+Bradford City
+
+Rivais: Leeds United, Bradford Park Avenue, Huddersfield Town e Halifax Town
+
+Bradford Park Avenue
+
+Rivais: Bradford City e Halifax Town
+
+Brentford
+
+Rivais: Fulham e Queen's Park Rangers
+
+Brighton & Hove Albion
+
+Rivais: Crystal Palace
+
+Bristol City
+
+Rivais: Bristol Rovers e Cardiff City
+
+Bristol Rovers
+
+Rivais: Bristol City e Swindon Town
+
+Burnley
+
+Rivais: Blackburn Rovers
+
+Bury
+
+Rivais: Bolton Wanderers e Rochdale
+
+Cambridge United
+
+Rivais: Colchester United e Peterborough United
+
+Cardiff City
+
+Rivais: Swansea City, Bristol City e Newport County
+
+Carlisle United
+
+Rivais: Workington
+
+Charlton Athletic
+
+Rivais: Crystal Palace e Millwall
+
+Chelsea
+
+Rivais: Arsenal, Leeds United, Manchester United, Tottenham Hotspur, Fulham e Queen's Park Rangers
+
+Chester
+
+Rivais: Wrexham e Tranmere Rovers
+
+Chesterfield
+
+Rivais: Mansfield Town
+
+Colchester United
+
+Rivais: Southend United e Cambridge United
+
+Coventry City
+
+Rivais: Leicester City
+
+Crewe Alexandra
+
+Rivais: Port Vale e Stockport County
+
+Crystal Palace
+
+Rivais: Brighton & Hove Albion, Charlton Athletic e Millwall
+
+Darlington
+
+Rivais: Hartlepool United
+
+Derby County
+
+Rivais: Nottingham Forest, Leicester City e Notts County
+
+Doncaster Rovers
+
+Rivais: Barnsley, Rotherham United e Scunthorpe United
+
+Everton
+
+Rivais: Liverpool
+
+Exeter City
+
+Rivais: Plymouth Argyle e Torquay United
+
+Fulham
+
+Rivais: Brentford, Chelsea e Queen's Park Rangers
+
+Gainsborough Trinity
+
+Rivais: Lincoln City
+
+Grimsby Town
+
+Rivais: Hull City, Lincoln City e Scunthorpe United
+
+Halifax Town
+
+Rivais: Bradford City e Bradford Park Avenue
+
+Hartlepool United
+
+Rivais: Darlington
+
+Hereford United
+
+Rivais: Shrewsbury Town
+
+Huddersfield Town
+
+Rivais: Leeds United e Bradford City
+
+Hull City
+
+Rivais: Grimsby Town e York City
+
+Ipswich Town
+
+Rivais: Norwich City
+
+Leeds United
+
+Rivais: Chelsea, Manchester United, Bradford City e Huddersfield Town
+
+Leicester City
+
+Rivais: Coventry City, Derby County e Nottingham Forest
+
+Leyton Orient
+
+Rivais: West Ham United
+
+Lincoln City
+
+Rivais: Grimsby Town, Scunthorpe United e Gainsborough Trinity
+
+Liverpool
+
+Rivais: Everton, Manchester City e Manchester United
+
+Luton Town
+
+Rivais: Watford
+
+Manchester City
+
+Rivais: Liverpool e Manchester United
+
+Manchester United
+
+Rivais: Arsenal, Chelsea, Leeds United, Liverpool e Manchester City
+
+Mansfield Town
+
+Rivais: Chesterfield e Notts County
+
+Milton Keynes Dons
+
+Rivais: Wimbledon
+
+Middlesbrough
+
+Rivais: Newcastle United e Sunderland
+
+Millwall
+
+Rivais: Charlton Athletic, Crystal Palace e West Ham United
+
+Newcastle United
+
+Rivais: Sunderland e Middlesbrough
+
+Newport County
+
+Rivais: Cardiff City
+
+Northampton Town
+
+Rivais: Peterborough United
+
+Norwich City
+
+Rivais: Ipswich Town
+
+Nottingham Forest
+
+Rivais: Derby County, Notts County e Leicester City
+
+Notts County
+
+Rivais: Nottingham Forest, Derby County e Mansfield Town
+
+Oldham Athletic
+
+Rivais: Rochdale
+
+Oxford United
+
+Rivais: Reading e Swindon Town
+
+Peterborough United
+
+Rivais: Northampton Town e Cambridge United
+
+Plymouth Argyle
+
+Rivais: Exeter City e Torquay United
+
+Port Vale
+
+Rivais: Crewe Alexandra e Stoke City
+
+Portsmouth
+
+Rivais: Southampton
+
+Preston North End
+
+Rivais: Blackpool
+
+Queen's Park Rangers
+
+Rivais: Brentford, Chelsea e Fulham
+
+Reading
+
+Rivais: Oxford United, Swindon Town e Aldershot Town
+
+Rochdale
+
+Rivais: Oldham Athletic e Bury
+
+Rotherham United
+
+Rivais: Barnsley e Doncaster Rovers
+
+Scunthorpe United
+
+Rivais: Doncaster Rovers, Grimsby Town e Lincoln City
+
+Sheffield United
+
+Rivais: Sheffield Wednesday
+
+Sheffield Wednesday
+
+Rivais: Sheffield United
+
+Shrewsbury Town
+
+Rivais: Walsall e Hereford United
+
+Southampton
+
+Rivais: Bournemouth e Portsmouth
+
+Southend United
+
+Rivais: Colchester United
+
+Stockport County
+
+Rivais: Crewe Alexandra
+
+Stoke City
+
+Rivais: Port Vale
+
+Sunderland
+
+Rivais: Middlesbrough e Newcastle United
+
+Swansea City
+
+Rivais: Cardiff City
+
+Swindon Town
+
+Rivais: Reading, Oxford United e Bristol Rovers
+
+Torquay United
+
+Rivais: Exeter City e Plymouth Argyle
+
+Tottenham Hotspur
+
+Rivais: Arsenal, Chelsea e West Ham United
+
+Tranmere Rovers
+
+Rivais: Chester e Wrexham
+
+Walsall
+
+Rivais: Shrewsbury Town
+
+Watford
+
+Rivais: Luton Town
+
+West Bromwich Albion
+
+Rivais: Wolverhampton Wanderers, Birmingham City e Aston Villa
+
+West Ham United
+
+Rivais: Tottenham Hotspur, Millwall e Leyton Orient
+
+Wimbledon
+
+Rivais: Milton Keynes Dons
+
+Workington
+
+Rivais: Carlisle United
+
+Wolverhampton Wanderers
+
+Rivais: West Bromwich Albion. Birmingham City e Aston Villa
+
+Wrexham
+
+Rivais: Chester e Tranmere Rovers
+
+Wycombe Wanderers
+
+Rivais: Barnet
+
+York City
+
+Rivais: Hull City
