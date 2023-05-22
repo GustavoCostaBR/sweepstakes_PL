@@ -3,6 +3,8 @@ import urllib.request
 from bs4 import BeautifulSoup
 import ssl
 import pdb
+import yaml
+import subprocess
 
 # Ignore SSL certificate errors
 ctx = ssl.create_default_context()
@@ -12,16 +14,18 @@ ctx.verify_mode = ssl.CERT_NONE
 # connect to the database
 conn = sqlite3.connect('championships.db')
 
-# https://sco.worldfootball.net/schedule/sco-premiership-2022-aufstieg-spieltag/5/
-# 'https://sco.worldfootball.net/schedule/sco-premiership-2023-championship-spieltag/38'
-
 # create a cursor object
 cursor = conn.cursor()
-links = ['https://www.worldfootball.net/schedule/eng-premier-league-2022-2023-spieltag/38/', 'https://sco.worldfootball.net/schedule/sco-premiership-2022-2023-spieltag/33/', 'https://www.worldfootball.net/schedule/eng-championship-2022-2023-spieltag/46/', 'https://sco.worldfootball.net/schedule/sco-premiership-2023-championship-spieltag/38', 'https://sco.worldfootball.net/schedule/sco-premiership-2023-relegation-spieltag/38/']
-table_names = ['premiere_league_table', 'scottish_premiership_table', 'eng_championship_table', 'scottish_premiership_table_championship', 'scottish_premiership_table_relegation']
+
+with open('tabelas.yml', 'r') as f:
+    data = yaml.load(f, Loader=yaml.FullLoader)
+
+links = data['Links']
+table_names = data['Table_Names']
 
 for index2,table in enumerate(table_names):
 	# create the table with an auto-generated position column
+	cursor.execute(f'''DROP TABLE IF EXISTS {table}''')
 	cursor.execute(f'''CREATE TABLE IF NOT EXISTS {table}
 					(position INTEGER PRIMARY KEY,
 					[Nome do time] TEXT UNIQUE,
