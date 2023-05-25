@@ -1,5 +1,5 @@
 #As tabelas devem seguir a mesma ordem, tanto nos links quanto nomes, ou o programa apresentará problemas.
-Links: ['https://www.worldfootball.net/schedule/eng-premier-league-2022-2023-spieltag/1/', 'https://sco.worldfootball.net/schedule/sco-premiership-2022-2023-spieltag/33/', 'https://www.worldfootball.net/schedule/eng-championship-2022-2023-spieltag/46/', 'https://sco.worldfootball.net/schedule/sco-premiership-2023-championship-spieltag/38', 'https://sco.worldfootball.net/schedule/sco-premiership-2023-relegation-spieltag/38/']
+Links: ['https://www.worldfootball.net/schedule/eng-premier-league-2022-2023-spieltag/38/', 'https://sco.worldfootball.net/schedule/sco-premiership-2022-2023-spieltag/33/', 'https://www.worldfootball.net/schedule/eng-championship-2022-2023-spieltag/46/', 'https://sco.worldfootball.net/schedule/sco-premiership-2023-championship-spieltag/38', 'https://sco.worldfootball.net/schedule/sco-premiership-2023-relegation-spieltag/38/']
 
 Table_Names: ['premiere_league_table', 'scottish_premiership_table', 'eng_championship_table', 'scottish_premiership_table_championship', 'scottish_premiership_table_relegation']
 

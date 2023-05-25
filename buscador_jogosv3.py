@@ -187,7 +187,7 @@ for u in range(len(ligas_times_diferentes)):
 			except:
 				continue
 		Rivalidades.append(times_desconsiderados)
-	if u<5 and url == ligas_times_ingleses_nao_listados[u]:
+	if u<6 and url == ligas_times_ingleses_nao_listados[u]:
 		f = 0
 		url2 = urls_times_ingleses_nao_listados[u]
 		req2 = req = urllib.request.Request(url2, headers=headers)

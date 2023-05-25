@@ -1,6 +1,6 @@
 #A data deve ser editada dentro do formato pré-estabelecido, aconselho usar o dia imediatamente anterior ao início da rodada, tendo em vista que a versào atual do programa considera todos os jogos começando meia noite (exato início do dia), apesar dele jogar a informação certa de hora no forms (falta ajustar o horário de verão). O formato da data é ano, mês (sem o zero, abril é 4 e não 04), dia (sem o zero), hora, minutos.
 # Inicio_Rodada: ['2022', '8', '19', '20', '30']
-Inicio_Rodada: ['2022', '5', '1', '20', '30']
+Inicio_Rodada: ['2022', '5', '19', '20', '30']
 
 
 #Para o fim recomendo usar o dia imediatamente posterior, zerado na hora, podemos testar.

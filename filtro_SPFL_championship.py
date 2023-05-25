@@ -17,7 +17,8 @@ temp0=[]
 
 cursor.execute(f"SELECT row_number() OVER (ORDER BY pontos DESC, [saldo de gols] DESC, [gols pró] DESC) AS position, [Nome do time], pontos, [saldo de gols], [Número de jogos]  FROM scottish_premiership_table")
 rows = cursor.fetchall()
-
+cursor.execute(f"SELECT row_number() OVER (ORDER BY pontos DESC, [saldo de gols] DESC, [gols pró] DESC) AS position, [Nome do time], pontos, [saldo de gols], [Número de jogos]  FROM scottish_premiership_table_championship")
+rows2 = cursor.fetchall()
 # for row in rows:
 # 	print(row)
 
@@ -41,7 +42,7 @@ for index, j in enumerate(temp):
 	# pdb.set_trace()
 	if index % 2 == 0:
 		# rodada 2 a 33
-		if rows[0][4] > 2:
+		if rows[0][4] > 2 and rows[0][4] < 33:
 			for row in rows:
 				if j in row:
 					temp1.append(row)
@@ -83,6 +84,85 @@ for index, j in enumerate(temp):
 				elif positionto_1_2 == 0 and diff <=5:
 					temp0.append(10)
 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
+					temp0.append(10)
+				else:
+					temp0.append(1)
+
+
+		#a partir da rodada 33
+		elif rows2[0][4] > 32 and rows2[0][4] < 38:
+			for row in rows2:
+				if j in row:
+					temp1.append(row)
+				elif temp[index+1] in row:
+					temp1.append(row)
+			diff = abs(temp1[index][2]-temp1[index+1][2])
+			positionto_1 = temp1[index][0] - rows2[0][0]
+			positionto_1_2 =  temp1[index+1][0] - rows2[0][0]
+			pointstofirst_1 = abs(temp1[index][2] - rows2[0][2])
+			# print(pointstofirst_1)
+			pointstofirst_2 = abs(temp1[index+1][2] - rows2[0][2])
+			# print(pointstofirst_2)
+			goalstofirts_1 = (rows2[0][3] - temp1[index][3])
+			goalstofirts_2 = (rows2[0][3] - temp1[index+1][3])
+			positionto_3 = temp1[index][0] - rows2[2][0]
+			positionto_3_2 =  temp1[index+1][0] - rows2[2][0]
+			pointstothird_1 = (rows2[2][2] - temp1[index][2])
+			pointstothird_2 = (rows2[2][2] - temp1[index+1][2])
+			goalstothird_1 = (rows2[2][3] - temp1[index][3])
+			goalstothird_2 = (rows2[2][3] - temp1[index+1][3])
+
+			#rodada 33 a 36
+			if rows2[0][4] < 36:
+				# print("aqui")
+			# critehrio 3 pontos/uel
+				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
+					temp0.append(9)
+
+			#critehrio primeiro colocado
+
+				elif positionto_1 == 0 and diff <=5:
+					# print(diff)
+					temp0.append(10)
+				elif positionto_1_2 == 0 and diff <=5:
+					# print(diff)
+					temp0.append(10)
+				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
+
+					temp0.append(10)
+				else:
+					temp0.append(1)
+			#rodada 37
+
+			elif rows2[0][4] == 36:
+
+			# critehrio 3 pontos/uel
+				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
+					temp0.append(9)
+
+			#critehrio primeiro colocado
+
+				elif positionto_1 == 0 and diff <=3:
+					temp0.append(10)
+				elif positionto_1_2 == 0 and diff <=3:
+					temp0.append(10)
+				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
+					temp0.append(10)
+				else:
+					temp0.append(1)
+			#rodada 38
+			elif rows2[0][4] == 37:
+
+				# critehrio 3 pontos/uel
+				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3 and goalstothird_1 <= 7 and goalstothird_2 <= 7:
+					temp0.append(9)
+
+			#critehrio primeiro colocado
+				elif positionto_1 == 0 and diff <=3 and goalstofirts_2 <= 7:
+					temp0.append(10)
+				elif positionto_1_2 == 0 and diff <=3 and goalstofirts_1 <= 7:
+					temp0.append(10)
+				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3 and goalstofirts_2 <= 7 and goalstofirts_1 <= 7:
 					temp0.append(10)
 				else:
 					temp0.append(1)

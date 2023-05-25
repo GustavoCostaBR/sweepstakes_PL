@@ -23,6 +23,7 @@ with open('tabelas.yml', 'r') as f:
 links = data['Links']
 table_names = data['Table_Names']
 
+
 for index2,table in enumerate(table_names):
 	# create the table with an auto-generated position column
 	cursor.execute(f'''DROP TABLE IF EXISTS {table}''')
@@ -44,7 +45,7 @@ for index2,table in enumerate(table_names):
 
 	req = urllib.request.Request(url, headers=headers)
 	html1 = urllib.request.urlopen(req, context=ctx).read()
-
+	zz=0
 	f=0
 	soup = BeautifulSoup(html1, 'lxml')
 	body = soup.findAll('table')
@@ -64,11 +65,14 @@ for index2,table in enumerate(table_names):
 				p3=p2.find('td')
 				# print(p3)
 
+			zz = 0
 			try:
 				if int(it2[0].text) < 100 and int(it2[0].text) > 0:
 					f=1
 			except:
 				try:
+					p2=t2[index].find_next_sibling()
+					p3=p2.find('td')
 					if int(p3.text) < 100 and int(p3.text) > 0 :
 						# print("aboboras")
 						f=1
@@ -76,7 +80,22 @@ for index2,table in enumerate(table_names):
 						# print('a' + it2[0].text + 'a')
 						f=0
 				except:
-					continue
+					try:
+						while zz == 0:
+							p2=p2.find_next_sibling()
+							p3=p2.find('td')
+							try:
+								if int(p3.text) < 100 and int(p3.text) > 0 :
+									# print("aboboras")
+									f=1
+								else:
+									# print('a' + it2[0].text + 'a')
+									f=0
+								zz = 1
+							except:
+								continue
+					except:
+						continue
 			for contador in range(len(it2)):
 				# pdb.set_trace()
 				if f == 1:
