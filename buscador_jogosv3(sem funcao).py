@@ -13,46 +13,6 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
-
-def cups_after(url, champstring, tag, stagestring):
-	if champstring in url:
-		target_list = []
-		for u in stagestring:
-			try:
-				zeta = tag.find('th')
-				zeta2 = zeta.find('a').text
-				if zeta2 == u:
-					zeta3 = tag.find_next_sibling()
-					zeta4 = zeta3.find('td')
-					zeta5 = zeta4.find('a').text
-					zeta55 = gmt.localize(datetime.strptime(zeta5, "%d/%m/%Y"))
-					target_list.append(zeta55)
-					z8 = 1
-			except:
-				z8 = 0
-	if z8 == 1:
-		return target_list, zeta3
-	else:
-		return None, None
-
-def extends_cups_after(url, champstring, tag, stagestring):
-	if champstring in url:
-		target_list = []
-		try:
-			target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
-			zeta6 = zeta3.find_next_sibling()
-			zeta7 = zeta6.find('td')
-			zeta8 = zeta7.find('a').text
-			zeta88 = gmt.localize(datetime.strptime(zeta8, "%d/%m/%Y"))
-			target_list.append(zeta88)
-			z8 = 1
-		except:
-			z8 = 0
-	if z8 == 1:
-		return target_list, zeta3
-	else:
-		return None, None
-
 Rivalidades_Inglaterra = {'Aldershot Town': ['Reading'],'Arsenal': ['Chelsea', 'Manchester United', 'Tottenham Hotspur'],'Aston Villa': ['Birmingham City', 'West Bromwich Albion', 'Wolverhampton Wanderers'],'Barnet': ['Wycombe Wanderers'],'Barnsley': ['Doncaster Rovers', 'Rotherham United'],'Birmingham City': ['Aston Villa', 'West Bromwich Albion', 'Wolverhamtpon Wanderers'],'Blackburn Rovers': ['Burnley'],'Blackpool': ['Preston North End'],
 'Bolton Wanderers': ['Bury', 'Wigan Athletic'],
 'Bournemouth': ['Southampton'],
@@ -297,13 +257,9 @@ if "premier-league" in url:
 
 elif 'sco-playoff' in url:
 	liga = 'SPFL - playoff'
-	champstring = "sco-playoff"
-	stagestring = ["Final"]
 
 elif 'eng-playoff' in url:
 	liga = 'LCH - playoff'
-	champstring = "eng-playoff"
-	stagestring = ["Final"]
 elif "premiership" in url:
 	liga = 'SPFL'
 elif "championship" in url:
@@ -318,8 +274,6 @@ elif "uefa-super-cup" in url:
 	liga = 'USC'
 elif "eng-fa-cup" in url:
 	liga = 'FAC'
-	champstring = "eng-fa-cup"
-	stagestring = ["3. Round", "Semi-finals", "Final"]
 elif "eng-league-cup" in url:
 	liga = 'EFL'
 elif "sco-fa-cup" in url:
@@ -340,31 +294,87 @@ z22 = 0
 j1=0
 datas_eng_fa_cup = []
 js = []
-contador1 = 0
 for tag in body:
 	a=1
-
+	# Tentando garantir que ele só pegue a final caso seja playoff escoces
 	try:
-		# Tentando garantir que ele só pegue a partir de um certo estágio se for playoff ou copa, nessa etapa ele ceta datas específicas para acontecimentos específicos. Só deve realizar essa etapa uma vez, por isso o contador.
-		if contador1 == 0:
-			if "sco-playoff" in url:
-				target_list, zeta3 = extends_cups_after(url, champstring, tag, stagestring)
-				if target_list != None:
-					datas_playoffs_sco.extend(target_list)
-					contador1 = 1
-			elif "eng-playoff" in url:
-				target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
-				if target_list != None:
-					datas_playoffs_eng.extend(target_list)
-					contador1 = 1
-			elif "eng-fa-cup" in url:
-				target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
-				if target_list != None:
-					datas_eng_fa_cup.extend(target_list)
-					# contador1 = 1
-				# if len(datas_eng_fa_cup) < 3:
-				# 	print("eh menor que 3")
-				# contador1 = 1
+		if "sco-playoff" in url:
+			try:
+				zeta = tag.find('th')
+				zeta2 = zeta.find('a').text
+				if zeta2 == "Final":
+					zeta3 = tag.find_next_sibling()
+					zeta4 = zeta3.find('td')
+					zeta5 = zeta4.find('a').text
+					zeta55 = gmt.localize(datetime.strptime(zeta5, "%d/%m/%Y"))
+					datas_playoffs_sco.append(zeta55)
+					zeta6 = zeta3.find_next_sibling()
+					zeta7 = zeta6.find('td')
+					zeta8 = zeta7.find('a').text
+					zeta88 = gmt.localize(datetime.strptime(zeta8, "%d/%m/%Y"))
+					datas_playoffs_sco.append(zeta88)
+					z8 = 1
+			except:
+				z8=0
+		if "eng-playoff" in url:
+			try:
+				zeta = tag.find('th')
+				zeta2 = zeta.find('a').text
+				if zeta2 == "Final":
+					zeta3 = tag.find_next_sibling()
+					zeta4 = zeta3.find('td')
+					zeta5 = zeta4.find('a').text
+					zeta55 = gmt.localize(datetime.strptime(zeta5, "%d/%m/%Y"))
+					datas_playoffs_eng.append(zeta55)
+			except:
+				z8=0
+
+
+		if "eng-fa-cup" in url:
+			try:
+				zeta = tag.find('th')
+				zeta2 = zeta.find('a').text
+				if zeta2 == "3. Round":
+					zeta3 = tag.find_next_sibling()
+					zeta4 = zeta3.find('td')
+					zeta5 = zeta4.find('a').text
+					zeta55 = gmt.localize(datetime.strptime(zeta5, "%d/%m/%Y"))
+					datas_eng_fa_cup.append(zeta55)
+			except:
+				z8=0
+
+
+		if "eng-fa-cup" in url:
+			try:
+				zeta = tag.find('th')
+				zeta2 = zeta.find('a').text
+				if zeta2 == "Semi-finals":
+					zeta3 = tag.find_next_sibling()
+					zeta4 = zeta3.find('td')
+					zeta5 = zeta4.find('a').text
+					zeta55 = gmt.localize(datetime.strptime(zeta5, "%d/%m/%Y"))
+					datas_eng_fa_cup.append(zeta55)
+			except:
+				z8=0
+
+
+		if "eng-fa-cup" in url:
+			try:
+				zeta = tag.find('th')
+				zeta2 = zeta.find('a').text
+				if zeta2 == "Final":
+					zeta3 = tag.find_next_sibling()
+					zeta4 = zeta3.find('td')
+					zeta5 = zeta4.find('a').text
+					zeta55 = gmt.localize(datetime.strptime(zeta5, "%d/%m/%Y"))
+					datas_eng_fa_cup.append(zeta55)
+			except:
+				z8=0
+
+
+
+
+
 
 		x = tag.find_all('td')
 		for tags in x:
