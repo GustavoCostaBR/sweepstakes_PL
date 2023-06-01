@@ -15,6 +15,7 @@ ctx.verify_mode = ssl.CERT_NONE
 
 
 def cups_after(url, champstring, tag, stagestring):
+	z8 = 0
 	if champstring in url:
 		target_list = []
 		for u in stagestring:
@@ -29,13 +30,17 @@ def cups_after(url, champstring, tag, stagestring):
 					target_list.append(zeta55)
 					z8 = 1
 			except:
-				z8 = 0
+				if z8 == 1:
+					continue
+				else:
+					z8 = 0
 	if z8 == 1:
 		return target_list, zeta3
 	else:
 		return None, None
 
 def extends_cups_after(url, champstring, tag, stagestring):
+	z8 = 0
 	if champstring in url:
 		target_list = []
 		try:
@@ -52,6 +57,8 @@ def extends_cups_after(url, champstring, tag, stagestring):
 		return target_list, zeta3
 	else:
 		return None, None
+
+
 
 Rivalidades_Inglaterra = {'Aldershot Town': ['Reading'],'Arsenal': ['Chelsea', 'Manchester United', 'Tottenham Hotspur'],'Aston Villa': ['Birmingham City', 'West Bromwich Albion', 'Wolverhampton Wanderers'],'Barnet': ['Wycombe Wanderers'],'Barnsley': ['Doncaster Rovers', 'Rotherham United'],'Birmingham City': ['Aston Villa', 'West Bromwich Albion', 'Wolverhamtpon Wanderers'],'Blackburn Rovers': ['Burnley'],'Blackpool': ['Preston North End'],
 'Bolton Wanderers': ['Bury', 'Wigan Athletic'],
@@ -341,31 +348,36 @@ j1=0
 datas_eng_fa_cup = []
 js = []
 contador1 = 0
+
+for tag in body:
+	# Tentando garantir que ele só pegue a partir de um certo estágio se for playoff ou copa, nessa etapa ele seta datas específicas para acontecimentos específicos. Só deve realizar essa etapa uma vez, por isso o contador.
+	if contador1 == 0:
+		if "sco-playoff" in url:
+			target_list, zeta3 = extends_cups_after(url, champstring, tag, stagestring)
+			if target_list != None:
+				datas_playoffs_sco.extend(target_list)
+				contador1 = 1
+		elif "eng-playoff" in url:
+			target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
+			if target_list != None:
+				datas_playoffs_eng.extend(target_list)
+				contador1 = 1
+	if contador <= 1:
+		if "eng-fa-cup" in url:
+			target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
+			if target_list != None:
+				datas_eng_fa_cup.extend(target_list)
+				contador1 = contador1 + 1
+			# if len(datas_eng_fa_cup) < 3:
+			# 	print("eh menor que 3")
+			# contador1 = 1
+
+
+
 for tag in body:
 	a=1
 
 	try:
-		# Tentando garantir que ele só pegue a partir de um certo estágio se for playoff ou copa, nessa etapa ele ceta datas específicas para acontecimentos específicos. Só deve realizar essa etapa uma vez, por isso o contador.
-		if contador1 == 0:
-			if "sco-playoff" in url:
-				target_list, zeta3 = extends_cups_after(url, champstring, tag, stagestring)
-				if target_list != None:
-					datas_playoffs_sco.extend(target_list)
-					contador1 = 1
-			elif "eng-playoff" in url:
-				target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
-				if target_list != None:
-					datas_playoffs_eng.extend(target_list)
-					contador1 = 1
-			elif "eng-fa-cup" in url:
-				target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
-				if target_list != None:
-					datas_eng_fa_cup.extend(target_list)
-					# contador1 = 1
-				# if len(datas_eng_fa_cup) < 3:
-				# 	print("eh menor que 3")
-				# contador1 = 1
-
 		x = tag.find_all('td')
 		for tags in x:
 			try:
@@ -399,7 +411,7 @@ for tag in body:
 								data3 = dt3
 								j1=3
 								# js.append(3)
-							if dt3 >= datas_eng_fa_cup[1]:
+							elif dt3 >= datas_eng_fa_cup[1]:
 								v=1
 								data3 = dt3
 								j1=1
@@ -410,12 +422,13 @@ for tag in body:
 								data3 = dt3
 								j1=3
 								# js.append(3)
-							if dt3 >= datas_eng_fa_cup[1] and dt3 < datas_eng_fa_cup[2]:
+							elif dt3 >= datas_eng_fa_cup[1] and dt3 < datas_eng_fa_cup[2]:
 								v=1
 								data3 = dt3
 								j1=1
 								# js.append(1)
-							if dt3 > datas_eng_fa_cup[1] and dt3 <= datas_eng_fa_cup[2]:
+							# if dt3 > datas_eng_fa_cup[1] and dt3 <= datas_eng_fa_cup[2]:
+							if dt3 == datas_eng_fa_cup[2]:
 								v=1
 								data3 = dt3
 								j1=2
