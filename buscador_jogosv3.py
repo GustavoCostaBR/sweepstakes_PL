@@ -13,6 +13,52 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
+def selection_liga(url):
+	if "premier-league" in url:
+		liga = 'PL'
+
+	elif 'sco-playoff' in url:
+		liga = 'SPFL - playoff'
+		champstring = "sco-playoff"
+		stagestring = ["Final"]
+
+	elif 'eng-playoff' in url:
+		liga = 'LCH - playoff'
+		champstring = "eng-playoff"
+		stagestring = ["Final"]
+	elif "premiership" in url:
+		liga = 'SPFL'
+	elif "championship" in url:
+		liga = 'LCH'
+	elif "champions-league" in url:
+		liga = 'UCL'
+	elif "europa-league" in url:
+		liga = 'UEL'
+	elif "conference-league" in url:
+		liga = 'UECL'
+	elif "uefa-super-cup" in url:
+		liga = 'USC'
+	elif "eng-fa-cup" in url:
+		liga = 'FAC'
+		champstring = "eng-fa-cup"
+		stagestring = ["3. Round", "Semi-finals", "Final"]
+	elif "eng-league-cup" in url:
+		liga = 'EFL'
+		champstring = "eng-league-cup"
+		stagestring = ["Round of 16", "Semi-finals", "Final"]
+	elif "sco-fa-cup" in url:
+		liga = 'SC'
+	elif "sco-league-cup" in url:
+		liga = 'SLC'
+	elif "eng-fa-community" in url:
+		liga = 'FACS'
+	else:
+		liga = 'FCWC'
+
+	if 'champstring' in locals():
+		return champstring, stagestring, liga
+	else:
+		return None, None, liga
 
 def cups_after(url, champstring, tag, stagestring):
 	z8 = 0
@@ -58,7 +104,42 @@ def extends_cups_after(url, champstring, tag, stagestring):
 	else:
 		return None, None
 
+def replace_abv(nome_time):
+	if "AFC " in nome_time:
+		j = nome_time.replace("AFC ", "")
+	elif " AFC" in nome_time:
+		j = nome_time.replace(" AFC", "")
+	elif "FC " in nome_time:
+		j = nome_time.replace("FC ", "")
+	elif " FC" in nome_time:
+		j = nome_time.replace(" FC", "")
+	else:
+		j = nome_time
+	return j
 
+def set_date(j, Rivalidades, contador, tags):
+	# for u0 in Rivalidades:
+	# 	if j in u0:
+	esquema = []
+	if j in Rivalidades[0] or j in Rivalidades[1] or j in Rivalidades[2] or j in Rivalidades[3]:
+		if contador % 2 == 0:
+			esquema = tags.find_previous_sibling('td')
+			hora_reino_unido = datetime.strptime(esquema.text, '%H:%M')
+			hora_brasil = hora_reino_unido - timedelta(hours=4)
+			hora_brasil_str = datetime.strftime(hora_brasil, '%H:%M')
+			datax = datetime.fromisoformat(str(data3))
+			dia_mes_str = datax.strftime('%d/%m')
+		contador = contador + 1
+		# garantindo que não vai apender o j em toda e qualquer situação fora da função
+		time0 = j
+	# else:
+	# 	continue
+	if len(esquema) > 0:
+		return time0, hora_brasil_str, dia_mes_str, contador
+	elif len(time0) > 1:
+		return time0, None, None, contador
+	else:
+		return None, None, None, None
 
 Rivalidades_Inglaterra = {'Aldershot Town': ['Reading'],'Arsenal': ['Chelsea', 'Manchester United', 'Tottenham Hotspur'],'Aston Villa': ['Birmingham City', 'West Bromwich Albion', 'Wolverhampton Wanderers'],'Barnet': ['Wycombe Wanderers'],'Barnsley': ['Doncaster Rovers', 'Rotherham United'],'Birmingham City': ['Aston Villa', 'West Bromwich Albion', 'Wolverhamtpon Wanderers'],'Blackburn Rovers': ['Burnley'],'Blackpool': ['Preston North End'],
 'Bolton Wanderers': ['Bury', 'Wigan Athletic'],
@@ -196,6 +277,7 @@ times_desconsiderados = {}
 headers = {
    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/110.0'}
 url = sys.argv[11]
+# url = 'https://www.worldfootball.net/all_matches/eng-premier-league-2022-2023/'
 ligas_times_diferentes = ['https://www.worldfootball.net/all_matches/champions-league-2022-2023/', 'https://www.worldfootball.net/all_matches/europa-league-2022-2023/', 'https://www.worldfootball.net/all_matches/europa-conference-league-2022-2023/', 'https://www.worldfootball.net/all_matches/uefa-super-cup-2022/','https://www.worldfootball.net/all_matches/klub-wm-2022/']
 urls_times_diferentes = ['https://www.worldfootball.net/players/champions-league-2022-2023/', 'https://www.worldfootball.net/players/europa-league-2022-2023/', 'https://www.worldfootball.net/players/europa-conference-league-2022-2023/', 'https://www.worldfootball.net/players/uefa-super-cup-2022/', 'https://www.worldfootball.net/players/klub-wm-2022/']
 ligas_times_ingleses_nao_listados = ['https://www.worldfootball.net/all_matches/sco-fa-cup-2022-2023/','https://www.worldfootball.net/all_matches/sco-league-cup-2022-2023/', 'https://www.worldfootball.net/all_matches/eng-fa-cup-2022-2023/', 'https://www.worldfootball.net/all_matches/eng-league-cup-2022-2023/', 'https://sco.worldfootball.net/all_matches/sco-playoff-2021-2022-premiership/']
@@ -289,6 +371,8 @@ int_list2 = [int(x) for x in sys.argv[6:11]]
 dt = datetime(*int_list, tzinfo=gmt)
 # limite superior de data
 dt2 = datetime(*int_list2, tzinfo=gmt)
+# dt = datetime(2023, 5, 18, 20, 30, tzinfo=gmt)
+# dt2 = datetime(2023, 5, 27, 20, 30, tzinfo=gmt)
 #  dt2 = sys.argv[2]
 # dt2 = datetime(2023, 2, 12, 20, 30, tzinfo=gmt)
 v = 2
@@ -299,44 +383,49 @@ jogos = []
 hora = []
 dia = []
 peso = []
-if "premier-league" in url:
-	liga = 'PL'
+# if "premier-league" in url:
+# 	liga = 'PL'
 
-elif 'sco-playoff' in url:
-	liga = 'SPFL - playoff'
-	champstring = "sco-playoff"
-	stagestring = ["Final"]
+# elif 'sco-playoff' in url:
+# 	liga = 'SPFL - playoff'
+# 	champstring = "sco-playoff"
+# 	stagestring = ["Final"]
 
-elif 'eng-playoff' in url:
-	liga = 'LCH - playoff'
-	champstring = "eng-playoff"
-	stagestring = ["Final"]
-elif "premiership" in url:
-	liga = 'SPFL'
-elif "championship" in url:
-	liga = 'LCH'
-elif "champions-league" in url:
-	liga = 'UCL'
-elif "europa-league" in url:
-	liga = 'UEL'
-elif "conference-league" in url:
-	liga = 'UECL'
-elif "uefa-super-cup" in url:
-	liga = 'USC'
-elif "eng-fa-cup" in url:
-	liga = 'FAC'
-	champstring = "eng-fa-cup"
-	stagestring = ["3. Round", "Semi-finals", "Final"]
-elif "eng-league-cup" in url:
-	liga = 'EFL'
-elif "sco-fa-cup" in url:
-	liga = 'SC'
-elif "sco-league-cup" in url:
-	liga = 'SLC'
-elif "eng-fa-community" in url:
-	liga = 'FACS'
-else:
-	liga = 'FCWC'
+# elif 'eng-playoff' in url:
+# 	liga = 'LCH - playoff'
+# 	champstring = "eng-playoff"
+# 	stagestring = ["Final"]
+# elif "premiership" in url:
+# 	liga = 'SPFL'
+# elif "championship" in url:
+# 	liga = 'LCH'
+# elif "champions-league" in url:
+# 	liga = 'UCL'
+# elif "europa-league" in url:
+# 	liga = 'UEL'
+# elif "conference-league" in url:
+# 	liga = 'UECL'
+# elif "uefa-super-cup" in url:
+# 	liga = 'USC'
+# elif "eng-fa-cup" in url:
+# 	liga = 'FAC'
+# 	champstring = "eng-fa-cup"
+# 	stagestring = ["3. Round", "Semi-finals", "Final"]
+# elif "eng-league-cup" in url:
+# 	liga = 'EFL'
+# 	champstring = "eng-league-cup"
+# 	stagestring = ["Round of 16", "Semi-finals", "Final"]
+# elif "sco-fa-cup" in url:
+# 	liga = 'SC'
+# elif "sco-league-cup" in url:
+# 	liga = 'SLC'
+# elif "eng-fa-community" in url:
+# 	liga = 'FACS'
+# else:
+# 	liga = 'FCWC'
+
+champstring, stagestring, liga = selection_liga(url)
+
 contador = 0
 contadorx=0
 datas_playoffs_sco = []
@@ -346,6 +435,7 @@ z22 = 0
 #variable to define if it is or not the final of england championship playoffs
 j1=0
 datas_eng_fa_cup = []
+datas_eng_league_cup = []
 js = []
 contador1 = 0
 
@@ -362,8 +452,14 @@ for tag in body:
 			if target_list != None:
 				datas_playoffs_eng.extend(target_list)
 				contador1 = 1
-	if contador <= 1:
+	if contador1 <= 2:
 		if "eng-fa-cup" in url:
+			target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
+			if target_list != None:
+				datas_eng_fa_cup.extend(target_list)
+				contador1 = contador1 + 1
+
+		elif "eng-league-cup" in url:
 			target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
 			if target_list != None:
 				datas_eng_fa_cup.extend(target_list)
@@ -445,80 +541,18 @@ for tag in body:
 			except:
 				if v == 1:
 					# pdb.set_trace()
-					if "FC" in y and "AFC" not in y:
-						# index = y.index("FC")
-						# j=(y[:index] + y[index+len("FC"):]).replace(" ","")
-						if " FC" in y:
-							j = y.replace(" FC", "")
-						else:
-							j = y.replace("FC ", "")
-						# print(j)
-						if j in Rivalidades[0] or j in Rivalidades[1] or j in Rivalidades[2] or j in Rivalidades[3]:
-							time.append(j)
-							# print(j)
-
-							if contador % 2 == 0:
-								esquema = tags.find_previous_sibling('td')
-								hora_reino_unido = datetime.strptime(esquema.text, '%H:%M')
-								hora_brasil = hora_reino_unido - timedelta(hours=4)
-								hora_brasil_str = datetime.strftime(hora_brasil, '%H:%M')
-								hora.append(hora_brasil_str)
-								datax = datetime.fromisoformat(str(data3))
-								dia_mes_str = datax.strftime('%d/%m')
-								dia.append(dia_mes_str)
-							contador = contador + 1
-					elif "AFC " in y:
-						# pdb.set_trace()
-						j = y.replace("AFC ", "")
-						# print(j)
-						if j in Rivalidades[0] or j in Rivalidades[1] or j in Rivalidades[2] or j in Rivalidades[3]:
-							time.append(j)
-							# print(j)
-
-							if contador % 2 == 0:
-								esquema = tags.find_previous_sibling('td')
-								hora_reino_unido = datetime.strptime(esquema.text, '%H:%M')
-								hora_brasil = hora_reino_unido - timedelta(hours=4)
-								hora_brasil_str = datetime.strftime(hora_brasil, '%H:%M')
-								hora.append(hora_brasil_str)
-								datax = datetime.fromisoformat(str(data3))
-								dia_mes_str = datax.strftime('%d/%m')
-								dia.append(dia_mes_str)
-							contador = contador + 1
-					elif " AFC" in y:
-						j=(y.rstrip(" AFC"))
-						# print(j)
-						if j in Rivalidades[0] or j in Rivalidades[1] or j in Rivalidades[2] or j in Rivalidades[3]:
-							time.append(j)
-							# print(j)
-
-							if contador % 2 == 0:
-								esquema = tags.find_previous_sibling('td')
-								hora_reino_unido = datetime.strptime(esquema.text, '%H:%M')
-								hora_brasil = hora_reino_unido - timedelta(hours=4)
-								hora_brasil_str = datetime.strftime(hora_brasil, '%H:%M')
-								hora.append(hora_brasil_str)
-								datax = datetime.fromisoformat(str(data3))
-								dia_mes_str = datax.strftime('%d/%m')
-								dia.append(dia_mes_str)
-							contador = contador + 1
+					j = replace_abv(y)
+					time0, hora_brasil_str, dia_mes_str, contador = set_date(j, Rivalidades, contador, tags)
+					if hora_brasil_str != None:
+						time.append(time0)
+						hora.append(hora_brasil_str)
+						dia.append(dia_mes_str)
+					elif time0 != None:
+						time.append(time0)
 					else:
-						if y in Rivalidades[0] or y in Rivalidades[1] or y in Rivalidades[2] or y in Rivalidades[3]:
-							time.append(y)
-							# print(y)
+						continue
 
-							if contador % 2 == 0:
-								esquema = tags.find_previous_sibling('td')
-								hora_reino_unido = datetime.strptime(esquema.text, '%H:%M')
-								hora_brasil = hora_reino_unido - timedelta(hours=4)
-								hora_brasil_str = datetime.strftime(hora_brasil, '%H:%M')
-								hora.append(hora_brasil_str)
-								datax = datetime.fromisoformat(str(data3))
-								dia_mes_str = datax.strftime('%d/%m')
-								dia.append(dia_mes_str)
-							contador = contador + 1
-					continue
-				if v == 2:
+				elif v == 2:
 					continue
 				else:
 					continue
@@ -528,7 +562,7 @@ for tag in body:
 # print(dia)
 # print(hora)
 
-
+# print(time)
 
 for x in range(len(time)):
 	if x % 2 == 0:
