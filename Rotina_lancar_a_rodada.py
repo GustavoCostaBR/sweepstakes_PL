@@ -4,9 +4,10 @@ import yaml
 from datetime import datetime, timedelta
 import pytz
 import sqlite3
+import pdb
 
 with open('Configuracoes.yml', 'r') as f:
-    data = yaml.load(f, Loader=yaml.FullLoader)
+	data = yaml.load(f, Loader=yaml.FullLoader)
 
 gmt = pytz.timezone('GMT')
 dt = []
@@ -28,6 +29,7 @@ url_SPFL_PLAYOFFS = data['URL_SPFL_PLAYOFFS']
 url_LCH = data['URL_LCH']
 url_LCH_PLAYOFFS = data['URL_LCH_PLAYOFFS']
 url_FAC = data['URL_FAC']
+url_EFL = data['URL_EFL']
 
 
 Tabelas = []
@@ -83,6 +85,8 @@ else:
 
 
 # # Start second program
+
+# pdb.set_trace()
 result2 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_PL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 # # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -288,8 +292,8 @@ else:
 			while "" in temp:
 				temp.remove("")
 			# print(temp)
-			if "j1=1" in temp:
-				temp.remove("j1=1")
+			if "j1=3" in temp:
+				temp.remove("j1=3")
 				temp[(len(temp)-1)] = temp[(len(temp)-1)].replace("P1", "P3")
 			# print(temp)
 			index1=0
@@ -390,6 +394,85 @@ else:
 		# var_dump.var_dump(variavel[0])
 
 		# Jogos.append(result2.stdout.split['\n'])
+
+
+result6 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_EFL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+temp=[]
+variavel=[]
+# Wait for the program to finish
+if result6.returncode != 0:
+	print(result6.stderr)
+else:
+	# Print the stdout output if the subprocess ran successfully
+	if result6.stdout != '':
+		zz=0
+		variavel = result6.stdout.split('\n')
+		for o in variavel:
+				temp.append(o)
+		while "" in temp:
+			temp.remove("")
+		# print(temp)
+		if "j1=0" in temp:
+			print('Jogo EFL anterior as oitavas, nao adicionado')
+			temp = []
+		elif "j1=3" in temp:
+			zz=2
+			temp.remove("j1=3")
+			print('Jogo EFL encaminhado ao filtro')
+		elif "j1=1" in temp:
+			temp.remove("j1=1")
+			index1 = 0
+			print('Jogo EFL semi-final adicionado')
+			while "P1" in temp[index1]:
+				temp[index1] = temp[index1].replace("P1", "P2")
+				if index1 < (len(temp)-1):
+					index1=index1 + 1
+			for o in temp:
+				Jogos.append(o)
+
+
+			# for z3 in temp:
+			# 	if "P1" in z3:
+			# 		z3 = z3.replace("P1", "P2")
+
+		elif "j1=2" in temp:
+			temp.remove("j1=2")
+			index1=0
+			print('Jogo EFL final adicionado')
+			while "P1" in temp[index1]:
+				temp[index1] = temp[index1].replace("P1", "P3")
+				if index1 < (len(temp)-1):
+					index1=index1 + 1
+			index1=0
+			while "P2" in temp[index1]:
+				temp[index1] = temp[index1].replace("P2", "P3")
+				if index1 < (len(temp)-1):
+					index1=index1 + 1
+			for o in temp:
+				Jogos.append(o)
+		# print(temp)
+		if len(temp) > 0 and zz == 2:
+			result5_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+				# # var_dump.var_dump(variavel[0])
+				# print(result3_1.stdout)
+			variavel = result5_1.stdout.split('\n')
+			while "" in variavel:
+				variavel.remove("")
+			# print(variavel)
+			for o in variavel:
+				Jogos.append(o)
+		# 	# Jogos.append(result3_1.stdout)
+		# else:
+		# 	print('Nenhum resultado para FAC')
+	else:
+		print('Nenhum resultado para EFL')
+
+		# var_dump.var_dump(variavel[0])
+
+		# Jogos.append(result2.stdout.split['\n'])
+
 print(Jogos)
 
 

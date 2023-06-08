@@ -21,11 +21,14 @@ def selection_liga(url):
 		liga = 'SPFL - playoff'
 		champstring = "sco-playoff"
 		stagestring = ["Final"]
+		liga_url = 'sco-playoff'
 
 	elif 'eng-playoff' in url:
 		liga = 'LCH - playoff'
 		champstring = "eng-playoff"
 		stagestring = ["Final"]
+		liga_url = 'eng-playoff'
+
 	elif "premiership" in url:
 		liga = 'SPFL'
 	elif "championship" in url:
@@ -42,10 +45,14 @@ def selection_liga(url):
 		liga = 'FAC'
 		champstring = "eng-fa-cup"
 		stagestring = ["3. Round", "Semi-finals", "Final"]
+		liga_url = 'eng-fa-cup'
+
 	elif "eng-league-cup" in url:
 		liga = 'EFL'
 		champstring = "eng-league-cup"
 		stagestring = ["Round of 16", "Semi-finals", "Final"]
+		liga_url = 'eng-league-cup'
+
 	elif "sco-fa-cup" in url:
 		liga = 'SC'
 	elif "sco-league-cup" in url:
@@ -56,9 +63,10 @@ def selection_liga(url):
 		liga = 'FCWC'
 
 	if 'champstring' in locals():
-		return champstring, stagestring, liga
+		return champstring, stagestring, liga, liga_url
 	else:
-		return None, None, liga
+		# cannot return None to liga_url, future verification in another function would return a problem, excepction
+		return None, None, liga, 'jiorjito'
 
 def cups_after(url, champstring, tag, stagestring):
 	z8 = 0
@@ -117,6 +125,67 @@ def replace_abv(nome_time):
 		j = nome_time
 	return j
 
+def selecting_matchs_by_data(url, dt3, dt2, dt, liga_url, j1, special_dates):
+	# pdb.set_trace()
+
+	if dt3 > dt and dt3 < dt2:
+
+		if liga_url in url:
+			if len(special_dates) >= 1:
+				if len(special_dates) < 2:
+					if dt3 >= special_dates[0]:
+						v = 1
+						data3 = dt3
+
+						# marcador de etapa do campeonato (copas e playoffs) no campeonato
+						j1 = 3
+
+				elif len(special_dates) < 3:
+					if dt3 >= special_dates[0] and dt3 < special_dates[1]:
+						v = 1
+						data3 = dt3
+						j1 = 3
+
+					elif dt3 >= special_dates[1]:
+						v = 1
+						data3 = dt3
+						j1 = 1
+
+				elif len(special_dates) < 4:
+					if dt3 >= special_dates[0] and dt3 < special_dates[1]:
+						v = 1
+						data3 = dt3
+						j1 = 3
+
+					elif dt3 >= special_dates[1] and dt3 < special_dates[2]:
+						v = 1
+						data3 = dt3
+						j1 = 1
+
+
+					elif dt3 == special_dates[2]:
+						v=1
+						data3 = dt3
+						j1=2
+
+
+		else:
+			v=1
+			data3 = dt3
+			j1=0
+
+	elif (dt3 < dt or dt3 > dt2) and (j1 != 2 and j1 != 1 and j1 != 3):
+		v = 2
+		j1 = 0
+
+
+	if 'data3' in locals():
+		return v, j1, data3
+	else:
+		return v, j1, None
+
+
+
 def set_date(j, Rivalidades, contador, tags):
 	# for u0 in Rivalidades:
 	# 	if j in u0:
@@ -140,6 +209,8 @@ def set_date(j, Rivalidades, contador, tags):
 		return time0, None, None, contador
 	else:
 		return None, None, None, None
+
+
 
 Rivalidades_Inglaterra = {'Aldershot Town': ['Reading'],'Arsenal': ['Chelsea', 'Manchester United', 'Tottenham Hotspur'],'Aston Villa': ['Birmingham City', 'West Bromwich Albion', 'Wolverhampton Wanderers'],'Barnet': ['Wycombe Wanderers'],'Barnsley': ['Doncaster Rovers', 'Rotherham United'],'Birmingham City': ['Aston Villa', 'West Bromwich Albion', 'Wolverhamtpon Wanderers'],'Blackburn Rovers': ['Burnley'],'Blackpool': ['Preston North End'],
 'Bolton Wanderers': ['Bury', 'Wigan Athletic'],
@@ -278,6 +349,7 @@ headers = {
    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/110.0'}
 url = sys.argv[11]
 # url = 'https://www.worldfootball.net/all_matches/eng-premier-league-2022-2023/'
+# url = 'https://www.worldfootball.net/all_matches/eng-fa-cup-2022-2023/'
 ligas_times_diferentes = ['https://www.worldfootball.net/all_matches/champions-league-2022-2023/', 'https://www.worldfootball.net/all_matches/europa-league-2022-2023/', 'https://www.worldfootball.net/all_matches/europa-conference-league-2022-2023/', 'https://www.worldfootball.net/all_matches/uefa-super-cup-2022/','https://www.worldfootball.net/all_matches/klub-wm-2022/']
 urls_times_diferentes = ['https://www.worldfootball.net/players/champions-league-2022-2023/', 'https://www.worldfootball.net/players/europa-league-2022-2023/', 'https://www.worldfootball.net/players/europa-conference-league-2022-2023/', 'https://www.worldfootball.net/players/uefa-super-cup-2022/', 'https://www.worldfootball.net/players/klub-wm-2022/']
 ligas_times_ingleses_nao_listados = ['https://www.worldfootball.net/all_matches/sco-fa-cup-2022-2023/','https://www.worldfootball.net/all_matches/sco-league-cup-2022-2023/', 'https://www.worldfootball.net/all_matches/eng-fa-cup-2022-2023/', 'https://www.worldfootball.net/all_matches/eng-league-cup-2022-2023/', 'https://sco.worldfootball.net/all_matches/sco-playoff-2021-2022-premiership/']
@@ -300,16 +372,9 @@ for u in range(max(len(ligas_times_diferentes), len(ligas_times_ingleses_nao_lis
 				# pdb.set_trace()
 				time_champions = x[1].find('a').text
 				# print(time_champions)
-				if " FC" in time_champions:
-					time2 = time_champions.replace(" FC", "")
-				elif "AFC " in time_champions:
-					time2 = time_champions.replace("AFC ", "")
-				elif "FC " in time_champions:
-					time2 = time_champions.replace("FC ", "")
-				elif " AFC" in time_champions:
-					time2 = time_champions.replace(" AFC", "")
-				else:
-					time2 = time_champions
+
+				time2 = replace_abv(time_champions)
+
 				if time2 not in Rivalidades[0] and time2 not in Rivalidades[1] and time2 not in Rivalidades[2]:
 					times_desconsiderados[time2] = ['Sem rival']
 
@@ -330,16 +395,9 @@ for u in range(max(len(ligas_times_diferentes), len(ligas_times_ingleses_nao_lis
 				# pdb.set_trace()
 				time_champions = x[1].find('a').text
 				# print(time_champions)
-				if " FC" in time_champions:
-					time2 = time_champions.replace(" FC", "")
-				elif "AFC " in time_champions:
-					time2 = time_champions.replace("AFC ", "")
-				elif "FC " in time_champions:
-					time2 = time_champions.replace("FC ", "")
-				elif " AFC" in time_champions:
-					time2 = time_champions.replace(" AFC", "")
-				else:
-					time2 = time_champions
+
+				time2 = replace_abv(time_champions)
+
 				if time2 not in Rivalidades[0] and time2 not in Rivalidades[1] and time2 not in Rivalidades[2]:
 					times_desconsiderados[time2] = ['Sem rival']
 			except:
@@ -371,8 +429,8 @@ int_list2 = [int(x) for x in sys.argv[6:11]]
 dt = datetime(*int_list, tzinfo=gmt)
 # limite superior de data
 dt2 = datetime(*int_list2, tzinfo=gmt)
-# dt = datetime(2023, 5, 18, 20, 30, tzinfo=gmt)
-# dt2 = datetime(2023, 5, 27, 20, 30, tzinfo=gmt)
+# dt = datetime(2023, 4, 21, 20, 30, tzinfo=gmt)
+# dt2 = datetime(2023, 4, 24, 20, 30, tzinfo=gmt)
 #  dt2 = sys.argv[2]
 # dt2 = datetime(2023, 2, 12, 20, 30, tzinfo=gmt)
 v = 2
@@ -383,51 +441,12 @@ jogos = []
 hora = []
 dia = []
 peso = []
-# if "premier-league" in url:
-# 	liga = 'PL'
 
-# elif 'sco-playoff' in url:
-# 	liga = 'SPFL - playoff'
-# 	champstring = "sco-playoff"
-# 	stagestring = ["Final"]
-
-# elif 'eng-playoff' in url:
-# 	liga = 'LCH - playoff'
-# 	champstring = "eng-playoff"
-# 	stagestring = ["Final"]
-# elif "premiership" in url:
-# 	liga = 'SPFL'
-# elif "championship" in url:
-# 	liga = 'LCH'
-# elif "champions-league" in url:
-# 	liga = 'UCL'
-# elif "europa-league" in url:
-# 	liga = 'UEL'
-# elif "conference-league" in url:
-# 	liga = 'UECL'
-# elif "uefa-super-cup" in url:
-# 	liga = 'USC'
-# elif "eng-fa-cup" in url:
-# 	liga = 'FAC'
-# 	champstring = "eng-fa-cup"
-# 	stagestring = ["3. Round", "Semi-finals", "Final"]
-# elif "eng-league-cup" in url:
-# 	liga = 'EFL'
-# 	champstring = "eng-league-cup"
-# 	stagestring = ["Round of 16", "Semi-finals", "Final"]
-# elif "sco-fa-cup" in url:
-# 	liga = 'SC'
-# elif "sco-league-cup" in url:
-# 	liga = 'SLC'
-# elif "eng-fa-community" in url:
-# 	liga = 'FACS'
-# else:
-# 	liga = 'FCWC'
-
-champstring, stagestring, liga = selection_liga(url)
+champstring, stagestring, liga, liga_url = selection_liga(url)
 
 contador = 0
 contadorx=0
+special_dates = []
 datas_playoffs_sco = []
 datas_playoffs_eng = []
 z8 = 0
@@ -445,24 +464,28 @@ for tag in body:
 		if "sco-playoff" in url:
 			target_list, zeta3 = extends_cups_after(url, champstring, tag, stagestring)
 			if target_list != None:
-				datas_playoffs_sco.extend(target_list)
+				# datas_playoffs_sco.extend(target_list)
+				special_dates.extend(target_list)
 				contador1 = 1
 		elif "eng-playoff" in url:
 			target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
 			if target_list != None:
-				datas_playoffs_eng.extend(target_list)
+				# datas_playoffs_eng.extend(target_list)
+				special_dates.extend(target_list)
 				contador1 = 1
 	if contador1 <= 2:
 		if "eng-fa-cup" in url:
 			target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
 			if target_list != None:
-				datas_eng_fa_cup.extend(target_list)
+				# datas_eng_fa_cup.extend(target_list)
+				special_dates.extend(target_list)
 				contador1 = contador1 + 1
 
 		elif "eng-league-cup" in url:
 			target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
 			if target_list != None:
-				datas_eng_fa_cup.extend(target_list)
+				# datas_eng_fa_cup.extend(target_list)
+				special_dates.extend(target_list)
 				contador1 = contador1 + 1
 			# if len(datas_eng_fa_cup) < 3:
 			# 	print("eh menor que 3")
@@ -479,69 +502,80 @@ for tag in body:
 			try:
 				if tags.find('a') is None:
 					continue
+
 				y = tags.find('a').text
 				dt3 = gmt.localize(datetime.strptime(y, "%d/%m/%Y"))
-				if "sco-playoff" in url:
-					if dt3 > dt and dt3 < dt2 and dt3 in datas_playoffs_sco:
-						v = 1
 
-						data3 = dt3
+				#Selecionando a parte do campeonanto que vamos pegar, tratamento especial para copas
 
-				elif dt3 > dt and dt3 < dt2:
+				# if dt3 > dt:
+					# pdb.set_trace()
 
-					if dt3 in datas_playoffs_eng:
-						j1=1
-						v=1
-						data3 = dt3
-					# garantindo que só passe uma vez por aqui com z22
-					elif (len(datas_eng_fa_cup)>=1):
-						if len(datas_eng_fa_cup) < 2:
-							if dt3 >= datas_eng_fa_cup[0]:
-								v=1
-								data3 = dt3
-								# js.append(3)
-								j1=3
-						elif len(datas_eng_fa_cup) < 3:
-							if dt3 >= datas_eng_fa_cup[0] and dt3 < datas_eng_fa_cup[1]:
-								v=1
-								data3 = dt3
-								j1=3
-								# js.append(3)
-							elif dt3 >= datas_eng_fa_cup[1]:
-								v=1
-								data3 = dt3
-								j1=1
-								# js.append(1)
-						elif len(datas_eng_fa_cup) < 4:
-							if dt3 >= datas_eng_fa_cup[0] and dt3 < datas_eng_fa_cup[1]:
-								v=1
-								data3 = dt3
-								j1=3
-								# js.append(3)
-							elif dt3 >= datas_eng_fa_cup[1] and dt3 < datas_eng_fa_cup[2]:
-								v=1
-								data3 = dt3
-								j1=1
-								# js.append(1)
-							# if dt3 > datas_eng_fa_cup[1] and dt3 <= datas_eng_fa_cup[2]:
-							if dt3 == datas_eng_fa_cup[2]:
-								v=1
-								data3 = dt3
-								j1=2
-								# js.append(2)
-					else:
-						v=1
-						data3 = dt3
-						j1=0
-						# js.append(0)
-				elif dt3 < dt or dt3 > dt2:
-					v = 2
-					# print(dt3)
-					# print("chegamos no limite")
+				v, j1, data3 = selecting_matchs_by_data(url, dt3, dt2, dt, liga_url, j1, special_dates)
+
+				# if "sco-playoff" in url:
+				# 	if dt3 > dt and dt3 < dt2 and dt3 in datas_playoffs_sco:
+				# 		v = 1
+
+				# 		data3 = dt3
+
+				# elif dt3 > dt and dt3 < dt2:
+
+				# 	if dt3 in datas_playoffs_eng:
+				# 		j1=1
+				# 		v=1
+				# 		data3 = dt3
+				# 	# garantindo que só passe uma vez por aqui com z22
+				# 	elif (len(datas_eng_fa_cup)>=1):
+				# 		if len(datas_eng_fa_cup) < 2:
+				# 			if dt3 >= datas_eng_fa_cup[0]:
+				# 				v=1
+				# 				data3 = dt3
+				# 				# js.append(3)
+				# 				j1=3
+				# 		elif len(datas_eng_fa_cup) < 3:
+				# 			if dt3 >= datas_eng_fa_cup[0] and dt3 < datas_eng_fa_cup[1]:
+				# 				v=1
+				# 				data3 = dt3
+				# 				j1=3
+				# 				# js.append(3)
+				# 			elif dt3 >= datas_eng_fa_cup[1]:
+				# 				v=1
+				# 				data3 = dt3
+				# 				j1=1
+				# 				# js.append(1)
+				# 		elif len(datas_eng_fa_cup) < 4:
+				# 			if dt3 >= datas_eng_fa_cup[0] and dt3 < datas_eng_fa_cup[1]:
+				# 				v=1
+				# 				data3 = dt3
+				# 				j1=3
+				# 				# js.append(3)
+				# 			elif dt3 >= datas_eng_fa_cup[1] and dt3 < datas_eng_fa_cup[2]:
+				# 				v=1
+				# 				data3 = dt3
+				# 				j1=1
+				# 				# js.append(1)
+				# 			# if dt3 > datas_eng_fa_cup[1] and dt3 <= datas_eng_fa_cup[2]:
+				# 			if dt3 == datas_eng_fa_cup[2]:
+				# 				v=1
+				# 				data3 = dt3
+				# 				j1=2
+				# 				# js.append(2)
+				# 	else:
+				# 		v=1
+				# 		data3 = dt3
+				# 		j1=0
+				# 		# js.append(0)
+				# elif dt3 < dt or dt3 > dt2:
+				# 	v = 2
+				# 	# print(dt3)
+				# 	# print("chegamos no limite")
 			except:
 				if v == 1:
 					# pdb.set_trace()
 					j = replace_abv(y)
+
+					# montando os jogos com as datas setadas
 					time0, hora_brasil_str, dia_mes_str, contador = set_date(j, Rivalidades, contador, tags)
 					if hora_brasil_str != None:
 						time.append(time0)
@@ -638,9 +672,9 @@ if j1==1:
 # 		print("Datas FA_CUP " + str(u))
 elif j1==2:
 	print("j1=2")
-elif j1==3:
+elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url):
 	print("j1=3")
-elif "eng-fa-cup" in url and j1==0:
+elif ("eng-fa-cup" in url or "eng-league-cup" in url) and j1==0:
 	print("j1=0")
 # for x in time:
 # 	print(x)
