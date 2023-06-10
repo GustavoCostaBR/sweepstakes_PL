@@ -1,15 +1,15 @@
 #A data deve ser editada dentro do formato pré-estabelecido, aconselho usar o dia imediatamente anterior ao início da rodada, tendo em vista que a versào atual do programa considera todos os jogos começando meia noite (exato início do dia), apesar dele jogar a informação certa de hora no forms (falta ajustar o horário de verão). O formato da data é ano, mês (sem o zero, abril é 4 e não 04), dia (sem o zero), hora, minutos.
 # Inicio_Rodada: ['2022', '8', '19', '20', '30']
 # Inicio_Rodada: ['2023', '5', '10', '20', '30']
-Inicio_Rodada: ['2023', '5', '18', '20', '30']
+Inicio_Rodada: ['2023', '5', '10', '20', '30']
 
 #Para o fim recomendo usar o dia imediatamente posterior, zerado na hora, podemos testar.
 # Fim_Rodada: ['2022', '8', '23', '20', '30']
 # Fim_Rodada: ['2023', '6', '5', '20', '30']
-Fim_Rodada: ['2023', '5', '27', '20', '30']
+Fim_Rodada: ['2023', '5', '19', '20', '30']
 
 #Sempre use a URL do schedule.
-URL_FACS: https://www.worldfootball.net/all_matches/eng-fa-community-shield-2022/
+URL_FACS: https://www.worldfootball.net/all_matches/eng-fa-community-shield-2023/
 
 URL_PL: https://www.worldfootball.net/all_matches/eng-premier-league-2022-2023/
 
@@ -26,3 +26,22 @@ URL_LCH: https://www.worldfootball.net/all_matches/eng-championship-2022-2023/
 URL_LCH_PLAYOFFS: https://www.worldfootball.net/all_matches/eng-playoffs-2022-2023-championship/
 
 URL_FAC: https://www.worldfootball.net/all_matches/eng-fa-cup-2022-2023/
+
+URL_EFL: https://www.worldfootball.net/all_matches/eng-league-cup-2022-2023/
+
+URL_SC: https://sco.worldfootball.net/all_matches/sco-fa-cup-2022-2023/
+
+URL_SLC: https://sco.worldfootball.net/all_matches/sco-league-cup-2022-2023/
+
+URL_USC: https://www.worldfootball.net/all_matches/uefa-super-cup-2021/
+
+URL_QUAL_UCL: https://www.worldfootball.net/all_matches/champions-league-qual-2022-2023/
+
+URL_UCL: https://www.worldfootball.net/all_matches/champions-league-2022-2023/
+
+URL_QUAL_UEL: https://www.worldfootball.net/all_matches/europa-league-qual-2022-2023/
+
+URL_UEL: https://www.worldfootball.net/all_matches/europa-league-2022-2023/
+
+URL_UECL: https://www.worldfootball.net/all_matches/europa-conference-league-2022-2023/
+
