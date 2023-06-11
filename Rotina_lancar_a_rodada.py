@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import pytz
 import sqlite3
 import pdb
+import sys
 
 with open('Configuracoes.yml', 'r') as f:
 	data = yaml.load(f, Loader=yaml.FullLoader)
@@ -12,6 +13,8 @@ with open('Configuracoes.yml', 'r') as f:
 gmt = pytz.timezone('GMT')
 dt = []
 dt2 = []
+
+# sys.stdout.reconfigure(encoding='utf-8')
 
 def after_FACS_filter(variavel, inicio_bolao_date):
 
@@ -65,7 +68,9 @@ url_QUAL_UCL = data['URL_QUAL_UCL']
 url_UCL = data['URL_UCL']
 url_QUAL_UEL = data['URL_QUAL_UEL']
 url_UEL = data['URL_UEL']
-
+url_QUAL_UECL = data['URL_QUAL_UECL']
+url_UECL = data['URL_UECL']
+url_FCWC = data['URL_FCWC']
 
 Tabelas = []
 temp = []
@@ -814,9 +819,10 @@ else:
 
 		temp = after_FACS_filter(temp, inicio_bolao_date)
 
-		temp = subst_P("P2", "P1", temp)
-		for o in temp:
-			Jogos.append(o)
+		if len(temp) > 0:
+			temp = subst_P("P2", "P1", temp)
+			for o in temp:
+				Jogos.append(o)
 	else:
 		print('Nenhum resultado para QUAL-UEL')
 
@@ -896,9 +902,189 @@ else:
 		print('Nenhum resultado para UEL')
 
 
+result14 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UECL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+temp=[]
+variavel=[]
+index1 = 0
+# Wait for the program to finish
+if result14.returncode != 0:
+	print(result14.stderr)
+else:
+	# Print the stdout output if the subprocess ran successfully
+	if result14.stdout != '':
+		zz=0
+		variavel = result14.stdout.split('\n')
+		for o in variavel:
+			temp.append(o)
+		while "" in temp:
+			temp.remove("")
+
+		print("Jogo encaminhado ao filtro para qualificatorias UECL")
+
+		temp = after_FACS_filter(temp, inicio_bolao_date)
+
+		if len(temp) > 0:
+			temp = subst_P("P2", "P1", temp)
+			for o in temp:
+				Jogos.append(o)
+	else:
+		print('Nenhum resultado para QUAL-UECL')
+
+
+
+
+result15 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_UECL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+temp=[]
+variavel=[]
+# Wait for the program to finish
+if result15.returncode != 0:
+	print(result15.stderr)
+else:
+	# Print the stdout output if the subprocess ran successfully
+	if result15.stdout != '':
+		zz=0
+		variavel = result15.stdout.split('\n')
+		for o in variavel:
+				temp.append(o)
+		while "" in temp:
+			temp.remove("")
+		# print(temp)
+		if "j1=0" in temp:
+			temp.remove("j1=0")
+			print('Jogo UECL adicionado')
+
+			# pdb.set_trace()
+			temp = subst_P("P2", "P1", temp)
+
+			# while "P2" in temp[index1]:
+			# 		temp[index1] = temp[index1].replace("P2", "P1")
+			# 		if index1 < (len(temp)-1):
+			# 			index1=index1 + 1
+
+			for o in temp:
+				Jogos.append(o)
+
+		elif "j1=3" in temp:
+			zz=2
+			temp.remove("j1=3")
+
+			temp = subst_P("P2", "P1", temp)
+
+			print('Jogo UECL oitavas/quartas adicionado')
+
+			for o in temp:
+				Jogos.append(o)
+
+		elif "j1=1" in temp:
+			temp.remove("j1=1")
+			index1 = 0
+			print('Jogo UECL semi-final adicionado')
+			temp = subst_P("P1", "P2", temp)
+			for o in temp:
+				Jogos.append(o)
+
+
+			# for z3 in temp:
+			# 	if "P1" in z3:
+			# 		z3 = z3.replace("P1", "P2")
+
+		elif "j1=2" in temp:
+			temp.remove("j1=2")
+			index1=0
+			print('Jogo UECL final adicionado')
+
+			temp = subst_P("P1", "P3", temp)
+			temp = subst_P("P2", "P3", temp)
+
+			for o in temp:
+				Jogos.append(o)
+
+	else:
+		print('Nenhum resultado para UECL')
+
+
+
+result16 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_FCWC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+temp=[]
+variavel=[]
+# Wait for the program to finish
+if result16.returncode != 0:
+	print(result16.stderr)
+else:
+	# Print the stdout output if the subprocess ran successfully
+	if result16.stdout != '':
+		zz=0
+		variavel = result16.stdout.split('\n')
+		for o in variavel:
+				temp.append(o)
+		while "" in temp:
+			temp.remove("")
+		# print(temp)
+		if "j1=0" in temp:
+			temp.remove("j1=0")
+			print('Jogo anterior a semi FCWC')
+
+			# pdb.set_trace()
+			temp = subst_P("P2", "P1", temp)
+
+			# while "P2" in temp[index1]:
+			# 		temp[index1] = temp[index1].replace("P2", "P1")
+			# 		if index1 < (len(temp)-1):
+			# 			index1=index1 + 1
+
+			for o in temp:
+				Jogos.append(o)
+
+		elif "j1=3" in temp:
+			zz=2
+			temp.remove("j1=3")
+
+			temp = subst_P("P2", "P1", temp)
+
+			print('Jogo FCWC semi adicionado')
+
+			for o in temp:
+				Jogos.append(o)
+
+		elif "j1=1" in temp:
+			temp.remove("j1=1")
+			index1 = 0
+			print('Jogo FCWC terceiro adicionado')
+			temp = subst_P("P2", "P1", temp)
+			for o in temp:
+				Jogos.append(o)
+
+
+			# for z3 in temp:
+			# 	if "P1" in z3:
+			# 		z3 = z3.replace("P1", "P2")
+
+		elif "j1=2" in temp:
+			temp.remove("j1=2")
+			index1=0
+			print('Jogo FCWC final adicionado')
+
+			temp = subst_P("P1", "P2", temp)
+
+
+			for o in temp:
+				Jogos.append(o)
+
+	else:
+		print('Nenhum resultado para FCWC')
+
+
+
 print(Jogos)
 
-
+# for index in range(len(Jogos)):
+# 	print(Jogos[index].encode('utf-8').decode(sys.stdout.encoding))
 
 
 # cursor.execute("SELECT [Número de jogos] FROM scottish_premiership_table_championship")

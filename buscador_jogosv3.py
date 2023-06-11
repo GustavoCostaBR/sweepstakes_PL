@@ -13,6 +13,8 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
+# sys.stdout.reconfigure(encoding='utf-8')
+
 def selection_liga(url):
 	if "premier-league" in url:
 		liga = 'PL'
@@ -47,8 +49,13 @@ def selection_liga(url):
 		champstring = "europa-league"
 		stagestring = ["Round of 16", "Semi-finals", "Final"]
 		liga_url = champstring
+	elif "europa-conference-league-qual" in url:
+		liga = 'UECL_QUAL'
 	elif "conference-league" in url:
 		liga = 'UECL'
+		champstring = "europa-conference-league"
+		stagestring = ["Round of 16", "Semi-finals", "Final"]
+		liga_url = champstring
 	elif "uefa-super-cup" in url:
 		liga = 'USC'
 	elif "eng-fa-cup" in url:
@@ -80,7 +87,9 @@ def selection_liga(url):
 		liga_url = champstring
 	else:
 		liga = 'FCWC'
-
+		champstring = "klub-wm"
+		stagestring = ["Semi-finals", "Third place", "Final"]
+		liga_url = champstring
 	if 'champstring' in locals():
 		return champstring, stagestring, liga, liga_url
 	else:
@@ -160,12 +169,7 @@ def selecting_matchs_by_data(url, dt3, dt2, dt, liga_url, j1, special_dates):
 						j1 = 3
 
 					else:
-						if "champions-league" in url:
-							j1=0
-							v=1
-							data3=dt3
-
-						elif "europa-league" in url:
+						if "champions-league" in url or "europa-league" in url or "europa-conference-league" in url:
 							j1=0
 							v=1
 							data3=dt3
@@ -182,15 +186,11 @@ def selecting_matchs_by_data(url, dt3, dt2, dt, liga_url, j1, special_dates):
 						j1 = 1
 
 					else:
-						if "champions-league" in url:
+						if "champions-league" in url or "europa-league" in url or "europa-conference-league" in url:
 							j1=0
 							v=1
 							data3=dt3
 
-						elif "europa-league" in url:
-							j1=0
-							v=1
-							data3=dt3
 
 				elif len(special_dates) < 4:
 					if dt3 >= special_dates[0] and dt3 < special_dates[1]:
@@ -210,24 +210,21 @@ def selecting_matchs_by_data(url, dt3, dt2, dt, liga_url, j1, special_dates):
 						j1=2
 
 					else:
-						if "champions-league" in url:
+						if "champions-league" in url or "europa-league" in url or "europa-conference-league" in url:
 							j1=0
 							v=1
 							data3=dt3
 
-						elif "europa-league" in url:
-							j1=0
-							v=1
-							data3=dt3
 
 		else:
 			v=1
 			data3 = dt3
 			j1=0
 
-	elif (dt3 < dt or dt3 > dt2) and (j1 != 2 and j1 != 1 and j1 != 3):
+	elif (dt3 < dt or dt3 > dt2):
 		v = 2
-		j1 = 0
+		if (j1 != 2 and j1 != 1 and j1 != 3):
+			j1 = 0
 
 
 	if 'data3' in locals():
@@ -399,26 +396,20 @@ Rivalidades_Escocia = {
 Times_sem_rivais = {'Livingston': ['Sem rival']}
 Rivalidades = [Rivalidades_Inglaterra , Rivalidades_Escocia, Times_sem_rivais]
 times_desconsiderados = {}
-# conn = sqlite3.connect('content.sqlite')
-# conn.execute('PRAGMA foreign_keys = ON')
-# cur = conn.cursor()
-# cur.execute('CREATE TABLE IF NOT EXISTS Jobs (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT UNIQUE, link TEXT UNIQUE, Profession TEXT UNIQUE, Workforce TEXT, [Average Age] REAL, [Average Salary] REAL, [Average Male Salary] REAL, [Average Female Salary] REAL, [Total of Male Workers] REAL, [Total of Female Workers] REAL, [Profession Tier] TEXT)')
-
-# cur.execute('CREATE TABLE IF NOT EXISTS Vari (Jobs_id INTEGER UNIQUE, vari FLOAT, dev FLOAT, [vari acumul] FLOAT, [disparidade salarial] FLOAT, [disparidade salarial relacao media] FLOAT, [disparidade salarial relacao media cumulativa] FLOAT, FOREIGN KEY(Jobs_id) REFERENCES Jobs(id))')
-
 
 # cur.execute('SELECT MAX(id) FROM Keywords')
 headers = {
    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/110.0'}
 url = sys.argv[11]
+# url = 'https://www.worldfootball.net/all_matches/europa-conference-league-2022-2023/'
 # url = "https://www.worldfootball.net/all_matches/champions-league-2022-2023/"
 # url ="https://www.worldfootball.net/all_matches/uefa-super-cup-2023/"
 # url = 'https://www.worldfootball.net/all_matches/eng-premier-league-2022-2023/'
 # url = 'https://www.worldfootball.net/all_matches/eng-fa-cup-2022-2023/'
 # url = 'https://sco.worldfootball.net/all_matches/sco-fa-cup-2022-2023/'
 # url = 'https://www.worldfootball.net/all_matches/eng-fa-community-shield-2023/'
-ligas_times_diferentes = ['https://www.worldfootball.net/all_matches/champions-league-2022-2023/', 'https://www.worldfootball.net/all_matches/europa-league-2022-2023/', 'https://www.worldfootball.net/all_matches/europa-conference-league-2022-2023/', 'https://www.worldfootball.net/all_matches/uefa-super-cup-2021/','https://www.worldfootball.net/all_matches/klub-wm-2022/', 'https://www.worldfootball.net/all_matches/champions-league-qual-2022-2023/', 'https://www.worldfootball.net/all_matches/europa-league-qual-2022-2023/']
-urls_times_diferentes = ['https://www.worldfootball.net/players/champions-league-2022-2023/', 'https://www.worldfootball.net/players/europa-league-2022-2023/', 'https://www.worldfootball.net/players/europa-conference-league-2022-2023/', 'https://www.worldfootball.net/players/uefa-super-cup-2021/', 'https://www.worldfootball.net/players/klub-wm-2022/', 'https://www.worldfootball.net/players/champions-league-qual-2022-2023/', 'https://www.worldfootball.net/players/europa-league-qual-2022-2023/']
+ligas_times_diferentes = ['https://www.worldfootball.net/all_matches/champions-league-2022-2023/', 'https://www.worldfootball.net/all_matches/europa-league-2022-2023/', 'https://www.worldfootball.net/all_matches/europa-conference-league-2022-2023/', 'https://www.worldfootball.net/all_matches/uefa-super-cup-2021/','https://www.worldfootball.net/all_matches/klub-wm-2021/', 'https://www.worldfootball.net/all_matches/champions-league-qual-2022-2023/', 'https://www.worldfootball.net/all_matches/europa-league-qual-2022-2023/', 'https://www.worldfootball.net/all_matches/europa-conference-league-qual-2022-2023/']
+urls_times_diferentes = ['https://www.worldfootball.net/players/champions-league-2022-2023/', 'https://www.worldfootball.net/players/europa-league-2022-2023/', 'https://www.worldfootball.net/players/europa-conference-league-2022-2023/', 'https://www.worldfootball.net/players/uefa-super-cup-2021/', 'https://www.worldfootball.net/players/klub-wm-2021/', 'https://www.worldfootball.net/players/champions-league-qual-2022-2023/', 'https://www.worldfootball.net/players/europa-league-qual-2022-2023/', 'https://www.worldfootball.net/players/europa-conference-league-qual-2022-2023/']
 ligas_times_ingleses_nao_listados = ['https://www.worldfootball.net/all_matches/sco-fa-cup-2022-2023/','https://www.worldfootball.net/all_matches/sco-league-cup-2022-2023/', 'https://www.worldfootball.net/all_matches/eng-fa-cup-2022-2023/', 'https://www.worldfootball.net/all_matches/eng-league-cup-2022-2023/', 'https://sco.worldfootball.net/all_matches/sco-playoff-2021-2022-premiership/']
 urls_times_ingleses_nao_listados = ['https://www.worldfootball.net/players/sco-fa-cup-2022-2023/','https://www.worldfootball.net/players/sco-league-cup-2022-2023/', 'https://www.worldfootball.net/players/eng-fa-cup-2022-2023/', 'https://www.worldfootball.net/players/eng-league-cup-2022-2023/', 'https://sco.worldfootball.net/players/sco-playoff-2021-2022-premiership/']
 f = 0
@@ -496,8 +487,8 @@ int_list2 = [int(x) for x in sys.argv[6:11]]
 dt = datetime(*int_list, tzinfo=gmt)
 # limite superior de data
 dt2 = datetime(*int_list2, tzinfo=gmt)
-# dt = datetime(2022, 8, 4, 20, 30, tzinfo=gmt)
-# dt2 = datetime(2022, 8, 10, 20, 30, tzinfo=gmt)
+# dt = datetime(2023, 4, 12, 20, 30, tzinfo=gmt)
+# dt2 = datetime(2023, 4, 21, 20, 30, tzinfo=gmt)
 #  dt2 = sys.argv[2]
 # dt2 = datetime(2023, 2, 12, 20, 30, tzinfo=gmt)
 v = 2
@@ -593,11 +584,23 @@ for tag in body:
 				# datas_eng_fa_cup.extend(target_list)
 				special_dates.extend(target_list)
 				contador1 = contador1 + 1
-			# if len(datas_eng_fa_cup) < 3:
-			# 	print("eh menor que 3")
-			# contador1 = 1
+
+		elif "europa-conference-league" in url and "europa-conference-league-qual" not in url:
+			target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
+			if target_list != None:
+				# datas_eng_fa_cup.extend(target_list)
+				special_dates.extend(target_list)
+				contador1 = contador1 + 1
+
+		elif "klub-wm" in url:
+			target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
+			if target_list != None:
+				# datas_eng_fa_cup.extend(target_list)
+				special_dates.extend(target_list)
+				contador1 = contador1 + 1
 
 
+v=2
 # pdb.set_trace()
 for tag in body:
 	a=1
@@ -624,7 +627,7 @@ for tag in body:
 				if v == 1:
 					# pdb.set_trace()
 					j = replace_abv(y)
-					# if j == "Manchester City":
+					# if j == "West Ham United":
 					# 	pdb.set_trace()
 					# montando os jogos com as datas setadas
 					time0, hora_brasil_str, dia_mes_str, contador = set_date(data3, j, Rivalidades, contador, tags)
@@ -712,8 +715,12 @@ if 'inicio_bolao' in globals():
 # pdb.set_trace()
 
 if f == 1:
-	for y in jogos_semana_f:
-		print(y)
+	for index, y in enumerate(jogos_semana_f):
+		try:
+			# print(y.encode('utf-8').decode(sys.stdout.encoding))
+			print(y)
+		except:
+			print("Time com caracter especiais, buscar manualmente")
 
 	if j1==1:
 		if len(jogos_semana_f) > 0:
@@ -722,19 +729,21 @@ if f == 1:
 	elif j1==2:
 		if len(jogos_semana_f) > 0:
 			print("j1=2")
-	elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url) and "champions-league-qual" not in url and "europa-league-qual" not in url:
+	elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url) and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
 		if len(jogos_semana_f) > 0:
 			print("j1=3")
-	elif ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url) and j1==0 and "champions-league-qual" not in url and "europa-league-qual" not in url:
+	elif ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url) and j1==0 and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
 		if len(jogos_semana_f) > 0:
 			print("j1=0")
 
 
 
 if f == 0:
-	for y in jogos_semana:
-		print(y)
-
+	for index, y in enumerate(jogos_semana):
+		try:
+			print(y)
+		except:
+			print("Time com caracter especiais, buscar manualmente")
 	if j1==1:
 		if len(jogos_semana) > 0:
 			print("j1=1")
@@ -742,10 +751,10 @@ if f == 0:
 	elif j1==2:
 		if len(jogos_semana) > 0:
 			print("j1=2")
-	elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url) and "champions-league-qual" not in url and "europa-league-qual" not in url:
+	elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url) and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
 		if len(jogos_semana) > 0:
 			print("j1=3")
-	elif ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url) and j1==0 and "champions-league-qual" not in url and "europa-league-qual" not in url:
+	elif ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url) and j1==0 and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
 		if len(jogos_semana) > 0:
 			print("j1=0")
 
