@@ -6,6 +6,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 import ssl
 import pdb
+import yaml
 # import var_dump
 #from lxml import html
 # Ignore SSL certificate errors
@@ -270,131 +271,21 @@ def set_date(data3, j, Rivalidades, contador, tags):
 	# else:
 	# 	return None, None, None, None
 
+# Importando arquivo de rivais, pode ser editável na estrutura atual
+with open('Rivals.yml', 'r') as f:
+	data = yaml.load(f, Loader=yaml.FullLoader)
+
+# with open('Configuracoes.yml', 'r') as f:
+# 	data2 = yaml.load(f, Loader=yaml.FullLoader)
 
 
-Rivalidades_Inglaterra = {'Aldershot Town': ['Reading'],'Arsenal': ['Chelsea', 'Manchester United', 'Tottenham Hotspur'],'Aston Villa': ['Birmingham City', 'West Bromwich Albion', 'Wolverhampton Wanderers'],'Barnet': ['Wycombe Wanderers'],'Barnsley': ['Doncaster Rovers', 'Rotherham United'],'Birmingham City': ['Aston Villa', 'West Bromwich Albion', 'Wolverhamtpon Wanderers'],'Blackburn Rovers': ['Burnley'],'Blackpool': ['Preston North End'],
-'Bolton Wanderers': ['Bury', 'Wigan Athletic'],
-'Bournemouth': ['Southampton'],
-'Bradford City': ['Leeds United', 'Bradford Park Avenue', 'Huddersfield Town', 'Halifax Town'],
-'Bradford Park Avenue': ['Bradford City', 'Halifax Town'],
-'Brentford': ['Fulham', "Queens Park Rangers"],
-'Brighton & Hove Albion': ['Crystal Palace'],
-'Bristol City': ['Bristol Rovers', 'Cardiff City'],
-'Bristol Rovers': ['Bristol City', 'Swindon Town'],
-'Burnley': ['Blackburn Rovers'],
-'Bury': ['Bolton Wanderers', 'Rochdale'],
-'Cambridge United': ['Colchester United', 'Peterborough United'],
-'Cardiff City': ['Swansea City', 'Bristol City', 'Newport County'],
-'Carlisle United': ['Workington'],
-'Charlton Athletic': ['Crystal Palace', 'Millwall'],
-'Chelsea': ['Arsenal', 'Leeds United', 'Manchester United', 'Tottenham Hotspur', 'Fulham', "Queens Park Rangers"],
-'Chester': ['Wrexham', 'Tranmere Rovers'],
-'Chesterfield': ['Mansfield Town'],
-'Colchester United': ['Southend United', 'Cambridge United'],
-'Coventry City': ['Leicester City'],
-'Crewe Alexandra': ['Port Vale', 'Stockport County'],
-'Crystal Palace': ['Brighton & Hove Albion', 'Charlton Athletic', 'Millwall'],
-'Darlington': ['Hartlepool United'],
-'Derby County': ['Nottingham Forest', 'Leicester City', 'Notts County'],
-'Doncaster Rovers': ['Barnsley', 'Rotherham United', 'Scunthorpe United'],
-'Everton': ['Liverpool'],
-'Exeter City': ['Plymouth Argyle', 'Torquay United'],
-'Fulham': ['Brentford', 'Chelsea', "Queens Park Rangers"],
-'Gainsborough Trinity': ['Lincoln City'],
-'Grimsby Town': ['Hull City', 'Lincoln City', 'Scunthorpe United'],
-'Halifax Town': ['Bradford City', 'Bradford Park Avenue'],
-'Hartlepool United': ['Darlington'],
-'Hereford United': ['Shrewsbury Town'],
-'Huddersfield Town': ['Leeds United', 'Bradford City'],
-'Hull City': ['Grimsby Town', 'York City'],
-'Ipswich Town': ['Norwich City'],
-'Leeds United': ['Chelsea', 'Manchester United', 'Bradford City', 'Huddersfield Town'], 'Leicester City': ['Coventry City', 'Derby County', 'Nottingham Forest'],
-'Leyton Orient': ['West Ham United'],
-'Lincoln City': ['Grimsby Town', 'Scunthorpe United', 'Gainsborough Trinity'],
-'Liverpool': ['Everton', 'Manchester City', 'Manchester United'],
-'Luton Town': ['Watford'],
-'Manchester City': ['Liverpool', 'Manchester United'],
-'Manchester United': ['Arsenal', 'Chelsea', 'Leeds United', 'Liverpool', 'Manchester City'],
-'Mansfield Town': ['Chesterfield', 'Notts County'],
-'Milton Keynes Dons': ['Wimbledon'],
-'Middlesbrough': ['Newcastle United', 'Sunderland'],
-'Millwall': ['Charlton Athletic', 'Crystal Palace', 'West Ham United'],
-'Newcastle United': ['Sunderland', 'Middlesbrough'],
-'Newport County': ['Cardiff City'],
-'Northampton Town': ['Peterborough United'],
-'Norwich City': ['Ipswich Town'],
-'Nottingham Forest': ['Derby County', 'Notts County', 'Leicester City'],
-'Notts County': ['Nottingham Forest', 'Derby County', 'Mansfield Town'],
-'Oldham Athletic': ['Rochdale'],
-'Oxford United': ['Reading', 'Swindon Town'],
-'Peterborough United': ['Northampton Town', 'Cambridge United'],
-'Plymouth Argyle': ['Exeter City', 'Torquay United'],
-'Port Vale': ['Crewe Alexandra', 'Stoke City'],
-'Portsmouth': ['Southampton'],
-'Preston North End': ['Blackpool'],
-"Queens Park Rangers": ['Brentford', 'Chelsea', 'Fulham'],
-'Reading': ['Oxford United', 'Swindon Town', 'Aldershot Town'],
-'Rochdale': ['Oldham Athletic', 'Bury'],
-'Rotherham United': ['Barnsley', 'Doncaster Rovers'],
-'Scunthorpe United': ['Doncaster Rovers', 'Grimsby Town', 'Lincoln City'],
-'Sheffield United': ['Sheffield Wednesday'],
-'Sheffield Wednesday': ['Sheffield United'],
-'Shrewsbury Town': ['Walsall', 'Hereford United'],
-'Southampton': ['Bournemouth', 'Portsmouth'],
-'Southend United': ['Colchester United'],
-'Stockport County': ['Crewe Alexandra'],
-'Stoke City': ['Port Vale'],
-'Sunderland': ['Middlesbrough', 'Newcastle United'],
-'Swansea City': ['Cardiff City'],
-'Swindon Town': ['Reading', 'Oxford United', 'Bristol Rovers'],
-'Torquay United': ['Exeter City', 'Plymouth Argyle'],
-'Tottenham Hotspur': ['Arsenal', 'Chelsea', 'West Ham United'],
-'Tranmere Rovers': ['Chester', 'Wrexham'],
-'Walsall': ['Shrewsbury Town'],
-'Watford': ['Luton Town'],
-'West Bromwich Albion': ['Wolverhampton Wanderers', 'Birmingham City', 'Aston Villa'],
-'West Ham United': ['Tottenham Hotspur', 'Millwall', 'Leyton Orient'],'Wigan Athletic': ['Bolton Wanderers'] ,'Wimbledon': ['Milton Keynes Dons'],
-'Workington': ['Carlisle United'],
-'Wolverhampton Wanderers': ['West Bromwich Albion', 'Birmingham City', 'Aston Villa'],
-'Wrexham': ['Chester', 'Tranmere Rovers'],
-'Wycombe Wanderers': ['Barnet'],
-'York City': ['Hull City']}
 
-Rivalidades_Escocia = {
-  'Aberdeen': ['Dundee United', 'Inverness CT'],
-  'Airdrieonians': ['Motherwell', 'Hamilton Academical'],
-  'Arbroath': ['Montrose', 'Forfar Athletic', 'Brechin City'],
-  'Ayr United': ['Kilmarnock'],
-  'Brechin City': ['Arbroath', 'Montrose', 'Forfar Athletic'],
-  'Celtic': ['Rangers'],
-  'Clyde': ['Partick Thistle'],
-  'Cowdenbeath': ['Dunfermline Athletic', 'Raith Rovers', 'East Fife'],
-  'Dundee': ['Dundee United', 'St. Johnstone'],
-  'Dundee United': ['Dundee', 'Aberdeen', 'St. Johnstone'],
-  'Dunfermline Athletic': ['Raith Rovers', 'Cowdenbeath', 'East Fife'],
-  'East Fife': ['Dunfermline Athletic', 'Raith Rovers', 'Cowdenbeath'],
-  'East Stirlingshire': ['Falkirk'],
-  'Falkirk': ['East Stirlingshire'],
-  'Forfar Athletic': ['Arbroath', 'Montrose', 'Brechin City'],
-  'Greenock Morton': ['St. Mirren'],
-  'Hamilton Academical': ['Motherwell', 'Airdrieonians'],
-  'Heart of Midlothian': ['Hibernian'],  'Hearts': ['Hibernian'],
-  'Hibernian': ['Heart of Midlothian', 'Hearts'],
-  'Inverness CT': ['Ross County', 'Aberdeen'],
-  'Kilmarnock': ['Ayr United'],
-  'Montrose': ['Arbroath', 'Forfar Athletic', 'Brechin City'],
-  'Motherwell': ['Hamilton Academical', 'Airdrieonians'],
-  'Partick Thistle': ['Clyde'],
-  "Queen's Park": ['Rangers'],
-  'Raith Rovers': ['Dunfermline Athletic', 'Cowdenbeath', 'East Fife'],
-  'Rangers': ['Celtic', "Queen's Park"],
-  'Ross County': ['Inverness CT'],
-  'St. Johnstone': ['Dundee', 'Dundee United'],
-  'St. Mirren': ['Greenock Morton']
-}
+Rivalidades_Inglaterra = data['Rivalidades_Inglaterra']
+Rivalidades_Escocia = data['Rivalidades_Escocia']
+Times_sem_rivais = data['Times_sem_rivais']
+# Inicio_Rodada = data2['Inicio_Rodada']
 
-Times_sem_rivais = {'Livingston': ['Sem rival']}
-Rivalidades = [Rivalidades_Inglaterra , Rivalidades_Escocia, Times_sem_rivais]
+Rivalidades= [Rivalidades_Inglaterra, Rivalidades_Escocia, Times_sem_rivais]
 times_desconsiderados = {}
 
 # cur.execute('SELECT MAX(id) FROM Keywords')
