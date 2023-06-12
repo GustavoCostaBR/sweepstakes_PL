@@ -401,6 +401,7 @@ datas_eng_league_cup = []
 js = []
 contador1 = 0
 
+# Verificando se é uma copa ou campeonato que exija tratamento especial quanto a datas
 for tag in body:
 	# Tentando garantir que ele só pegue a partir de um certo estágio se for playoff ou copa, nessa etapa ele seta datas específicas para acontecimentos específicos. Só deve realizar essa etapa uma vez, por isso o contador.
 	if contador1 == 0:
@@ -485,6 +486,7 @@ for tag in body:
 
 
 v=2
+# Selecionando a partida pelas datas, inclusive considerando as datas especiais evocadas na última parte
 for tag in body:
 	a=1
 
@@ -526,6 +528,7 @@ for tag in body:
 	except:
 		continue
 
+# Montando Jogos e slecionando peso de derbies
 for x in range(len(time)):
 	if x % 2 == 0:
 		for y in range(len(Rivalidades)):
@@ -552,13 +555,14 @@ lista_delete_jogos = []
 lista_delete_dia = []
 lista_delete_hora = []
 lista_delete_jogos_semana = []
+
+# Casos especiais em que os times não estão nas listas de times ingleses e escoceses, se nenhum dos times do jogo está nessas listas, o jogo é removido
 for u in range(len(time)):
 	if u % 2 == 0:
 		# print(time[u])
 		if not time[u] in Rivalidades[0] and not time[u+1] in Rivalidades[0] and not time[u] in Rivalidades[1] and not time[u+1] in Rivalidades[1] and not time[u] in Rivalidades[2] and not time[u+1] in Rivalidades[2]:
 
 			lista_delete_time.extend([u, u+1])
-			# print(lista_delete_time)
 			lista_delete_peso.append(int(u/2))
 			lista_delete_jogos.append(int(u/2))
 			lista_delete_dia.append(int(u/2))
@@ -569,9 +573,10 @@ for u in range(len(time)):
 	# contadory = contadory + 1
 	# print(u)
 
+# Removendo times não ingleses e não escoceses seguindo critério do último comentário
 timef = [elem for idx, elem in enumerate(time) if idx not in lista_delete_time]
-	# for y in
-	# time[x]
+
+# Removendo jogos não ingleses e não escoceses seguindo critério do último comentário
 jogos_semana_f = [elem for idx, elem in enumerate(jogos_semana) if idx not in lista_delete_jogos_semana]
 
 # print(time)
