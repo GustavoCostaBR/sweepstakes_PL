@@ -9,6 +9,7 @@ from googleapiclient.errors import HttpError
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient import errors
+import sys
 
 
 def main():
@@ -42,7 +43,7 @@ SCOPES2 = ['https://www.googleapis.com/auth/script.projects', 'https://www.googl
 
 # SCOPES = ['https://www.googleapis.com/auth/forms', 'https://www.googleapis.com/auth/spreadsheets']
 SERVICE_ACCOUNT_FILE = 'I:/network_share/Gustavo/bolao/teste-spreadsheet2-73bac563f316.json'
-SPREADSHEET_ID = '14h7JFsQa5ebEKl3earfrF6NMAcvSCMFtT9J8IZuHLDU'
+# SPREADSHEET_ID = '14h7JFsQa5ebEKl3earfrF6NMAcvSCMFtT9J8IZuHLDU'
 
 # Authenticate with Google using a service account
 creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
@@ -53,16 +54,16 @@ forms_service = build('forms', 'v1', credentials=creds)
 sheets_service = build('sheets', 'v4', credentials=creds)
 drive_service = build('drive', 'v3', credentials=creds2)
 # Read the column headers from the linked spreadsheet
-sheet_metadata = sheets_service.spreadsheets().get(spreadsheetId=SPREADSHEET_ID).execute()
-sheet_name = sheet_metadata['sheets'][0]['properties']['title']
-headers = sheets_service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range=f'{sheet_name}!1:1').execute().get('values', [])[0]
+# sheet_metadata = sheets_service.spreadsheets().get(spreadsheetId=SPREADSHEET_ID).execute()
+# sheet_name = sheet_metadata['sheets'][0]['properties']['title']
+# headers = sheets_service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range=f'{sheet_name}!1:1').execute().get('values', [])[0]
 
 # Create a new Google Form
 
 
 form2 = {
     "info": {
-        "title": "My new form",
+        "title": "Rodada_trinta_v_1",
     },
 }
 
@@ -96,7 +97,7 @@ response = drive_service.permissions().create(fileId=form_id, body=permission, *
 # Create a new google spreadsheet
 spreadsheet = sheets_service.spreadsheets().create(body={
     'properties': {
-        'title': 'My New Spreadsheet'
+        'title': 'Rodada_trinta_v_1'
     }
 }).execute()
 
@@ -117,34 +118,78 @@ atualizacion = [
     {
         "createItem": {
             "item": {
-                "textItem": {},
-                "title": "Manchester United2 x Everton2 - P1 (PL) - 08/04 - 08:30"
-            },
+                "title": "Qual é o seu nome (com sobrenome final)?",
+                "questionItem": {
+		            'question': {
+			            'required': True,
+		                'textQuestion': {}}}},
             "location": {
                 "index": 0
             }
-        }
-    },
+        }},
     {
         "createItem": {
             "item": {
+                "title": "Qual é a sua senha padrão de aposta (deverá ser sempre a mesma)?",
                 "questionItem": {
                     "question": {
                         "required": True,
-                        "scaleQuestion": {"high": 10}
-                    }
-                },
-                "title": "Manchester United2"
-            },
+                        'textQuestion': {}}}
+                    },
             "location": {
                 "index": 1
-        }
-    }}
-]
+        }}
+    }]
+# for x in range(len(jogos)):
+
+jogos = sys.argv[1:]
+
+for index in range(len(jogos)):
+    parts = jogos[index].split(" x ", 1)
+    time1 = parts[0]
+    parts2 = parts[1].split(" - ", 1)
+    time2 = parts2[0]
+    newitem = {
+        "createItem": {
+            "item": {
+                "questionGroupItem": {
+                    "questions": [{
+                        "required": True,
+                        "rowQuestion":{
+                            "title": f"{time1}"}},
+			    {
+				        "required": True,
+                        "rowQuestion":{
+                            "title": f"{time2}"}}],
+                        'grid':
+			{
+				            'columns':
+			     {
+				                'type': 'RADIO',
+				                'options':
+				[{
+					                'value':'0'},
+				                    {'value': '1'},
+				                    {'value': '2'},
+				                    {'value': '3'},
+				                    {'value': '4'},
+				                    {'value': '5'},
+				                    {'value': '6'},
+				                    {'value': '7'},
+				                    {'value': '8'},
+				                    {'value': '9'}]}}},
+				'title': f"{jogos[index]}"},
+		    "location": {
+                "index": index+2
+
+                        }}}
+    atualizacion.append(newitem)
 
 update = {
     "requests": atualizacion
 }
+
+
 
 # Add the question to the form
 question_setting = forms_service.forms().batchUpdate(

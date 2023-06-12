@@ -1083,20 +1083,14 @@ else:
 
 print(Jogos)
 
-# for index in range(len(Jogos)):
-# 	print(Jogos[index].encode('utf-8').decode(sys.stdout.encoding))
+result17 = subprocess.run(['python', 'forms.py', *Jogos], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
+if result17.returncode != 0:
+	print(result17.stderr)
+else:
+	# Print the stdout output if the subprocess ran successfully
+	if result17.stdout != '':
+		variavel = result17.stdout.split('\n')
+		for o in variavel:
+			print(o)
 
-# cursor.execute("SELECT [Número de jogos] FROM scottish_premiership_table_championship")
-# resultado1 = cursor.fetchone()[0]
-
-# for jogo in Jogos:
-#     if jogo == '':
-#         del jogo
-#     else:
-#         Jogos_final.append(jogo)
-# # output = result.stdout.decode('utf-8')
-# # print(output)
-# # # out1, err1 = p1.communicate()
-
-# print(Jogos_final)
