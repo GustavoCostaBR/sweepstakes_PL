@@ -130,7 +130,7 @@ atualizacion = [
     {
         "createItem": {
             "item": {
-                "title": "Qual é a sua senha padrão de aposta (deverá ser sempre a mesma)?",
+                "title": "Qual é a sua senha padrão de aposta? (deverá ser sempre a mesma)",
                 "questionItem": {
                     "question": {
                         "required": True,
@@ -140,7 +140,6 @@ atualizacion = [
                 "index": 1
         }}
     }]
-# for x in range(len(jogos)):
 
 jogos = sys.argv[1:]
 

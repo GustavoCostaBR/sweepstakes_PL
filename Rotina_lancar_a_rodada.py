@@ -10,6 +10,9 @@ import sys
 with open('Configuracoes.yml', 'r') as f:
 	data = yaml.load(f, Loader=yaml.FullLoader)
 
+with open('Ativar_Desativar_campeonatos.yml', 'r') as f:
+	data0 = yaml.load(f, Loader=yaml.FullLoader)
+
 gmt = pytz.timezone('GMT')
 dt = []
 dt2 = []
@@ -79,22 +82,23 @@ Jogos = []
 Jogos_final = []
 # var_dump.var_dump(dt)
 
-# Start program 0
-result0 = subprocess.run(['python', 'TABELA_CAMPEONATOS.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-if result0.returncode != 0:
-	print(result0.stderr)
-else:
-    # Print the stdout output if the subprocess ran successfully
-	if result0.stdout != '':
-		print('Tabela dos campeonatos criada/atualizada')
-        # variavel = result0.stdout.split('\n')
-        # for o in variavel:
-            # Tabelas.append(o)
+if data0['TABELAS'] == 1:
+	# Start program 0
+	result0 = subprocess.run(['python', 'TABELA_CAMPEONATOS.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	if result0.returncode != 0:
+		print(result0.stderr)
 	else:
-		print('Erro provável no subprograma TABELA_CAMPEONATOS.py')
-        # var_dump.var_dump(result.stdout)
+		# Print the stdout output if the subprocess ran successfully
+		if result0.stdout != '':
+			print('Tabela dos campeonatos criada/atualizada')
+			# variavel = result0.stdout.split('\n')
+			# for o in variavel:
+				# Tabelas.append(o)
+		else:
+			print('Erro provável no subprograma TABELA_CAMPEONATOS.py')
+			# var_dump.var_dump(result.stdout)
 
-# print(Tabelas)
+
 
 # connect to the database
 conn = sqlite3.connect('championships.db')
@@ -102,995 +106,871 @@ conn = sqlite3.connect('championships.db')
 # create a cursor object
 cursor = conn.cursor()
 
-# Start first program
-result = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_FACS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+if data0['FACS'] == 1:
+	# Start first program
+	result = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_FACS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	# p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-
-# Wait for the program to finish
-if result.returncode != 0:
-	print(result.stderr)
-else:
-    # Print the stdout output if the subprocess ran successfully
-	if result.stdout != '':
-		print('Data inicial do bolao capturada')
-		# var_dump.var_dump(result.stdout)
-		variavel = result.stdout.split('\n')
-		while "hora ainda nao definida, setada como padrão, meio dia" in variavel:
-			variavel.remove("hora ainda nao definida, setada como padrão, meio dia")
-			print("hora ainda nao definida, setada como padrão, meio dia")
-		while "" in variavel:
-			variavel.remove("")
-		inicio_bolao = variavel[0]
-		print(inicio_bolao)
-		inicio_bolao_date = datetime.strptime(inicio_bolao, "%Y-%m-%d %H:%M:%S%z")
-		if len(variavel) > 1:
-			print(variavel[1])
-			print('Jogo adicionado para FACS')
-			Jogos.append(variavel[1])
-		else:
-			print("Nenhum jogo adicionado para FACS")
-
-
-	else:
-		print('Data inicial do bolao nao capturada')
-        # var_dump.var_dump(result.stdout)
-# print(Jogos)
-
-
-# # Start second program
-
-# # pdb.set_trace()
-result2 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_PL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-
-# Wait for the program to finish
-if result2.returncode != 0:
-	print(result2.stderr)
-else:
-    # Print the stdout output if the subprocess ran successfully
-	if result2.stdout != '':
-		print('Jogo adicionado para PL')
-		variavel = result2.stdout.split('\n')
-		for o in variavel:
-			Jogos.append(o)
-        # var_dump.var_dump(variavel[0])
-        # Jogos.append(result2.stdout.split['\n'])
-	else:
-		print('Nenhum resultado para PL')
-        # var_dump.var_dump(result.stdout)
-while "" in Jogos:
-	Jogos.remove("")
-# print(Jogos)
-
-cursor.execute("SELECT [Número de jogos] FROM scottish_premiership_table_championship")
-resultado1 = cursor.fetchone()[0]
-temp = []
-cursor.execute("SELECT [Número de jogos] FROM scottish_premiership_table")
-resultado = cursor.fetchone()[0]
-if resultado < 33:
-	# Start third program
-	result3 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 	# Wait for the program to finish
-	if result3.returncode != 0:
-		print(result3.stderr)
+	if result.returncode != 0:
+		print(result.stderr)
 	else:
-    	# Print the stdout output if the subprocess ran successfully
-		if result3.stdout != '':
-			print('Jogos SPFL encaminhados para o filtro')
-			variavel = result3.stdout.split('\n')
-			for o in variavel:
-				temp.append(o)
-			while "" in temp:
-				temp.remove("")
-			# print(temp)
-			# print("\n")
-			result3_1 = subprocess.run(['python', 'filtro_SPFL.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-			# # var_dump.var_dump(variavel[0])
-			# print(result3_1.stdout)
-			# variavel = result3_1.stdout.split('\n')
-			# while "" in variavel:
-			# 	variavel.remove("")
-			# for o in variavel:
-			# 	Jogos.append(o)
-			# Jogos.append(result3_1.stdout)
-		else:
-			print('Nenhum resultado para SPFL')
+		# Print the stdout output if the subprocess ran successfully
+		if result.stdout != '':
+			print('Data inicial do bolao capturada')
 			# var_dump.var_dump(result.stdout)
-# print(Jogos)
+			variavel = result.stdout.split('\n')
+			while "hora ainda nao definida, setada como padrão, meio dia" in variavel:
+				variavel.remove("hora ainda nao definida, setada como padrão, meio dia")
+				print("hora ainda nao definida, setada como padrão, meio dia")
+			while "" in variavel:
+				variavel.remove("")
+			inicio_bolao = variavel[0]
+			print(inicio_bolao)
+			inicio_bolao_date = datetime.strptime(inicio_bolao, "%Y-%m-%d %H:%M:%S%z")
+			if len(variavel) > 1:
+				print(variavel[1])
+				print('Jogo adicionado para FACS')
+				Jogos.append(variavel[1])
+			else:
+				print("Nenhum jogo adicionado para FACS")
 
-elif resultado1 < 38:
-	temp=[]
-	# Start third program
-	result3 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL_championship], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+		else:
+			print('Data inicial do bolao nao capturada')
+
+
+if data0['PL'] == 1:
+	# # Start second program
+
+	# # pdb.set_trace()
+	result2 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_PL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
 
 	# Wait for the program to finish
-	if result3.returncode != 0:
-		print(result3.stderr)
+	if result2.returncode != 0:
+		print(result2.stderr)
 	else:
-    	# Print the stdout output if the subprocess ran successfully
-		if result3.stdout != '':
-			print('Jogos SPFL_championship encaminhados para o filtro')
-			variavel = result3.stdout.split('\n')
+		# Print the stdout output if the subprocess ran successfully
+		if result2.stdout != '':
+			print('Jogo adicionado para PL')
+			variavel = result2.stdout.split('\n')
 			for o in variavel:
-				temp.append(o)
-			while "" in temp:
-				temp.remove("")
-
+				Jogos.append(o)
 
 		else:
-			print('Nenhum resultado para SPFL_championship')
+			print('Nenhum resultado para PL')
 			# var_dump.var_dump(result.stdout)
-
-	# Start third program (part2)
-	result3_2 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL_relegation], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-	# Wait for the program to finish
-	if result3_2.returncode != 0:
-		print(result3_2.stderr)
-	else:
-    	# Print the stdout output if the subprocess ran successfully
-		if result3_2.stdout != '':
-			print('Jogos SPFL_relegation encaminhados para o filtro')
-			variavel = result3_2.stdout.split('\n')
-			for o in variavel:
-				temp.append(o)
-			while "" in temp:
-				temp.remove("")
-			# print(temp)
-			# print("\n")
-
-
-		else:
-			print('Nenhum resultado para SPFL_relegation')
-			# var_dump.var_dump(result.stdout)
-
-
-	print(len(temp))
-	if len(temp) > 0:
-		result3_1 = subprocess.run(['python', 'filtro_SPFL_championship_relegation.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-		variavel = result3_1.stdout.split('\n')
-		while "" in variavel:
-			variavel.remove("")
-		for o in variavel:
-			Jogos.append(o)
-
-	temp=[]
-	variavel=[]
-
+	while "" in Jogos:
+		Jogos.remove("")
 	# print(Jogos)
 
-# # Remove the else for now for testing propose
-else:
-	result3 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL_PLAYOFFS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+if data0['SPFL'] == 1:
+	cursor.execute("SELECT [Número de jogos] FROM scottish_premiership_table_championship")
+	resultado1 = cursor.fetchone()[0]
+	temp = []
+	cursor.execute("SELECT [Número de jogos] FROM scottish_premiership_table")
+	resultado = cursor.fetchone()[0]
+	if resultado < 33:
+		# Start third program
+		result3 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-	# Wait for the program to finish
-	if result3.returncode != 0:
-		print(result3.stderr)
-	else:
-    	# Print the stdout output if the subprocess ran successfully
-		if result3.stdout != '':
-			print('Jogos SPFL_playoffs adicionados')
-			variavel = result3.stdout.split('\n')
-			for o in variavel:
-				if "SPFL - playoff" in o:
-					u5 = o.replace("P1", "P2")
-					Jogos.append(u5)
-        	# var_dump.var_dump(variavel[0])
-        	# Jogos.append(result2.stdout.split['\n'])
+		# Wait for the program to finish
+		if result3.returncode != 0:
+			print(result3.stderr)
 		else:
-			print('Nenhum resultado para SPFL_playoffs')
-			# var_dump.var_dump(result.stdout)
-# print(Jogos)
-
-
-cursor.execute("SELECT [Número de jogos] FROM eng_championship_table")
-resultado = cursor.fetchone()[0]
-if resultado < 46:
-
-	# # Start fourth program
-	result4 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_LCH], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-	temp=[]
-	variavel=[]
-	# Wait for the program to finish
-	if result4.returncode != 0:
-		print(result4.stderr)
-	else:
-		# Print the stdout output if the subprocess ran successfully
-		if result4.stdout != '':
-			print('Jogo LCH encaminhado ao filtro')
-			variavel = result4.stdout.split('\n')
-			for o in variavel:
+			# Print the stdout output if the subprocess ran successfully
+			if result3.stdout != '':
+				print('Jogos SPFL encaminhados para o filtro')
+				variavel = result3.stdout.split('\n')
+				for o in variavel:
 					temp.append(o)
-			while "" in temp:
-				temp.remove("")
-			# print(temp)
-			result4_1 = subprocess.run(['python', 'filtro_LCH.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-				# # var_dump.var_dump(variavel[0])
-				# print(result3_1.stdout)
-			variavel = result4_1.stdout.split('\n')
+				while "" in temp:
+					temp.remove("")
+
+				result3_1 = subprocess.run(['python', 'filtro_SPFL.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+			else:
+				print('Nenhum resultado para SPFL')
+
+	elif resultado1 < 38:
+		temp=[]
+		# Start third program
+		result3 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL_championship], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+		# Wait for the program to finish
+		if result3.returncode != 0:
+			print(result3.stderr)
+		else:
+			# Print the stdout output if the subprocess ran successfully
+			if result3.stdout != '':
+				print('Jogos SPFL_championship encaminhados para o filtro')
+				variavel = result3.stdout.split('\n')
+				for o in variavel:
+					temp.append(o)
+				while "" in temp:
+					temp.remove("")
+
+
+			else:
+				print('Nenhum resultado para SPFL_championship')
+
+		# Start third program (part2)
+		result3_2 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL_relegation], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+		# Wait for the program to finish
+		if result3_2.returncode != 0:
+			print(result3_2.stderr)
+		else:
+			# Print the stdout output if the subprocess ran successfully
+			if result3_2.stdout != '':
+				print('Jogos SPFL_relegation encaminhados para o filtro')
+				variavel = result3_2.stdout.split('\n')
+				for o in variavel:
+					temp.append(o)
+				while "" in temp:
+					temp.remove("")
+				# print(temp)
+				# print("\n")
+
+
+			else:
+				print('Nenhum resultado para SPFL_relegation')
+				# var_dump.var_dump(result.stdout)
+
+
+		print(len(temp))
+		if len(temp) > 0:
+			result3_1 = subprocess.run(['python', 'filtro_SPFL_championship_relegation.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+			variavel = result3_1.stdout.split('\n')
 			while "" in variavel:
 				variavel.remove("")
-			print(variavel)
+			for o in variavel:
+				Jogos.append(o)
+
+		temp=[]
+		variavel=[]
+
+		# print(Jogos)
+
+	# # Remove the else for now for testing propose
+	else:
+		result3 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL_PLAYOFFS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+		# Wait for the program to finish
+		if result3.returncode != 0:
+			print(result3.stderr)
+		else:
+			# Print the stdout output if the subprocess ran successfully
+			if result3.stdout != '':
+				print('Jogos SPFL_playoffs adicionados')
+				variavel = result3.stdout.split('\n')
+				variavel = subst_P("P1", "P2", variavel)
+				for o in variavel:
+					Jogos.append(o)
+			else:
+				print('Nenhum resultado para SPFL_playoffs')
+
+
+if data0['LCH'] == 1:
+	cursor.execute("SELECT [Número de jogos] FROM eng_championship_table")
+	resultado = cursor.fetchone()[0]
+	if resultado < 46:
+
+		# # Start fourth program
+		result4 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_LCH], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+		temp=[]
+		variavel=[]
+		# Wait for the program to finish
+		if result4.returncode != 0:
+			print(result4.stderr)
+		else:
+			# Print the stdout output if the subprocess ran successfully
+			if result4.stdout != '':
+				print('Jogo LCH encaminhado ao filtro')
+				variavel = result4.stdout.split('\n')
+				for o in variavel:
+						temp.append(o)
+				while "" in temp:
+					temp.remove("")
+				# print(temp)
+				result4_1 = subprocess.run(['python', 'filtro_LCH.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+# LCH ESTÁ DESABILITADO ENQUANTO AS LINHAS DE APPEND TO JOGOS ESTIVEREM DESABILITADAS
+
+				variavel = result4_1.stdout.split('\n')
+				while "" in variavel:
+					variavel.remove("")
+				print(variavel)
 				# for o in variavel:
 				# 	Jogos.append(o)
-				# Jogos.append(result3_1.stdout)
+			else:
+				print('Nenhum resultado para LCH')
+
+
+	else:
+
+		# # Start fourth program
+		result4 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_LCH_PLAYOFFS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+		temp=[]
+		variavel=[]
+		# Wait for the program to finish
+		if result4.returncode != 0:
+			print(result4.stderr)
 		else:
-			print('Nenhum resultado para LCH')
+			# Print the stdout output if the subprocess ran successfully
+			if result4.stdout != '':
+				print('Jogo LCH_PLAYOFF adicionado')
+				variavel = result4.stdout.split('\n')
+				for o in variavel:
+						temp.append(o)
+				while "" in temp:
+					temp.remove("")
+				# print(temp)
+				if "j1=3" in temp:
+					temp.remove("j1=3")
+					temp[(len(temp)-1)] = temp[(len(temp)-1)].replace("P1", "P3")
+				# print(temp)
+				index1=0
+				temp = subst_P("P1", "P2", temp)
 
-			# var_dump.var_dump(variavel[0])
+				# print(temp)
+				for o in temp:
+					Jogos.append(o)
 
-			# Jogos.append(result2.stdout.split['\n'])
-else:
+			else:
+				print('Nenhum resultado para LCH_PLAYOFF')
 
-	# # Start fourth program
-	result4 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_LCH_PLAYOFFS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+if data0['FAC'] == 1:
+	# # Start fifth program
+	result5 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_FAC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 	temp=[]
 	variavel=[]
 	# Wait for the program to finish
-	if result4.returncode != 0:
-		print(result4.stderr)
+	if result5.returncode != 0:
+		print(result5.stderr)
 	else:
 		# Print the stdout output if the subprocess ran successfully
-		if result4.stdout != '':
-			print('Jogo LCH_PLAYOFF adicionado')
-			variavel = result4.stdout.split('\n')
+		if result5.stdout != '':
+			zz=0
+			variavel = result5.stdout.split('\n')
 			for o in variavel:
 					temp.append(o)
 			while "" in temp:
 				temp.remove("")
 			# print(temp)
-			if "j1=3" in temp:
+			if "j1=0" in temp:
+				print('Jogo FAC anterior ao Round 3, nao adicionado')
+				temp = []
+			elif "j1=3" in temp:
+				zz=2
 				temp.remove("j1=3")
-				temp[(len(temp)-1)] = temp[(len(temp)-1)].replace("P1", "P3")
-			# print(temp)
-			index1=0
-			while "P1" in temp[index1]:
-				temp[index1] = temp[index1].replace("P1", "P2")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
+				print('Jogo FAC encaminhado ao filtro')
+			elif "j1=1" in temp:
+				temp.remove("j1=1")
+				index1 = 0
+				print('Jogo FAC semi-final adicionado')
+				temp = subst_P("P1", "P2", temp)
+				for o in temp:
+					Jogos.append(o)
 
+
+			elif "j1=2" in temp:
+				temp.remove("j1=2")
+				print('Jogo FAC final adicionado')
+				temp = subst_P("P1", "P3", temp)
+				temp = subst_P("P2", "P3", temp)
+				for o in temp:
+					Jogos.append(o)
 			# print(temp)
+			if len(temp) > 0 and zz == 2:
+				result5_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+					# # var_dump.var_dump(variavel[0])
+					# print(result3_1.stdout)
+				variavel = result5_1.stdout.split('\n')
+				while "" in variavel:
+					variavel.remove("")
+				# print(variavel)
+				for o in variavel:
+					Jogos.append(o)
+
+		else:
+			print('Nenhum resultado para FAC')
+
+
+if data0['EFL'] == 1:
+	result6 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_EFL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+	temp=[]
+	variavel=[]
+	# Wait for the program to finish
+	if result6.returncode != 0:
+		print(result6.stderr)
+	else:
+		# Print the stdout output if the subprocess ran successfully
+		if result6.stdout != '':
+			zz=0
+			variavel = result6.stdout.split('\n')
+			for o in variavel:
+					temp.append(o)
+			while "" in temp:
+				temp.remove("")
+			# print(temp)
+			if "j1=0" in temp:
+				print('Jogo EFL anterior as oitavas, nao adicionado')
+				temp = []
+			elif "j1=3" in temp:
+				zz=2
+				temp.remove("j1=3")
+				print('Jogo EFL encaminhado ao filtro')
+			elif "j1=1" in temp:
+				temp.remove("j1=1")
+				print('Jogo EFL semi-final adicionado')
+				temp = subst_P("P1", "P2", temp)
+
+				for o in temp:
+					Jogos.append(o)
+
+
+			elif "j1=2" in temp:
+				temp.remove("j1=2")
+				print('Jogo EFL final adicionado')
+				temp = subst_P("P1", "P3", temp)
+				temp = subst_P("P2", "P3", temp)
+				for o in temp:
+					Jogos.append(o)
+			# print(temp)
+			if len(temp) > 0 and zz == 2:
+				result6_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+				variavel = result6_1.stdout.split('\n')
+				while "" in variavel:
+					variavel.remove("")
+				# print(variavel)
+				for o in variavel:
+					Jogos.append(o)
+
+		else:
+			print('Nenhum resultado para EFL')
+
+
+if data0['SC'] == 1:
+	result7 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+	temp=[]
+	variavel=[]
+	# Wait for the program to finish
+	if result7.returncode != 0:
+		print(result7.stderr)
+	else:
+		# Print the stdout output if the subprocess ran successfully
+		if result7.stdout != '':
+			zz=0
+			variavel = result7.stdout.split('\n')
+			for o in variavel:
+					temp.append(o)
+			while "" in temp:
+				temp.remove("")
+			# print(temp)
+			if "j1=0" in temp:
+				print('Jogo SC anterior as quartas, nao adicionado')
+				temp = []
+			elif "j1=3" in temp:
+				zz=2
+				temp.remove("j1=3")
+				print('Jogos SC quartas-de-final adicionados')
+				for o in temp:
+					Jogos.append(o)
+
+			elif "j1=1" in temp:
+				temp.remove("j1=1")
+				print('Jogo SC semi-final adicionado')
+
+				temp = subst_P("P1", "P2", temp)
+
+				for o in temp:
+					Jogos.append(o)
+
+
+			elif "j1=2" in temp:
+				temp.remove("j1=2")
+				print('Jogo SC final adicionado')
+
+				temp = subst_P("P1", "P3", temp)
+
+				temp = subst_P("P2", "P3", temp)
+
+				for o in temp:
+					Jogos.append(o)
+
+		else:
+			print('Nenhum resultado para SC')
+
+
+if data0['SLC'] == 1:
+	result8 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SLC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+	temp=[]
+	variavel=[]
+	# Wait for the program to finish
+	if result8.returncode != 0:
+		print(result8.stderr)
+	else:
+		# Print the stdout output if the subprocess ran successfully
+		if result8.stdout != '':
+			zz=0
+			variavel = result8.stdout.split('\n')
+			for o in variavel:
+				temp.append(o)
+			while "" in temp:
+				temp.remove("")
+			# print(temp)
+			if "j1=0" in temp:
+				print('Jogo SLC anterior as quartas, nao adicionado')
+				temp = []
+			elif "j1=3" in temp:
+				zz=2
+				temp.remove("j1=3")
+				print('Jogos SLC quartas-de-final adicionados')
+				for o in temp:
+					Jogos.append(o)
+
+			elif "j1=1" in temp:
+				temp.remove("j1=1")
+				index1 = 0
+				print('Jogo SLC semi-final adicionado')
+				temp = subst_P("P1", "P2", temp)
+
+				for o in temp:
+					Jogos.append(o)
+
+
+			elif "j1=2" in temp:
+				temp.remove("j1=2")
+				index1=0
+				print('Jogo SLC final adicionado')
+
+				temp = subst_P("P1", "P3", temp)
+				temp = subst_P("P2", "P2", temp)
+
+				for o in temp:
+					Jogos.append(o)
+
+		else:
+			print('Nenhum resultado para SLC')
+
+if data0['USC'] == 1:
+	result9 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_USC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+	temp=[]
+	variavel=[]
+	index1 = 0
+	# Wait for the program to finish
+	if result9.returncode != 0:
+		print(result9.stderr)
+	else:
+		# Print the stdout output if the subprocess ran successfully
+		if result9.stdout != '':
+			zz=0
+			variavel = result9.stdout.split('\n')
+			for o in variavel:
+				temp.append(o)
+			while "" in temp:
+				temp.remove("")
+
+			temp = subst_P("P1", "P2", temp)
+
+			print("Jogo adicionado para USC")
+
+			temp = after_FACS_filter(temp, inicio_bolao_date)
+
 			for o in temp:
 				Jogos.append(o)
 
 		else:
-			print('Nenhum resultado para LCH_PLAYOFF')
+			print('Nenhum resultado para USC')
 
-			# var_dump.var_dump(variavel[0])
+if data0['QUAL_UCL'] == 1:
+	result10 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UCL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-			# Jogos.append(result2.stdout.split['\n'])
-
-# while "" in Jogos:
-# 	Jogos.remove("")
-# print(Jogos)
-
-# # Start fifth program
-result5 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_FAC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-temp=[]
-variavel=[]
-# Wait for the program to finish
-if result5.returncode != 0:
-	print(result5.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result5.stdout != '':
-		zz=0
-		variavel = result5.stdout.split('\n')
-		for o in variavel:
-				temp.append(o)
-		while "" in temp:
-			temp.remove("")
-		# print(temp)
-		if "j1=0" in temp:
-			print('Jogo FAC anterior ao Round 3, nao adicionado')
-			temp = []
-		elif "j1=3" in temp:
-			zz=2
-			temp.remove("j1=3")
-			print('Jogo FAC encaminhado ao filtro')
-		elif "j1=1" in temp:
-			temp.remove("j1=1")
-			index1 = 0
-			print('Jogo FAC semi-final adicionado')
-			while "P1" in temp[index1]:
-				temp[index1] = temp[index1].replace("P1", "P2")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-			for o in temp:
-				Jogos.append(o)
-
-
-			# for z3 in temp:
-			# 	if "P1" in z3:
-			# 		z3 = z3.replace("P1", "P2")
-
-		elif "j1=2" in temp:
-			temp.remove("j1=2")
-			index1=0
-			print('Jogo FAC final adicionado')
-			while "P1" in temp[index1]:
-				temp[index1] = temp[index1].replace("P1", "P3")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-			index1=0
-			while "P2" in temp[index1]:
-				temp[index1] = temp[index1].replace("P2", "P3")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-			for o in temp:
-				Jogos.append(o)
-		# print(temp)
-		if len(temp) > 0 and zz == 2:
-			result5_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-				# # var_dump.var_dump(variavel[0])
-				# print(result3_1.stdout)
-			variavel = result5_1.stdout.split('\n')
-			while "" in variavel:
-				variavel.remove("")
-			# print(variavel)
+	temp=[]
+	variavel=[]
+	index1 = 0
+	# Wait for the program to finish
+	if result10.returncode != 0:
+		print(result10.stderr)
+	else:
+		# Print the stdout output if the subprocess ran successfully
+		if result10.stdout != '':
+			zz=0
+			variavel = result10.stdout.split('\n')
 			for o in variavel:
-				Jogos.append(o)
-		# 	# Jogos.append(result3_1.stdout)
-		# else:
-		# 	print('Nenhum resultado para FAC')
-	else:
-		print('Nenhum resultado para FAC')
-
-		# var_dump.var_dump(variavel[0])
-
-		# Jogos.append(result2.stdout.split['\n'])
-
-
-result6 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_EFL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-temp=[]
-variavel=[]
-# Wait for the program to finish
-if result6.returncode != 0:
-	print(result6.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result6.stdout != '':
-		zz=0
-		variavel = result6.stdout.split('\n')
-		for o in variavel:
 				temp.append(o)
-		while "" in temp:
-			temp.remove("")
-		# print(temp)
-		if "j1=0" in temp:
-			print('Jogo EFL anterior as oitavas, nao adicionado')
-			temp = []
-		elif "j1=3" in temp:
-			zz=2
-			temp.remove("j1=3")
-			print('Jogo EFL encaminhado ao filtro')
-		elif "j1=1" in temp:
-			temp.remove("j1=1")
-			index1 = 0
-			print('Jogo EFL semi-final adicionado')
-			while "P1" in temp[index1]:
-				temp[index1] = temp[index1].replace("P1", "P2")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
+			while "" in temp:
+				temp.remove("")
+
+			print("Jogo encaminhado ao filtro para qualificatorias UCL")
+
+			temp = after_FACS_filter(temp, inicio_bolao_date)
+
+			temp = subst_P("P2", "P1", temp)
+
 			for o in temp:
 				Jogos.append(o)
 
+		else:
+			print('Nenhum resultado para QUAL-UCL')
 
-			# for z3 in temp:
-			# 	if "P1" in z3:
-			# 		z3 = z3.replace("P1", "P2")
 
-		elif "j1=2" in temp:
-			temp.remove("j1=2")
-			index1=0
-			print('Jogo EFL final adicionado')
-			while "P1" in temp[index1]:
-				temp[index1] = temp[index1].replace("P1", "P3")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-			index1=0
-			while "P2" in temp[index1]:
-				temp[index1] = temp[index1].replace("P2", "P3")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-			for o in temp:
-				Jogos.append(o)
-		# print(temp)
-		if len(temp) > 0 and zz == 2:
-			result6_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-				# # var_dump.var_dump(variavel[0])
-				# print(result3_1.stdout)
-			variavel = result6_1.stdout.split('\n')
-			while "" in variavel:
-				variavel.remove("")
-			# print(variavel)
+if data0['UCL'] == 1:
+	result11 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_UCL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+	temp=[]
+	variavel=[]
+	# Wait for the program to finish
+	if result11.returncode != 0:
+		print(result11.stderr)
+	else:
+		# Print the stdout output if the subprocess ran successfully
+		if result11.stdout != '':
+			zz=0
+			variavel = result11.stdout.split('\n')
 			for o in variavel:
-				Jogos.append(o)
-		# 	# Jogos.append(result3_1.stdout)
-		# else:
-		# 	print('Nenhum resultado para FAC')
+					temp.append(o)
+			while "" in temp:
+				temp.remove("")
+			# print(temp)
+			if "j1=0" in temp:
+				temp.remove("j1=0")
+				print('Jogo UCL adicionado')
+
+				# pdb.set_trace()
+				temp = subst_P("P2", "P1", temp)
+
+				for o in temp:
+					Jogos.append(o)
+
+			elif "j1=3" in temp:
+				zz=2
+				temp.remove("j1=3")
+
+				temp = subst_P("P1", "P2", temp)
+
+				print('Jogo UCL oitavas/quartas adicionado')
+
+				for o in temp:
+					Jogos.append(o)
+
+			elif "j1=1" in temp:
+				temp.remove("j1=1")
+				index1 = 0
+				print('Jogo UCL semi-final adicionado')
+				temp = subst_P("P1", "P3", temp)
+				temp = subst_P("P2", "P3", temp)
+				for o in temp:
+					Jogos.append(o)
+
+
+			elif "j1=2" in temp:
+				temp.remove("j1=2")
+				index1=0
+				print('Jogo UCL final adicionado')
+
+				temp = subst_P("P1", "P4", temp)
+				temp = subst_P("P2", "P4", temp)
+
+				for o in temp:
+					Jogos.append(o)
+
+		else:
+			print('Nenhum resultado para UCL')
+
+
+
+if data0['QUAL_UEL'] == 1:
+	result12 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UEL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+	temp=[]
+	variavel=[]
+	index1 = 0
+	# Wait for the program to finish
+	if result12.returncode != 0:
+		print(result12.stderr)
 	else:
-		print('Nenhum resultado para EFL')
-
-		# var_dump.var_dump(variavel[0])
-
-		# Jogos.append(result2.stdout.split['\n'])
-
-result7 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-temp=[]
-variavel=[]
-# Wait for the program to finish
-if result7.returncode != 0:
-	print(result7.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result7.stdout != '':
-		zz=0
-		variavel = result7.stdout.split('\n')
-		for o in variavel:
+		# Print the stdout output if the subprocess ran successfully
+		if result12.stdout != '':
+			zz=0
+			variavel = result12.stdout.split('\n')
+			for o in variavel:
 				temp.append(o)
-		while "" in temp:
-			temp.remove("")
-		# print(temp)
-		if "j1=0" in temp:
-			print('Jogo SC anterior as quartas, nao adicionado')
-			temp = []
-		elif "j1=3" in temp:
-			zz=2
-			temp.remove("j1=3")
-			print('Jogos SC quartas-de-final adicionados')
-			for o in temp:
-				Jogos.append(o)
+			while "" in temp:
+				temp.remove("")
 
-		elif "j1=1" in temp:
-			temp.remove("j1=1")
-			index1 = 0
-			print('Jogo SC semi-final adicionado')
-			while "P1" in temp[index1]:
-				temp[index1] = temp[index1].replace("P1", "P2")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-			for o in temp:
-				Jogos.append(o)
+			print("Jogo encaminhado ao filtro para qualificatorias UEL")
+
+			temp = after_FACS_filter(temp, inicio_bolao_date)
+
+			if len(temp) > 0:
+				temp = subst_P("P2", "P1", temp)
+				for o in temp:
+					Jogos.append(o)
+		else:
+			print('Nenhum resultado para QUAL-UEL')
 
 
-			# for z3 in temp:
-			# 	if "P1" in z3:
-			# 		z3 = z3.replace("P1", "P2")
 
-		elif "j1=2" in temp:
-			temp.remove("j1=2")
-			index1=0
-			print('Jogo SC final adicionado')
-			while "P1" in temp[index1]:
-				temp[index1] = temp[index1].replace("P1", "P3")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-			index1=0
-			while "P2" in temp[index1]:
-				temp[index1] = temp[index1].replace("P2", "P3")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-			for o in temp:
-				Jogos.append(o)
+if data0['UEL'] == 1:
+	result13 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_UEL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+	temp=[]
+	variavel=[]
+	# Wait for the program to finish
+	if result13.returncode != 0:
+		print(result13.stderr)
 	else:
-		print('Nenhum resultado para SC')
+		# Print the stdout output if the subprocess ran successfully
+		if result13.stdout != '':
+			zz=0
+			variavel = result13.stdout.split('\n')
+			for o in variavel:
+					temp.append(o)
+			while "" in temp:
+				temp.remove("")
+			# print(temp)
+			if "j1=0" in temp:
+				temp.remove("j1=0")
+				print('Jogo UEL adicionado')
+
+				# pdb.set_trace()
+				temp = subst_P("P2", "P1", temp)
+
+				for o in temp:
+					Jogos.append(o)
+
+			elif "j1=3" in temp:
+				zz=2
+				temp.remove("j1=3")
+
+				temp = subst_P("P1", "P2", temp)
+
+				print('Jogo UEL oitavas/quartas adicionado')
+
+				for o in temp:
+					Jogos.append(o)
+
+			elif "j1=1" in temp:
+				temp.remove("j1=1")
+				index1 = 0
+				print('Jogo UEL semi-final adicionado')
+				temp = subst_P("P1", "P3", temp)
+				temp = subst_P("P2", "P3", temp)
+				for o in temp:
+					Jogos.append(o)
 
 
+			elif "j1=2" in temp:
+				temp.remove("j1=2")
+				index1=0
+				print('Jogo UEL final adicionado')
 
-result8 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SLC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+				temp = subst_P("P1", "P4", temp)
+				temp = subst_P("P2", "P4", temp)
 
-temp=[]
-variavel=[]
-# Wait for the program to finish
-if result8.returncode != 0:
-	print(result8.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result8.stdout != '':
-		zz=0
-		variavel = result8.stdout.split('\n')
-		for o in variavel:
-			temp.append(o)
-		while "" in temp:
-			temp.remove("")
-		# print(temp)
-		if "j1=0" in temp:
-			print('Jogo SLC anterior as quartas, nao adicionado')
-			temp = []
-		elif "j1=3" in temp:
-			zz=2
-			temp.remove("j1=3")
-			print('Jogos SLC quartas-de-final adicionados')
-			for o in temp:
-				Jogos.append(o)
+				for o in temp:
+					Jogos.append(o)
 
-		elif "j1=1" in temp:
-			temp.remove("j1=1")
-			index1 = 0
-			print('Jogo SLC semi-final adicionado')
-			while "P1" in temp[index1]:
-				temp[index1] = temp[index1].replace("P1", "P2")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-			for o in temp:
-				Jogos.append(o)
+		else:
+			print('Nenhum resultado para UEL')
 
+if data0['QUAL_UECL'] == 1:
+	result14 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UECL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-			# for z3 in temp:
-			# 	if "P1" in z3:
-			# 		z3 = z3.replace("P1", "P2")
-
-		elif "j1=2" in temp:
-			temp.remove("j1=2")
-			index1=0
-			print('Jogo SLC final adicionado')
-			while "P1" in temp[index1]:
-				temp[index1] = temp[index1].replace("P1", "P3")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-			index1=0
-			while "P2" in temp[index1]:
-				temp[index1] = temp[index1].replace("P2", "P3")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-			for o in temp:
-				Jogos.append(o)
-
+	temp=[]
+	variavel=[]
+	index1 = 0
+	# Wait for the program to finish
+	if result14.returncode != 0:
+		print(result14.stderr)
 	else:
-		print('Nenhum resultado para SLC')
-
-
-result9 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_USC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-temp=[]
-variavel=[]
-index1 = 0
-# Wait for the program to finish
-if result9.returncode != 0:
-	print(result9.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result9.stdout != '':
-		zz=0
-		variavel = result9.stdout.split('\n')
-		for o in variavel:
-			temp.append(o)
-		while "" in temp:
-			temp.remove("")
-
-		while "P1" in temp[index1]:
-				temp[index1] = temp[index1].replace("P1", "P2")
-				if index1 < (len(temp)-1):
-					index1=index1 + 1
-		print("Jogo adicionado para USC")
-
-		temp = after_FACS_filter(temp, inicio_bolao_date)
-
-		for o in temp:
-			Jogos.append(o)
-
-	else:
-		print('Nenhum resultado para USC')
-
-
-result10 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UCL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-temp=[]
-variavel=[]
-index1 = 0
-# Wait for the program to finish
-if result10.returncode != 0:
-	print(result10.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result10.stdout != '':
-		zz=0
-		variavel = result10.stdout.split('\n')
-		for o in variavel:
-			temp.append(o)
-		while "" in temp:
-			temp.remove("")
-
-		print("Jogo encaminhado ao filtro para qualificatorias UCL")
-
-		temp = after_FACS_filter(temp, inicio_bolao_date)
-
-		for o in temp:
-			Jogos.append(o)
-
-	else:
-		print('Nenhum resultado para QUAL-UCL')
-
-
-
-result11 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_UCL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-temp=[]
-variavel=[]
-# Wait for the program to finish
-if result11.returncode != 0:
-	print(result11.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result11.stdout != '':
-		zz=0
-		variavel = result11.stdout.split('\n')
-		for o in variavel:
+		# Print the stdout output if the subprocess ran successfully
+		if result14.stdout != '':
+			zz=0
+			variavel = result14.stdout.split('\n')
+			for o in variavel:
 				temp.append(o)
-		while "" in temp:
-			temp.remove("")
-		# print(temp)
-		if "j1=0" in temp:
-			temp.remove("j1=0")
-			print('Jogo UCL adicionado')
+			while "" in temp:
+				temp.remove("")
 
-			# pdb.set_trace()
-			temp = subst_P("P2", "P1", temp)
+			print("Jogo encaminhado ao filtro para qualificatorias UECL")
 
-			# while "P2" in temp[index1]:
-			# 		temp[index1] = temp[index1].replace("P2", "P1")
-			# 		if index1 < (len(temp)-1):
-			# 			index1=index1 + 1
+			temp = after_FACS_filter(temp, inicio_bolao_date)
 
-			for o in temp:
-				Jogos.append(o)
-
-		elif "j1=3" in temp:
-			zz=2
-			temp.remove("j1=3")
-
-			temp = subst_P("P1", "P2", temp)
-
-			print('Jogo UCL oitavas/quartas adicionado')
-
-			for o in temp:
-				Jogos.append(o)
-
-		elif "j1=1" in temp:
-			temp.remove("j1=1")
-			index1 = 0
-			print('Jogo UCL semi-final adicionado')
-			temp = subst_P("P1", "P3", temp)
-			temp = subst_P("P2", "P3", temp)
-			for o in temp:
-				Jogos.append(o)
+			if len(temp) > 0:
+				temp = subst_P("P2", "P1", temp)
+				for o in temp:
+					Jogos.append(o)
+		else:
+			print('Nenhum resultado para QUAL-UECL')
 
 
-			# for z3 in temp:
-			# 	if "P1" in z3:
-			# 		z3 = z3.replace("P1", "P2")
 
-		elif "j1=2" in temp:
-			temp.remove("j1=2")
-			index1=0
-			print('Jogo UCL final adicionado')
+if data0['UECL'] == 1:
+	result15 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_UECL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-			temp = subst_P("P1", "P4", temp)
-			temp = subst_P("P2", "P4", temp)
-
-			for o in temp:
-				Jogos.append(o)
-
+	temp=[]
+	variavel=[]
+	# Wait for the program to finish
+	if result15.returncode != 0:
+		print(result15.stderr)
 	else:
-		print('Nenhum resultado para UCL')
+		# Print the stdout output if the subprocess ran successfully
+		if result15.stdout != '':
+			zz=0
+			variavel = result15.stdout.split('\n')
+			for o in variavel:
+					temp.append(o)
+			while "" in temp:
+				temp.remove("")
+			# print(temp)
+			if "j1=0" in temp:
+				temp.remove("j1=0")
+				print('Jogo UECL adicionado')
+
+				# pdb.set_trace()
+				temp = subst_P("P2", "P1", temp)
+
+
+				for o in temp:
+					Jogos.append(o)
+
+			elif "j1=3" in temp:
+				zz=2
+				temp.remove("j1=3")
+
+				temp = subst_P("P2", "P1", temp)
+
+				print('Jogo UECL oitavas/quartas adicionado')
+
+				for o in temp:
+					Jogos.append(o)
+
+			elif "j1=1" in temp:
+				temp.remove("j1=1")
+				index1 = 0
+				print('Jogo UECL semi-final adicionado')
+				temp = subst_P("P1", "P2", temp)
+				for o in temp:
+					Jogos.append(o)
 
 
 
+			elif "j1=2" in temp:
+				temp.remove("j1=2")
+				index1=0
+				print('Jogo UECL final adicionado')
 
-result12 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UEL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+				temp = subst_P("P1", "P3", temp)
+				temp = subst_P("P2", "P3", temp)
 
-temp=[]
-variavel=[]
-index1 = 0
-# Wait for the program to finish
-if result12.returncode != 0:
-	print(result12.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result12.stdout != '':
-		zz=0
-		variavel = result12.stdout.split('\n')
-		for o in variavel:
-			temp.append(o)
-		while "" in temp:
-			temp.remove("")
+				for o in temp:
+					Jogos.append(o)
 
-		print("Jogo encaminhado ao filtro para qualificatorias UEL")
+		else:
+			print('Nenhum resultado para UECL')
 
-		temp = after_FACS_filter(temp, inicio_bolao_date)
 
-		if len(temp) > 0:
-			temp = subst_P("P2", "P1", temp)
-			for o in temp:
-				Jogos.append(o)
+
+if data0['FCWC'] == 1:
+	result16 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_FCWC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+	temp=[]
+	variavel=[]
+	# Wait for the program to finish
+	if result16.returncode != 0:
+		print(result16.stderr)
 	else:
-		print('Nenhum resultado para QUAL-UEL')
+		# Print the stdout output if the subprocess ran successfully
+		if result16.stdout != '':
+			zz=0
+			variavel = result16.stdout.split('\n')
+			for o in variavel:
+					temp.append(o)
+			while "" in temp:
+				temp.remove("")
+			# print(temp)
+			if "j1=0" in temp:
+				temp.remove("j1=0")
+				print('Jogo anterior a semi FCWC')
+
+				temp = subst_P("P2", "P1", temp)
 
 
+				for o in temp:
+					Jogos.append(o)
+
+			elif "j1=3" in temp:
+				zz=2
+				temp.remove("j1=3")
+
+				temp = subst_P("P2", "P1", temp)
+
+				print('Jogo FCWC semi adicionado')
+
+				for o in temp:
+					Jogos.append(o)
+
+			elif "j1=1" in temp:
+				temp.remove("j1=1")
+				index1 = 0
+				print('Jogo FCWC terceiro adicionado')
+				temp = subst_P("P2", "P1", temp)
+				for o in temp:
+					Jogos.append(o)
 
 
-result13 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_UEL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			elif "j1=2" in temp:
+				temp.remove("j1=2")
+				index1=0
+				print('Jogo FCWC final adicionado')
 
-temp=[]
-variavel=[]
-# Wait for the program to finish
-if result13.returncode != 0:
-	print(result13.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result13.stdout != '':
-		zz=0
-		variavel = result13.stdout.split('\n')
-		for o in variavel:
-				temp.append(o)
-		while "" in temp:
-			temp.remove("")
-		# print(temp)
-		if "j1=0" in temp:
-			temp.remove("j1=0")
-			print('Jogo UEL adicionado')
-
-			# pdb.set_trace()
-			temp = subst_P("P2", "P1", temp)
-
-			# while "P2" in temp[index1]:
-			# 		temp[index1] = temp[index1].replace("P2", "P1")
-			# 		if index1 < (len(temp)-1):
-			# 			index1=index1 + 1
-
-			for o in temp:
-				Jogos.append(o)
-
-		elif "j1=3" in temp:
-			zz=2
-			temp.remove("j1=3")
-
-			temp = subst_P("P1", "P2", temp)
-
-			print('Jogo UEL oitavas/quartas adicionado')
-
-			for o in temp:
-				Jogos.append(o)
-
-		elif "j1=1" in temp:
-			temp.remove("j1=1")
-			index1 = 0
-			print('Jogo UEL semi-final adicionado')
-			temp = subst_P("P1", "P3", temp)
-			temp = subst_P("P2", "P3", temp)
-			for o in temp:
-				Jogos.append(o)
+				temp = subst_P("P1", "P2", temp)
 
 
-			# for z3 in temp:
-			# 	if "P1" in z3:
-			# 		z3 = z3.replace("P1", "P2")
+				for o in temp:
+					Jogos.append(o)
 
-		elif "j1=2" in temp:
-			temp.remove("j1=2")
-			index1=0
-			print('Jogo UEL final adicionado')
-
-			temp = subst_P("P1", "P4", temp)
-			temp = subst_P("P2", "P4", temp)
-
-			for o in temp:
-				Jogos.append(o)
-
-	else:
-		print('Nenhum resultado para UEL')
-
-
-result14 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UECL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-temp=[]
-variavel=[]
-index1 = 0
-# Wait for the program to finish
-if result14.returncode != 0:
-	print(result14.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result14.stdout != '':
-		zz=0
-		variavel = result14.stdout.split('\n')
-		for o in variavel:
-			temp.append(o)
-		while "" in temp:
-			temp.remove("")
-
-		print("Jogo encaminhado ao filtro para qualificatorias UECL")
-
-		temp = after_FACS_filter(temp, inicio_bolao_date)
-
-		if len(temp) > 0:
-			temp = subst_P("P2", "P1", temp)
-			for o in temp:
-				Jogos.append(o)
-	else:
-		print('Nenhum resultado para QUAL-UECL')
-
-
-
-
-result15 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_UECL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-temp=[]
-variavel=[]
-# Wait for the program to finish
-if result15.returncode != 0:
-	print(result15.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result15.stdout != '':
-		zz=0
-		variavel = result15.stdout.split('\n')
-		for o in variavel:
-				temp.append(o)
-		while "" in temp:
-			temp.remove("")
-		# print(temp)
-		if "j1=0" in temp:
-			temp.remove("j1=0")
-			print('Jogo UECL adicionado')
-
-			# pdb.set_trace()
-			temp = subst_P("P2", "P1", temp)
-
-			# while "P2" in temp[index1]:
-			# 		temp[index1] = temp[index1].replace("P2", "P1")
-			# 		if index1 < (len(temp)-1):
-			# 			index1=index1 + 1
-
-			for o in temp:
-				Jogos.append(o)
-
-		elif "j1=3" in temp:
-			zz=2
-			temp.remove("j1=3")
-
-			temp = subst_P("P2", "P1", temp)
-
-			print('Jogo UECL oitavas/quartas adicionado')
-
-			for o in temp:
-				Jogos.append(o)
-
-		elif "j1=1" in temp:
-			temp.remove("j1=1")
-			index1 = 0
-			print('Jogo UECL semi-final adicionado')
-			temp = subst_P("P1", "P2", temp)
-			for o in temp:
-				Jogos.append(o)
-
-
-			# for z3 in temp:
-			# 	if "P1" in z3:
-			# 		z3 = z3.replace("P1", "P2")
-
-		elif "j1=2" in temp:
-			temp.remove("j1=2")
-			index1=0
-			print('Jogo UECL final adicionado')
-
-			temp = subst_P("P1", "P3", temp)
-			temp = subst_P("P2", "P3", temp)
-
-			for o in temp:
-				Jogos.append(o)
-
-	else:
-		print('Nenhum resultado para UECL')
-
-
-
-result16 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_FCWC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-temp=[]
-variavel=[]
-# Wait for the program to finish
-if result16.returncode != 0:
-	print(result16.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result16.stdout != '':
-		zz=0
-		variavel = result16.stdout.split('\n')
-		for o in variavel:
-				temp.append(o)
-		while "" in temp:
-			temp.remove("")
-		# print(temp)
-		if "j1=0" in temp:
-			temp.remove("j1=0")
-			print('Jogo anterior a semi FCWC')
-
-			# pdb.set_trace()
-			temp = subst_P("P2", "P1", temp)
-
-			# while "P2" in temp[index1]:
-			# 		temp[index1] = temp[index1].replace("P2", "P1")
-			# 		if index1 < (len(temp)-1):
-			# 			index1=index1 + 1
-
-			for o in temp:
-				Jogos.append(o)
-
-		elif "j1=3" in temp:
-			zz=2
-			temp.remove("j1=3")
-
-			temp = subst_P("P2", "P1", temp)
-
-			print('Jogo FCWC semi adicionado')
-
-			for o in temp:
-				Jogos.append(o)
-
-		elif "j1=1" in temp:
-			temp.remove("j1=1")
-			index1 = 0
-			print('Jogo FCWC terceiro adicionado')
-			temp = subst_P("P2", "P1", temp)
-			for o in temp:
-				Jogos.append(o)
-
-
-			# for z3 in temp:
-			# 	if "P1" in z3:
-			# 		z3 = z3.replace("P1", "P2")
-
-		elif "j1=2" in temp:
-			temp.remove("j1=2")
-			index1=0
-			print('Jogo FCWC final adicionado')
-
-			temp = subst_P("P1", "P2", temp)
-
-
-			for o in temp:
-				Jogos.append(o)
-
-	else:
-		print('Nenhum resultado para FCWC')
+		else:
+			print('Nenhum resultado para FCWC')
 
 
 
 print(Jogos)
 
-result17 = subprocess.run(['python', 'forms.py', *Jogos], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+if data0['LANCAR_FORMS'] == 1:
+	result17 = subprocess.run(['python', 'forms.py', *Jogos], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-if result17.returncode != 0:
-	print(result17.stderr)
-else:
-	# Print the stdout output if the subprocess ran successfully
-	if result17.stdout != '':
-		variavel = result17.stdout.split('\n')
-		for o in variavel:
-			print(o)
+	if result17.returncode != 0:
+		print(result17.stderr)
+	else:
+		# Print the stdout output if the subprocess ran successfully
+		if result17.stdout != '':
+			variavel = result17.stdout.split('\n')
+			for o in variavel:
+				print(o)
 
