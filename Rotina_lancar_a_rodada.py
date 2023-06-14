@@ -191,6 +191,12 @@ if data0['SPFL'] == 1:
 
 				result3_1 = subprocess.run(['python', 'filtro_SPFL.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
+				variavel = result3_1.stdout.split('\n')
+				while "" in variavel:
+					variavel.remove("")
+				for o in variavel:
+					Jogos.append(o)
+
 			else:
 				print('Nenhum resultado para SPFL')
 
@@ -240,7 +246,7 @@ if data0['SPFL'] == 1:
 				# var_dump.var_dump(result.stdout)
 
 
-		print(len(temp))
+		# print((temp))
 		if len(temp) > 0:
 			result3_1 = subprocess.run(['python', 'filtro_SPFL_championship_relegation.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 			variavel = result3_1.stdout.split('\n')
@@ -267,6 +273,8 @@ if data0['SPFL'] == 1:
 				print('Jogos SPFL_playoffs adicionados')
 				variavel = result3.stdout.split('\n')
 				variavel = subst_P("P1", "P2", variavel)
+				while "" in variavel:
+					variavel.remove("")
 				for o in variavel:
 					Jogos.append(o)
 			else:
@@ -449,7 +457,7 @@ if data0['EFL'] == 1:
 					Jogos.append(o)
 			# print(temp)
 			if len(temp) > 0 and zz == 2:
-				result6_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+				result6_1 = subprocess.run(['python', 'filtro_EFL.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 				variavel = result6_1.stdout.split('\n')
 				while "" in variavel:

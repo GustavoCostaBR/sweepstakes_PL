@@ -182,7 +182,7 @@ def selecting_matchs_by_data(url, dt3, dt2, dt, liga_url, j1, special_dates):
 						j1 = 3
 
 					else:
-						if "champions-league" in url or "europa-league" in url or "europa-conference-league" in url:
+						if "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "eng-playoff" in url:
 							j1=0
 							v=1
 							data3=dt3
@@ -409,7 +409,13 @@ for tag in body:
 			target_list, zeta3 = extends_cups_after(url, champstring, tag, stagestring)
 			if target_list != None:
 				# datas_playoffs_sco.extend(target_list)
-				special_dates.extend(target_list)
+				# AQUI QUE REVERTE CASO QUEIRA ADICIONAR OS DOIS JOGOS
+				# special_dates.extend(target_list)
+				if len(target_list) == 2:
+					special_dates.append(target_list[1])
+				elif len(target_list) == 1:
+					special_dates.append(target_list[0])
+
 				contador1 = 1
 		elif "eng-playoff" in url:
 			target_list, zeta3 = cups_after(url, champstring, tag, stagestring)
@@ -600,7 +606,7 @@ if f == 1:
 	elif j1==2:
 		if len(jogos_semana_f) > 0:
 			print("j1=2")
-	elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url) and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
+	elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url or "eng-playoff" in url) and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
 		if len(jogos_semana_f) > 0:
 			print("j1=3")
 	elif ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url) and j1==0 and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
@@ -622,7 +628,7 @@ if f == 0:
 	elif j1==2:
 		if len(jogos_semana) > 0:
 			print("j1=2")
-	elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url) and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
+	elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url or "eng-playoff" in url) and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
 		if len(jogos_semana) > 0:
 			print("j1=3")
 	elif ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url) and j1==0 and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:

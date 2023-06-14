@@ -7,6 +7,7 @@ conn = sqlite3.connect('championships.db')
 cursor = conn.cursor()
 
 x = sys.argv[1:]
+# x = ['Rangers x Celtic - P2 (SPFL) - 13/05 - 08:30', 'Aberdeen x Hibernian - P1 (SPFL) - 13/05 - 11:00', 'St. Mirren x Heart of Midlothian - P1 (SPFL) - 13/05 - 11:00', 'Dundee United x Ross County - P1 (SPFL) - 13/05 - 11:00', 'Kilmarnock x Livingston - P1 (SPFL) - 13/05 - 11:00', 'St. Johnstone x Motherwell - P1 (SPFL) - 13/05 - 11:00']
 # x = ['Aberdeen x Hibernian - P2 (SPFL) - 20/05 - 15:45']
 temp = []
 temp1 = []
@@ -80,7 +81,7 @@ for index, j in enumerate(temp):
 			# Os 1000 escritos aqui são uma gambiarra para não confundir relegation com championship, tive que adapatar o código e essa foi a forma mais rápida de corrigir o problema sem pensar.
 
 			#para o relegation
-			if z == 0:
+			elif z == 0:
 				diff = 1000
 				positionto_1 = 1000
 				positionto_1_2 =  1000
@@ -107,23 +108,23 @@ for index, j in enumerate(temp):
 				# print("aqui")
 			# critehrio 3 pontos/uel
 				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
-					temp0.append(9)
+					temp0.append(11)
 
 			#critehrio primeiro colocado
 
 				elif positionto_1 == 0 and diff <=5:
 					# print(diff)
-					temp0.append(10)
+					temp0.append(12)
 				elif positionto_1_2 == 0 and diff <=5:
 					# print(diff)
-					temp0.append(10)
+					temp0.append(12)
 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
 
-					temp0.append(10)
+					temp0.append(12)
 
 			# critehrio do ultimo colocado
 				elif rows[0][4] > 34 and pointstolast_1 <= 3 and pointstolast_2 <= 3:
-					temp0.append(8)
+					temp0.append(10)
 
 				else:
 					temp0.append(1)
@@ -133,20 +134,21 @@ for index, j in enumerate(temp):
 
 			# critehrio 3 pontos/uel
 				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
-					temp0.append(9)
+					temp0.append(11)
 
 			# critehrio do ultimo colocado
 				elif rows[0][4] > 34 and pointstolast_1 <= 3 and pointstolast_2 <= 3:
-					temp0.append(8)
+					temp0.append(10)
 
 			#critehrio primeiro colocado
 
 				elif positionto_1 == 0 and diff <=3:
-					temp0.append(10)
+					temp0.append(12)
 				elif positionto_1_2 == 0 and diff <=3:
-					temp0.append(10)
+					temp0.append(12)
 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
-					temp0.append(10)
+					temp0.append(12)
+
 				else:
 					temp0.append(1)
 			#rodada 38
@@ -156,44 +158,68 @@ for index, j in enumerate(temp):
 			# Aqui eu abri espaço para 4 times na disputa do terceiro lugar, não faz sentido limitarmos isso, creio
 				if 0 <= positionto_3 <= 3 and 0 <= positionto_3_2 <= 3 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
 					if goalstothird_1 <= 7 and goalstothird_2 <= 7:
-						temp0.append(9)
+						temp0.append(11)
 					elif goalstothird_1 <= 7 and pointstothird_2 < 3:
-						temp0.append(9)
+						temp0.append(11)
 					elif goalstothird_2 <= 7 and pointstothird_1 < 3:
-						temp0.append(9)
+						temp0.append(11)
 					elif pointstothird_2 < 3 and pointstothird_1 < 3:
-						temp0.append(9)
+						temp0.append(11)
 					else:
 						temp0.append(1)
 			# critehrio do ultimo colocado
 				elif rows[0][4] > 34 and pointstolast_1 <= 3 and pointstolast_2 <= 3 and goalstolast_1 <= 7 and goalstolast_2 <= 7:
-					temp0.append(8)
+					temp0.append(10)
 
 			#critehrio primeiro colocado
 
 				elif positionto_1 == 0 and diff == 3 and goalstofirst_2 <= 7:
-					temp0.append(10)
+					temp0.append(12)
 				elif positionto_1 == 0 and diff < 3:
-					temp0.append(10)
+					temp0.append(12)
 				elif positionto_1_2 == 0 and diff == 3 and goalstofirst_1 <= 7:
-					temp0.append(10)
+					temp0.append(12)
 				elif positionto_1_2 == 0 and diff < 3:
-					temp0.append(10)
+					temp0.append(12)
 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
 					if goalstofirst_2 <= 7 and goalstofirst_1 <= 7:
-						temp0.append(10)
+						temp0.append(12)
 					elif pointstofirst_1 < 3 and pointstofirst_2 < 3:
-						temp0.append(10)
+						temp0.append(12)
 					elif goalstofirst_2 <= 7 and pointstofirst_1 < 3:
-						temp0.append(10)
+						temp0.append(12)
 					elif goalstofirst_1 <= 7 and pointstofirst_2 < 3:
-						temp0.append(10)
+						temp0.append(12)
+
 					else:
 						temp0.append(1)
 				else:
 					temp0.append(1)
 
-
+	#critehrio do derbie
+		if temp0[index//2] < 9 and "P2" in x[index//2]:
+			temp0[index//2] = 9
+	# jogo do primeiro colocado
+		elif positionto_1 == 0 or positionto_1_2 == 0:
+			temp0[index//2] = 8
+	# jogo do segundo colocado
+		elif positionto_1 == 1 or positionto_1_2 == 1:
+			temp0[index//2] = 7
+	# jogo do terceiro colocado
+		elif positionto_1 == 2 or positionto_1_2 == 2:
+			temp0[index//2] = 6
+	# jogo do quarto colocado
+		elif positionto_1 == 3 or positionto_1_2 == 3:
+			temp0[index//2] = 5
+	# jogo do quinto colocado
+		elif positionto_1 == 4 or positionto_1_2 == 4:
+			temp0[index//2] = 4
+	# jogo do sexto colocado
+		elif positionto_1 == 5 or positionto_1_2 == 5:
+			temp0[index//2] = 3
+	# jogo do setimo colocado
+		elif positionto_1 == 6 or positionto_1_2 == 6:
+			temp0[index//2] = 2
 
 # print(temp)
 # print(temp0)
@@ -219,7 +245,7 @@ filtrado = []
 # temp0_sorted, x_sorted = sorted((temp0, x), reverse=True)
 # a_sorted, b_sorted, c_sorted = map(list, zip(*sorted_values))
 
-print(temp0)
+# print(temp0)
 # print(x)
 # print("\n")
 # print(temp0_sorted)

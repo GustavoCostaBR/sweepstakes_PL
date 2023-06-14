@@ -41,7 +41,7 @@ for index, j in enumerate(temp):
 	# pdb.set_trace()
 	if index % 2 == 0:
 		# rodada 2 a 33
-		if rows[0][4] > 2:
+		if rows[0][4] > 1:
 			for row in rows:
 				if j in row:
 					temp1.append(row)
@@ -60,13 +60,15 @@ for index, j in enumerate(temp):
 			pointstothird_1 = (rows[2][2] - temp1[index][2])
 			pointstothird_2 = (rows[2][2] - temp1[index+1][2])
 			# rodada 3 a 11
+
 			if rows[0][4] <11:
+			# critehrio do primeiro colocado
 				if positionto_1 == 0 and diff <=3:
-					temp0.append(10)
+					temp0.append(12)
 				elif positionto_1_2 == 0 and diff <=3:
-					temp0.append(10)
+					temp0.append(12)
 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
-					temp0.append(10)
+					temp0.append(12)
 
 			# rodada 11 a 33
 			elif rows[0][4] > 10 and rows[0][4] <33:
@@ -74,18 +76,45 @@ for index, j in enumerate(temp):
 			# critehrio 3 pontos/uel
 				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
 					if rows[0][4] > 22:
-						temp0.append(9)
+						temp0.append(11)
 					else:
 						temp0.append(1)
 			#critehrio primeiro colocado
 				elif positionto_1 == 0 and diff <=5:
-					temp0.append(10)
+					temp0.append(12)
 				elif positionto_1_2 == 0 and diff <=5:
-					temp0.append(10)
+					temp0.append(12)
 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
-					temp0.append(10)
+					temp0.append(12)
+
 				else:
 					temp0.append(1)
+
+	#critehrio do derbie
+		if temp0[index//2] < 7 and "P2" in x[index//2]:
+			temp0[index//2] = 10
+	# jogo do primeiro colocado
+		elif positionto_1 == 0 or positionto_1_2 == 0:
+			temp0[index//2] = 9
+	# jogo do segundo colocado
+		elif positionto_1 == 1 or positionto_1_2 == 1:
+			temp0[index//2] = 8
+	# jogo do terceiro colocado
+		elif positionto_1 == 2 or positionto_1_2 == 2:
+			temp0[index//2] = 7
+	# jogo do quarto colocado
+		elif positionto_1 == 3 or positionto_1_2 == 3:
+			temp0[index//2] = 6
+	# jogo do quinto colocado
+		elif positionto_1 == 4 or positionto_1_2 == 4:
+			temp0[index//2] = 5
+	# jogo do sexto colocado
+		elif positionto_1 == 5 or positionto_1_2 == 5:
+			temp0[index//2] = 4
+	# jogo do setimo colocado
+		elif positionto_1 == 6 or positionto_1_2 == 6:
+			temp0[index//2] = 3
+
 
 # print(temp)
 # print(temp0)
