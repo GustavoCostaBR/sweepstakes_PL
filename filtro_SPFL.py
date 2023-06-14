@@ -7,6 +7,7 @@ conn = sqlite3.connect('championships.db')
 cursor = conn.cursor()
 
 x = sys.argv[1:]
+# x = ['Livingston x Rangers - P1 (SPFL) - 30/07 - 08:00', 'Kilmarnock x Dundee United - P1 (SPFL) - 30/07 - 11:00', 'Heart of Midlothian x Ross County - P1 (SPFL) - 30/07 - 11:00', 'St. Johnstone x Hibernian - P1 (SPFL) - 30/07 - 11:00', 'St. Mirren x Motherwell - P1 (SPFL) - 31/07 - 11:00', 'Celtic x Aberdeen - P1 (SPFL) - 31/07 - 12:30']
 # x = ['Aberdeen x Hibernian - P2 (SPFL) - 20/05 - 15:45']
 temp = []
 temp1 = []
@@ -40,8 +41,22 @@ for y in x:
 for index, j in enumerate(temp):
 	# pdb.set_trace()
 	if index % 2 == 0:
+		# rodada inicial
+		if rows[0][4] == 0:
+			if "Celtic" in x[index//2]:
+				temp0.append(9)
+			elif "Rangers" in x[index//2]:
+				temp0.append(8)
+			elif "Aberdeen" in x[index//2]:
+				temp0.append(7)
+			elif "Heart of Midlothian" in x[index//2]:
+				temp0.append(6)
+			elif "Hibernian" in x[index//2]:
+				temp0.append(5)
+			else:
+				temp0.append(1)
 		# rodada 2 a 33
-		if rows[0][4] > 1:
+		if rows[0][4] >= 1:
 			for row in rows:
 				if j in row:
 					temp1.append(row)
@@ -90,30 +105,32 @@ for index, j in enumerate(temp):
 				else:
 					temp0.append(1)
 
+		# jogo do primeiro colocado
+			if positionto_1 == 0 or positionto_1_2 == 0:
+				temp0[index//2] = 9
+		# jogo do segundo colocado
+			elif positionto_1 == 1 or positionto_1_2 == 1:
+				temp0[index//2] = 8
+		# jogo do terceiro colocado
+			elif positionto_1 == 2 or positionto_1_2 == 2:
+				temp0[index//2] = 7
+		# jogo do quarto colocado
+			elif positionto_1 == 3 or positionto_1_2 == 3:
+				temp0[index//2] = 6
+		# jogo do quinto colocado
+			elif positionto_1 == 4 or positionto_1_2 == 4:
+				temp0[index//2] = 5
+		# jogo do sexto colocado
+			elif positionto_1 == 5 or positionto_1_2 == 5:
+				temp0[index//2] = 4
+		# jogo do setimo colocado
+			elif positionto_1 == 6 or positionto_1_2 == 6:
+				temp0[index//2] = 3
+
 	#critehrio do derbie
-		if temp0[index//2] < 7 and "P2" in x[index//2]:
+		if temp0[index//2] < 10 and  "P2" in x[index//2]:
 			temp0[index//2] = 10
-	# jogo do primeiro colocado
-		elif positionto_1 == 0 or positionto_1_2 == 0:
-			temp0[index//2] = 9
-	# jogo do segundo colocado
-		elif positionto_1 == 1 or positionto_1_2 == 1:
-			temp0[index//2] = 8
-	# jogo do terceiro colocado
-		elif positionto_1 == 2 or positionto_1_2 == 2:
-			temp0[index//2] = 7
-	# jogo do quarto colocado
-		elif positionto_1 == 3 or positionto_1_2 == 3:
-			temp0[index//2] = 6
-	# jogo do quinto colocado
-		elif positionto_1 == 4 or positionto_1_2 == 4:
-			temp0[index//2] = 5
-	# jogo do sexto colocado
-		elif positionto_1 == 5 or positionto_1_2 == 5:
-			temp0[index//2] = 4
-	# jogo do setimo colocado
-		elif positionto_1 == 6 or positionto_1_2 == 6:
-			temp0[index//2] = 3
+
 
 
 # print(temp)
@@ -145,6 +162,7 @@ filtrado = []
 # print("\n")
 # print(temp0_sorted)
 # print(filtrado[0:3])
+# print(temp0_sorted)
 for index, z in enumerate(x_sorted):
 	print(z)
 	if index==2:
