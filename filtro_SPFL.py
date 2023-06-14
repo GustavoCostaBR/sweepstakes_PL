@@ -2,9 +2,13 @@ import sys
 import sqlite3
 import var_dump
 import pdb
+import yaml
 
 conn = sqlite3.connect('championships.db')
 cursor = conn.cursor()
+
+with open('TIMES_PRIMEIRA_RODADA.yml', 'r') as f:
+	data = yaml.load(f, Loader=yaml.FullLoader)
 
 x = sys.argv[1:]
 # x = ['Livingston x Rangers - P1 (SPFL) - 30/07 - 08:00', 'Kilmarnock x Dundee United - P1 (SPFL) - 30/07 - 11:00', 'Heart of Midlothian x Ross County - P1 (SPFL) - 30/07 - 11:00', 'St. Johnstone x Hibernian - P1 (SPFL) - 30/07 - 11:00', 'St. Mirren x Motherwell - P1 (SPFL) - 31/07 - 11:00', 'Celtic x Aberdeen - P1 (SPFL) - 31/07 - 12:30']
@@ -43,15 +47,16 @@ for index, j in enumerate(temp):
 	if index % 2 == 0:
 		# rodada inicial
 		if rows[0][4] == 0:
-			if "Celtic" in x[index//2]:
+			if data['FIRST_ROUND_SPFL']['TIME1'] in x[index//2]:
+				# print('jorge')
 				temp0.append(9)
-			elif "Rangers" in x[index//2]:
+			elif data['FIRST_ROUND_SPFL']['TIME2'] in x[index//2]:
 				temp0.append(8)
-			elif "Aberdeen" in x[index//2]:
+			elif data['FIRST_ROUND_SPFL']['TIME3'] in x[index//2]:
 				temp0.append(7)
-			elif "Heart of Midlothian" in x[index//2]:
+			elif data['FIRST_ROUND_SPFL']['TIME4'] in x[index//2]:
 				temp0.append(6)
-			elif "Hibernian" in x[index//2]:
+			elif data['FIRST_ROUND_SPFL']['TIME5'] in x[index//2]:
 				temp0.append(5)
 			else:
 				temp0.append(1)
@@ -163,10 +168,12 @@ filtrado = []
 # print(temp0_sorted)
 # print(filtrado[0:3])
 # print(temp0_sorted)
+# print(x_sorted)
 for index, z in enumerate(x_sorted):
 	print(z)
 	if index==2:
 		break
 conn.close()
+# print(data['FIRST_ROUND_SPFL']['TIME1'])
 # var_dump.var_dump(part1)
 # var_dump.var_dump(part3)
