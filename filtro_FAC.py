@@ -6,11 +6,38 @@ import pdb
 conn = sqlite3.connect('championships.db')
 cursor = conn.cursor()
 
+def p(choice ,index, positionr):
+	global rows0
+	global temp1
+	if choice == 0:
+		points_1 = (temp1[index][2] - rows0[positionr][2])
+		# points_2 = (temp1[index+1][2] - rows[positionr][2])
+		# return points_1, points_2
+		return points_1
+	elif choice == 1:
+		posi_1 = (temp1[index][0] - rows0[positionr][0])
+		# posi_2 = (temp1[index+1][0] - rows[positionr][0])
+		# return posi_1, posi_2
+		return posi_1
+	elif choice == 2:
+		goals_1 = (temp1[index][3] - rows0[positionr][3])
+		# goals_2 = (temp1[index+1][3] - rows[positionr][3])
+		# return goals_1, goals_2
+		return goals_1
+	elif choice == 3:
+		points_1 = (temp1[index][2] - rows0[positionr][2])
+		# points_2 = (temp1[index+1][2] - rows[positionr][2])
+		goals_1 = (temp1[index][3] - rows0[positionr][3])
+		# goals_2 = (temp1[index+1][3] - rows[positionr][3])
+		# return points_1, points_2, goals_1, goals_2
+		return points_1, goals_1
+
 x = sys.argv[1:]
 # x = ['Aberdeen x Hibernian - P2 (SPFL) - 20/05 - 15:45']
 temp = []
 temp1 = []
-temp1_2 = []
+div = []
+orgdiv = []
 temp0=[]
 # print(x)
 
@@ -44,71 +71,69 @@ for y in x:
 	temp.append(part1)
 	temp.append(part3)
 
-# print(temp)
-	# if part1 in
-	# cursor.execute("SELECT [Número de jogos] FROM scottish_premiership_table")
-	# resultado = cursor.fetchone()[0]
 
-# for index, j in enumerate(temp):
-# 	# pdb.set_trace()
-# 	if index % 2 == 0:
-# 		# rodada 2 a 33
-# 		if rows[0][4] > 2:
-# 			for row in rows:
-# 				if j in row:
-# 					temp1.append(row)
-# 				elif temp[index+1] in row:
-# 					temp1.append(row)
-# 			# print(temp1)
-# 			diff = abs(temp1[index][2]-temp1[index+1][2])
-# 			positionto_1 = temp1[index][0] - rows[0][0]
-# 			positionto_1_2 =  temp1[index+1][0] - rows[0][0]
-# 			pointstofirst_1 = abs(temp1[index][2] - rows[0][2])
-# 			# print(pointstofirst_1)
-# 			pointstofirst_2 = abs(temp1[index+1][2] - rows[0][2])
-# 			# print(pointstofirst_2)
-# 			positionto_3 = temp1[index][0] - rows[2][0]
-# 			positionto_3_2 =  temp1[index+1][0] - rows[2][0]
-# 			pointstothird_1 = (rows[2][2] - temp1[index][2])
-# 			pointstothird_2 = (rows[2][2] - temp1[index+1][2])
-# 			# rodada 3 a 11
-# 			if rows[0][4] <11:
-# 				if positionto_1 == 0 and diff <=3:
-# 					temp0.append(10)
-# 				elif positionto_1_2 == 0 and diff <=3:
-# 					temp0.append(10)
-# 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
-# 					temp0.append(10)
+for index, j in enumerate(temp):
+	if index % 2 == 0:
 
-# 			# rodada 11 a 33
-# 			elif rows[0][4] > 10 and rows[0][4] <33:
+		for row in rows0:
+			if j in row:
+				temp1.append(row)
+				div.append(1)
+			elif temp[index+1] in row:
+				temp1.append(row)
+				div.append(1)
 
-# 			# critehrio 3 pontos/uel
-# 				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
-# 					if rows[0][4] > 22:
-# 						temp0.append(9)
-# 					else:
-# 						temp0.append(1)
-# 			#critehrio primeiro colocado
-# 				elif positionto_1 == 0 and diff <=5:
-# 					temp0.append(10)
-# 				elif positionto_1_2 == 0 and diff <=5:
-# 					temp0.append(10)
-# 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
-# 					temp0.append(10)
-# 				else:
-# 					temp0.append(1)
+		for row in rows1:
+			if j in row:
+				temp1.append(row)
+				div.append(2)
+			elif temp[index+1] in row:
+				temp1.append(row)
+				div.append(2)
 
-# print(temp)
-# print(temp0)
+		for row in rows2:
+			if j in row:
+				temp1.append(row)
+				div.append(3)
+			elif temp[index+1] in row:
+				temp1.append(row)
+				div.append(3)
+
+		for row in rows3:
+			if j in row:
+				temp1.append(row)
+				div.append(4)
+			elif temp[index+1] in row:
+				temp1.append(row)
+				div.append(4)
+
+		for row in rows4:
+			if j in row:
+				temp1.append(row)
+				div.append(5)
+			elif temp[index+1] in row:
+				temp1.append(row)
+				div.append(5)
+
+		# Garantindo que se o time for da sexta divisão vai apender alguma coisa
+		while (index+1) > len(div):
+			div.append(6)
+		#
+		# Verificando se é um confronto top 6 da liga
+		if div[index] == 1 and div[index+1] == 1:
+			if p(1, index, 0) <= 5 and p(1, index+1, 0) <= 5:
+				x[index//2] = x[index//2].replace("P1", "P2")
+
+		#critehrio do derbie (considerarah confreonto top 6 como derbie, mas isso não vai fazer diferença nenhuma pra nos)
+		orgdiv.append(int(div[index]+div[index+1]))
+		if "P2" in x[index//2]:
+			orgdiv[index//2] = 1
+
+
 tempoo = []
 index2=0
-# for index, y in enumerate(temp):
-# 	if index%2 == 0:
-# 		for z in x:
-# 			if y in z:
-# 				tempoo.append(z)
-# temp0_sorted, x_sorted = zip(*sorted(zip(temp0, x), reverse=True))
+
+temp0_sorted, x_sorted = zip(*sorted(zip(orgdiv, x)))
 
 # temp0_sorted, x_sorted = zip(*sorted(zip(temp0, x), reverse=True))
 
@@ -123,13 +148,14 @@ index2=0
 # temp0_sorted, x_sorted = sorted((temp0, x), reverse=True)
 # a_sorted, b_sorted, c_sorted = map(list, zip(*sorted_values))
 
-for index, z in enumerate(x):
-	print(z)
-
-# for index, z in enumerate(x_sorted):
+# for index, z in enumerate(x):
 # 	print(z)
-# 	if index==2:
-# 		break
+# print(temp0_sorted)
+
+for index, z in enumerate(x_sorted):
+	print(z)
+	if index==9:
+		break
 conn.close()
 # var_dump.var_dump(part1)
 # var_dump.var_dump(part3)

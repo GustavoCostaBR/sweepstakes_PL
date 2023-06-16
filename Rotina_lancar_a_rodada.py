@@ -183,12 +183,13 @@ if data0['SPFL'] == 1:
 			# Print the stdout output if the subprocess ran successfully
 			if result3.stdout != '':
 				print('Jogos SPFL encaminhados para o filtro')
+
 				variavel = result3.stdout.split('\n')
 				for o in variavel:
 					temp.append(o)
 				while "" in temp:
 					temp.remove("")
-
+				# print(temp)
 				result3_1 = subprocess.run(['python', 'filtro_SPFL.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 				variavel = result3_1.stdout.split('\n')
@@ -304,16 +305,14 @@ if data0['LCH'] == 1:
 						temp.append(o)
 				while "" in temp:
 					temp.remove("")
-				# print(temp)
+				print(temp)
 				result4_1 = subprocess.run(['python', 'filtro_LCH.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# LCH ESTÁ DESABILITADO ENQUANTO AS LINHAS DE APPEND TO JOGOS ESTIVEREM DESABILITADAS
-
 				variavel = result4_1.stdout.split('\n')
 				while "" in variavel:
 					variavel.remove("")
-				print(variavel)
-				# for o in variavel:
-				# 	Jogos.append(o)
+				# print(variavel)
+				for o in variavel:
+					Jogos.append(o)
 			else:
 				print('Nenhum resultado para LCH')
 
@@ -455,9 +454,9 @@ if data0['EFL'] == 1:
 				temp = subst_P("P2", "P3", temp)
 				for o in temp:
 					Jogos.append(o)
-			# print(temp)
+			print(temp)
 			if len(temp) > 0 and zz == 2:
-				result6_1 = subprocess.run(['python', 'filtro_EFL.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+				result6_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 				variavel = result6_1.stdout.split('\n')
 				while "" in variavel:

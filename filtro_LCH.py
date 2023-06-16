@@ -25,6 +25,7 @@ temp_classi = []
 
 def p(choice ,index, positionr):
 	global rows
+	global temp1
 	if choice == 0:
 		points_1 = (temp1[index][2] - rows[positionr][2])
 		# points_2 = (temp1[index+1][2] - rows[positionr][2])
