@@ -85,27 +85,40 @@ for index, j in enumerate(temp):
 			# critehrio do primeiro colocado
 				if positionto_1 == 0 and diff <=3:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 				elif positionto_1_2 == 0 and diff <=3:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 
 			# rodada 11 a 33
 			elif rows[0][4] > 10 and rows[0][4] <33:
 
-			# critehrio 3 pontos/uel
-				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
-					if rows[0][4] > 22:
+			# critehrio 3 pontos/uel. A conferencia de posicoes eu coloquei um valor alto, mas nem fazia sentido conferir
+				if 0 <= positionto_3 <= 5 and 0 <= positionto_3_2 <= 5 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
+					if rows[0][4] >= 22:
 						temp0.append(11)
+						x[index//2] = x[index//2].replace("P1", "P2")
 					else:
 						temp0.append(1)
 			#critehrio primeiro colocado
 				elif positionto_1 == 0 and diff <=5:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 				elif positionto_1_2 == 0 and diff <=5:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 
 				else:
 					temp0.append(1)

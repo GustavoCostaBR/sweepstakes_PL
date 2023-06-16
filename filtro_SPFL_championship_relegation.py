@@ -109,22 +109,30 @@ for index, j in enumerate(temp):
 			# critehrio 3 pontos/uel
 				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
 					temp0.append(11)
+					x[index//2] = x[index//2].replace("P1", "P2")
 
 			#critehrio primeiro colocado
 
 				elif positionto_1 == 0 and diff <=5:
 					# print(diff)
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 				elif positionto_1_2 == 0 and diff <=5:
 					# print(diff)
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
 
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 
 			# critehrio do ultimo colocado
 				elif rows[0][4] > 34 and pointstolast_1 <= 3 and pointstolast_2 <= 3:
 					temp0.append(10)
+					x[index//2] = x[index//2].replace("P1", "P2")
 
 				else:
 					temp0.append(1)
@@ -135,19 +143,27 @@ for index, j in enumerate(temp):
 			# critehrio 3 pontos/uel
 				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
 					temp0.append(11)
+					x[index//2] = x[index//2].replace("P1", "P2")
 
 			# critehrio do ultimo colocado
 				elif rows[0][4] > 34 and pointstolast_1 <= 3 and pointstolast_2 <= 3:
 					temp0.append(10)
+					x[index//2] = x[index//2].replace("P1", "P2")
 
 			#critehrio primeiro colocado
 
 				elif positionto_1 == 0 and diff <=3:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 				elif positionto_1_2 == 0 and diff <=3:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 
 				else:
 					temp0.append(1)
@@ -159,38 +175,59 @@ for index, j in enumerate(temp):
 				if 0 <= positionto_3 <= 3 and 0 <= positionto_3_2 <= 3 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
 					if goalstothird_1 <= 7 and goalstothird_2 <= 7:
 						temp0.append(11)
+						x[index//2] = x[index//2].replace("P1", "P2")
 					elif goalstothird_1 <= 7 and pointstothird_2 < 3:
 						temp0.append(11)
+						x[index//2] = x[index//2].replace("P1", "P2")
 					elif goalstothird_2 <= 7 and pointstothird_1 < 3:
 						temp0.append(11)
+						x[index//2] = x[index//2].replace("P1", "P2")
 					elif pointstothird_2 < 3 and pointstothird_1 < 3:
 						temp0.append(11)
+						x[index//2] = x[index//2].replace("P1", "P2")
 					else:
 						temp0.append(1)
 			# critehrio do ultimo colocado
 				elif rows[0][4] > 34 and pointstolast_1 <= 3 and pointstolast_2 <= 3 and goalstolast_1 <= 7 and goalstolast_2 <= 7:
 					temp0.append(10)
+					x[index//2] = x[index//2].replace("P1", "P2")
 
 			#critehrio primeiro colocado
 
 				elif positionto_1 == 0 and diff == 3 and goalstofirst_2 <= 7:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 				elif positionto_1 == 0 and diff < 3:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 				elif positionto_1_2 == 0 and diff == 3 and goalstofirst_1 <= 7:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
 				elif positionto_1_2 == 0 and diff < 3:
 					temp0.append(12)
+					x[index//2] = x[index//2].replace("P1", "P3")
+					x[index//2] = x[index//2].replace("P2", "P3")
+
 				elif pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
 					if goalstofirst_2 <= 7 and goalstofirst_1 <= 7:
 						temp0.append(12)
+						x[index//2] = x[index//2].replace("P1", "P3")
+						x[index//2] = x[index//2].replace("P2", "P3")
 					elif pointstofirst_1 < 3 and pointstofirst_2 < 3:
 						temp0.append(12)
+						x[index//2] = x[index//2].replace("P1", "P3")
+						x[index//2] = x[index//2].replace("P2", "P3")
 					elif goalstofirst_2 <= 7 and pointstofirst_1 < 3:
 						temp0.append(12)
+						x[index//2] = x[index//2].replace("P1", "P3")
+						x[index//2] = x[index//2].replace("P2", "P3")
 					elif goalstofirst_1 <= 7 and pointstofirst_2 < 3:
 						temp0.append(12)
-
+						x[index//2] = x[index//2].replace("P1", "P3")
+						x[index//2] = x[index//2].replace("P2", "P3")
 					else:
 						temp0.append(1)
 				else:
