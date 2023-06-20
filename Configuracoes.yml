@@ -10,8 +10,12 @@ Fim_Rodada: ['2023', '4', '13', '20', '30']
 
 Nome_Rodada: Rodada 30
 
+# EXCEL_DOWNLOADER
 ARQUIVO_EXCEL_ABRIR: BOLAO_PL_31.xlsm
 ARQUIVO_EXCEL_SALVAR: BOLAO_PL_30.xlsm
+
+# ROTINA_BUSCAR_RESULTADO
+ARQUIVO_EXCEL_ABRIR_2: BOLAO_PL_30.xlsm
 
 #Sempre use a URL do schedule.
 URL_FACS: https://www.worldfootball.net/all_matches/eng-fa-community-shield-2023/
