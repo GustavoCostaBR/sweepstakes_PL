@@ -1,12 +1,17 @@
 #A data deve ser editada dentro do formato pré-estabelecido, aconselho usar o dia imediatamente anterior ao início da rodada, tendo em vista que a versào atual do programa considera todos os jogos começando meia noite (exato início do dia), apesar dele jogar a informação certa de hora no forms (falta ajustar o horário de verão). O formato da data é ano, mês (sem o zero, abril é 4 e não 04), dia (sem o zero), hora, minutos.
 # Inicio_Rodada: ['2022', '8', '19', '20', '30']
 # Inicio_Rodada: ['2023', '5', '10', '20', '30']
-Inicio_Rodada: ['2022', '8', '1', '20', '30']
+Inicio_Rodada: ['2023', '4', '7', '20', '30']
 
 #Para o fim recomendo usar o dia imediatamente posterior, zerado na hora, podemos testar.
 # Fim_Rodada: ['2022', '8', '23', '20', '30']
 # Fim_Rodada: ['2023', '6', '5', '20', '30']
-Fim_Rodada: ['2022', '8', '10', '20', '30']
+Fim_Rodada: ['2023', '4', '13', '20', '30']
+
+Nome_Rodada: Rodada 30
+
+ARQUIVO_EXCEL_ABRIR: BOLAO_PL_31.xlsm
+ARQUIVO_EXCEL_SALVAR: BOLAO_PL_30.xlsm
 
 #Sempre use a URL do schedule.
 URL_FACS: https://www.worldfootball.net/all_matches/eng-fa-community-shield-2023/

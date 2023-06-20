@@ -10,6 +10,7 @@ from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient import errors
 import sys
+import yaml
 
 
 def main():
@@ -41,6 +42,9 @@ SCOPES = ['https://www.googleapis.com/auth/forms.body', 'https://www.googleapis.
 # If modifying these scopes, delete the file token.json.
 SCOPES2 = ['https://www.googleapis.com/auth/script.projects', 'https://www.googleapis.com/auth/script.scriptapp', 'https://www.googleapis.com/auth/forms.body', 'https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/forms']
 
+with open('Configuracoes.yml', 'r') as f:
+	data = yaml.load(f, Loader=yaml.FullLoader)
+
 # SCOPES = ['https://www.googleapis.com/auth/forms', 'https://www.googleapis.com/auth/spreadsheets']
 SERVICE_ACCOUNT_FILE = 'I:/network_share/Gustavo/bolao/teste-spreadsheet2-73bac563f316.json'
 # SPREADSHEET_ID = '14h7JFsQa5ebEKl3earfrF6NMAcvSCMFtT9J8IZuHLDU'
@@ -63,7 +67,7 @@ drive_service = build('drive', 'v3', credentials=creds2)
 
 form2 = {
     "info": {
-        "title": "Rodada_trinta_v_1",
+        "title": f"{data['Nome_Rodada']}",
     },
 }
 
@@ -97,7 +101,7 @@ response = drive_service.permissions().create(fileId=form_id, body=permission, *
 # Create a new google spreadsheet
 spreadsheet = sheets_service.spreadsheets().create(body={
     'properties': {
-        'title': 'Rodada_trinta_v_1'
+        'title': f"{data['Nome_Rodada']}"
     }
 }).execute()
 
@@ -118,7 +122,7 @@ atualizacion = [
     {
         "createItem": {
             "item": {
-                "title": "Qual é o seu nome (com sobrenome final)?",
+                "title": "Qual é o seu nome? (com sobrenome final)",
                 "questionItem": {
 		            'question': {
 			            'required': True,
@@ -212,3 +216,8 @@ response = app_script_service.scripts().run(scriptId='AKfycbwXk6l4oREUIR-XTshRxZ
 if 'error' in response:
     raise RuntimeError(response['error'])
 
+id_spreadsheet = {'id': spreadsheet_id}
+
+
+with open("info_spreadsheet.yaml", "w", encoding="utf-8") as f:
+		yaml.dump(id_spreadsheet, f)
