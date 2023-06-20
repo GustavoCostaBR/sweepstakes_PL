@@ -10,33 +10,33 @@ FACS: 1
 PL: 1
 
 # SPFL, SPFL playoffs, championship e relegation
-SPFL: 0
+SPFL: 1
 
 # LCH, LCH PLAYOFFS
-LCH: 0
+LCH: 1
 
-FAC: 0
+FAC: 1
 
-EFL: 0
+EFL: 1
 
-SC: 0
+SC: 1
 
-SLC: 0
+SLC: 1
 
-USC: 0
+USC: 1
 
-QUAL_UCL: 0
+QUAL_UCL: 1
 
-UCL: 0
+UCL: 1
 
-QUAL_UEL: 0
+QUAL_UEL: 1
 
-UEL: 0
+UEL: 1
 
-QUAL_UECL: 0
+QUAL_UECL: 1
 
-UECL: 0
+UECL: 1
 
-FCWC: 0
+FCWC: 1
 
-LANCAR_FORMS: 1
+LANCAR_FORMS: 0

@@ -154,8 +154,19 @@ if data0['PL'] == 1:
 	else:
 		# Print the stdout output if the subprocess ran successfully
 		if result2.stdout != '':
+			temp = []
 			print('Jogo adicionado para PL')
 			variavel = result2.stdout.split('\n')
+			while "" in variavel:
+				variavel.remove("")
+			for o in variavel:
+				temp.append(o)
+
+			result2_1 = subprocess.run(['python', 'filtro_PL.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+			variavel = result2_1.stdout.split('\n')
+			while "" in variavel:
+				variavel.remove("")
 			for o in variavel:
 				Jogos.append(o)
 
@@ -568,7 +579,7 @@ if data0['SLC'] == 1:
 				print('Jogo SLC final adicionado')
 
 				temp = subst_P("P1", "P3", temp)
-				temp = subst_P("P2", "P2", temp)
+				temp = subst_P("P2", "P3", temp)
 
 				for o in temp:
 					Jogos.append(o)
@@ -747,6 +758,7 @@ if data0['UEL'] == 1:
 	temp=[]
 	variavel=[]
 	# Wait for the program to finish
+	# pdb.set_trace()
 	if result13.returncode != 0:
 		print(result13.stderr)
 	else:
@@ -842,6 +854,7 @@ if data0['UECL'] == 1:
 
 	temp=[]
 	variavel=[]
+
 	# Wait for the program to finish
 	if result15.returncode != 0:
 		print(result15.stderr)

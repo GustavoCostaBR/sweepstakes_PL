@@ -14,6 +14,10 @@ ctx.verify_mode = ssl.CERT_NONE
 
 # sys.stdout.reconfigure(encoding='utf-8')
 
+# Gambiarra champions
+u0 = 0
+
+
 def selection_liga(url, data2):
 	url_times_world_diferentes = "z"
 	url_times_eng_sco_diferentes = "z"
@@ -168,7 +172,8 @@ def replace_abv(nome_time):
 
 def selecting_matchs_by_data(url, dt3, dt2, dt, liga_url, j1, special_dates):
 	# pdb.set_trace()
-
+	deltachampions = timedelta(days=40)
+	global u0
 	if dt3 > dt and dt3 < dt2:
 
 		if liga_url in url:
@@ -180,6 +185,9 @@ def selecting_matchs_by_data(url, dt3, dt2, dt, liga_url, j1, special_dates):
 
 						# marcador de etapa do campeonato (copas e playoffs) no campeonato
 						j1 = 3
+						if "champions-league" in url:
+							if ((dt3 - special_dates[0]) >= deltachampions):
+								u0 = 1
 
 					else:
 						if "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "eng-playoff" in url:
@@ -192,6 +200,10 @@ def selecting_matchs_by_data(url, dt3, dt2, dt, liga_url, j1, special_dates):
 						v = 1
 						data3 = dt3
 						j1 = 3
+				# gambiarra para marcar as quartas para tratamento especial novo de pegar jogos não ingleses
+						if "champions-league" in url:
+							if ((dt3 - special_dates[0]) >= deltachampions):
+								u0 = 1
 
 					elif dt3 >= special_dates[1]:
 						v = 1
@@ -210,6 +222,9 @@ def selecting_matchs_by_data(url, dt3, dt2, dt, liga_url, j1, special_dates):
 						v = 1
 						data3 = dt3
 						j1 = 3
+						if "champions-league" in url:
+							if ((dt3 - special_dates[0]) >= deltachampions):
+								u0 = 1
 
 					elif dt3 >= special_dates[1] and dt3 < special_dates[2]:
 						v = 1
@@ -592,35 +607,63 @@ if 'inicio_bolao' in globals():
 
 # pdb.set_trace()
 
-if f == 1:
-	for index, y in enumerate(jogos_semana_f):
-		try:
-			print(y)
-		except:
-			print("Time com caracter especiais, buscar manualmente")
-
-	if j1==1:
-		if len(jogos_semana_f) > 0:
-			print("j1=1")
-
-	elif j1==2:
-		if len(jogos_semana_f) > 0:
-			print("j1=2")
-	elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url or "eng-playoff" in url) and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
-		if len(jogos_semana_f) > 0:
-			print("j1=3")
-	elif ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url) and j1==0 and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
-		if len(jogos_semana_f) > 0:
-			print("j1=0")
+if f == 1 and u0 == 0:
+# if f == 1:
+	if (j1 == 1 and (("europa-league" in url and "europa-league-qual" not in url) or ("champions-league" in url and "champions-league-qual" not in url))) or ( j1 == 2 and (("europa-conference-league" in url and "europa-conference-league-qual" not in url) or ("europa-league" in url and "europa-league-qual" not in url) or ("champions-league" in url and "champions-league-qual" not in url))):
+		for index, y in enumerate(jogos_semana):
+			try:
+				print(y)
+			except:
+				print("Time com caracteres especiais, buscar manualmente")
 
 
+		if j1==1:
+			if len(jogos_semana) > 0:
+				print("j1=1")
 
-if f == 0:
+		elif j1==2:
+			if len(jogos_semana) > 0:
+				print("j1=2")
+		elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url or "eng-playoff" in url) and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
+			if len(jogos_semana) > 0:
+				print("j1=3")
+		elif ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url) and j1==0 and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
+			if len(jogos_semana) > 0:
+				print("j1=0")
+
+
+
+
+	else:
+		for index, y in enumerate(jogos_semana_f):
+			try:
+				print(y)
+			except:
+				print("Time com caracteres especiais, buscar manualmente")
+
+		if j1==1:
+			if len(jogos_semana_f) > 0:
+				print("j1=1")
+
+		elif j1==2:
+			if len(jogos_semana_f) > 0:
+				print("j1=2")
+		elif j1==3 and ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url or "eng-playoff" in url) and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
+			if len(jogos_semana_f) > 0:
+				print("j1=3")
+		elif ("eng-fa-cup" in url or "eng-league-cup" in url or "sco-fa-cup" in url or "sco-league-cup" in url or "champions-league" in url or "europa-league" in url or "europa-conference-league" in url or "klub-wm" in url) and j1==0 and "champions-league-qual" not in url and "europa-league-qual" not in url and "europa-conference-league-qual" not in url:
+			if len(jogos_semana_f) > 0:
+				print("j1=0")
+
+
+
+if f == 0 or u0 == 1:
+# if f == 0:
 	for index, y in enumerate(jogos_semana):
 		try:
 			print(y)
 		except:
-			print("Time com caracter especiais, buscar manualmente")
+			print("Time com caracteres especiais, buscar manualmente")
 	if j1==1:
 		if len(jogos_semana) > 0:
 			print("j1=1")

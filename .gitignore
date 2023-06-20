@@ -4,3 +4,7 @@
 # ignore json files
 *.json
 
+# ignore xlsm
+*.xlsm
+
+
