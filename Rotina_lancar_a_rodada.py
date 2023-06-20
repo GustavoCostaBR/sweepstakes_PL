@@ -316,7 +316,7 @@ if data0['LCH'] == 1:
 						temp.append(o)
 				while "" in temp:
 					temp.remove("")
-				print(temp)
+				# print(temp)
 				result4_1 = subprocess.run(['python', 'filtro_LCH.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 				variavel = result4_1.stdout.split('\n')
 				while "" in variavel:
@@ -465,7 +465,7 @@ if data0['EFL'] == 1:
 				temp = subst_P("P2", "P3", temp)
 				for o in temp:
 					Jogos.append(o)
-			print(temp)
+			# print(temp)
 			if len(temp) > 0 and zz == 2:
 				result6_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
@@ -980,7 +980,11 @@ if data0['FCWC'] == 1:
 
 
 
-print(Jogos)
+# print(Jogos)
+for o in range(len(Jogos)):
+	Jogos[o] = Jogos[o].replace("_QUAL", '')
+	print(Jogos[o])
+
 
 if data0['LANCAR_FORMS'] == 1:
 	result17 = subprocess.run(['python', 'forms.py', *Jogos], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
