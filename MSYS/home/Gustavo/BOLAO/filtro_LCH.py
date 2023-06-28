@@ -13,7 +13,7 @@ with open('TIMES_PRIMEIRA_RODADA.yml', 'r') as f:
 with open('Configuracoes.yml', 'r') as f:
 	data0 = yaml.load(f, Loader=yaml.FullLoader)
 
-x = sys.argv[1:]
+# x = sys.argv[1:]
 
 x = ['Blackburn Rovers x Burnley - P2 (LCH) - 25/04 - 16:00', 'Sheffield United x West Bromwich Albion - P1 (LCH) - 26/04 - 16:00', 'Rotherham United x Cardiff City - P1 (LCH) - 27/04 - 16:00', 'Huddersfield Town x Sheffield United - P1 (LCH) - 04/05 - 15:45', 'Blackpool x Millwall - P1 (LCH) - 28/04 - 16:00', 'Sunderland x Watford - P1 (LCH) - 29/04 - 11:00', 'Bristol City x Burnley - P1 (LCH) - 29/04 - 11:00', 'Coventry City x Birmingham City - P1 (LCH) - 29/04 - 11:00', 'Reading x Wigan Athletic - P1 (LCH) - 29/04 - 11:00', 'Hull City x Swansea City - P1 (LCH) - 29/04 - 11:00', 'Sheffield United x Preston North End - P1 (LCH) - 29/04 - 11:00', 'Stoke City x Queens Park Rangers - P1 (LCH) - 29/04 - 11:00', 'West Bromwich Albion x Norwich City - P1 (LCH) - 29/04 - 13:30', 'Cardiff City x Huddersfield Town - P1 (LCH) - 30/04 - 08:00', 'Rotherham United x Middlesbrough - P1 (LCH) - 01/05 - 09:00', 'Blackburn Rovers x Luton Town - P1 (LCH) - 01/05 - 13:30']
 
@@ -131,11 +131,18 @@ if len(teams_not_listed) > 0:
 					else:
 						temp1_.append(row)
 
-# Defines the search of the first positions to exclude mathematics defined positions
-index2=0
+# Defines the search of the firs position to exclude mathematics defined positions
+index1=0
 
-# Defines the search of the last positions to exclude mathematics defined positions
+# Defines the search of the second position to exclude mathematics defined positions
+index2 = 0
 index3 = 0
+index4 = 0
+index5 = 0
+index6 = 0
+index24 = 0
+index23 = 0
+
 
 
 
@@ -146,8 +153,23 @@ while contador < 20:
 		# if index == 23:
 			# pdb.set_trace()
 		if rows[0][4] < 45:
-			# Playoff verification
-			if 5 >= index2 >= 2 and ((p(1, index, index2) == 0 and p(0, index, 6) > (((46 - (rows[0][4])) * 3) ))):
+			# First position
+			if ((p(1, index, 0) == 0 and p(0, index, 1) > (((46 - (rows[0][4])) * 3)))):
+				index1 = index1 + 1
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
+			# Second position
+			elif index1 > 0 and ((p(1, index, 1) == 0 and p(0, index, 2) > (((46 - (rows[0][4])) * 3)))):
 				index2 = index2 + 1
 				if index not in list_to_delete:
 					list_to_delete.append(index)
@@ -161,23 +183,9 @@ while contador < 20:
 							list_to_delete.append(index-1)
 							lista_times_delete.append(temp[index-1])
 
-			# First positions verification, should be after because of the index2
-			elif index2 < 2 and ((p(1, index, index2) == 0 and p(0, index, index2+1) > (((46 - (rows[0][4])) * 3)))):
-				index2 = index2 + 1
-				if index not in list_to_delete:
-					list_to_delete.append(index)
-					lista_times_delete.append(team)
-					if index % 2 == 0:
-						if index+1 not in list_to_delete:
-							list_to_delete.append(index+1)
-							lista_times_delete.append(temp[index+1])
-					else:
-						if index-1 not in list_to_delete:
-							list_to_delete.append(index-1)
-							lista_times_delete.append(temp[index-1])
 
-			# Last positions verification
-			elif 2 >= index3  and ((p(1, index, 23-index3) == 0 and abs(p(0, index, 20)) > (((46 - (rows[0][4])) * 3)))):
+			# Third position
+			elif  index2 > 0 and ((p(1, index, 2) == 0 and p(0, index, 6) > (((46 - (rows[0][4])) * 3)))):
 				index3 = index3 + 1
 				if index not in list_to_delete:
 					list_to_delete.append(index)
@@ -190,12 +198,103 @@ while contador < 20:
 						if index-1 not in list_to_delete:
 							list_to_delete.append(index-1)
 							lista_times_delete.append(temp[index-1])
+
+			# Fourth position
+			elif  index3 > 0 and ((p(1, index, 3) == 0 and p(0, index, 6) > (((46 - (rows[0][4])) * 3)))):
+				index4 = index4 + 1
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
+			# Fifth position
+			elif  index4 > 0 and ((p(1, index, 4) == 0 and p(0, index, 6) > (((46 - (rows[0][4])) * 3)))):
+				index5 = index5 + 1
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
+			# Sixth position
+			elif  index5 > 0 and ((p(1, index, 5) == 0 and p(0, index, 6) > (((46 - (rows[0][4])) * 3)))):
+				index6 = index6 + 1
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
+
+			# Last position verification
+			elif ((p(1, index, 23) == 0 and abs(p(0, index, 20)) > (((46 - (rows[0][4])) * 3)))):
+				index24 = index24 + 1
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
+			# Position 23 verification
+			elif index24 > 0  and ((p(1, index, 22) == 0 and abs(p(0, index, 20)) > (((46 - (rows[0][4])) * 3)))):
+				index23 = index23 + 1
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
+			# Position 22 verification
+			elif index23 > 0  and ((p(1, index, 21) == 0 and abs(p(0, index, 20)) > (((46 - (rows[0][4])) * 3)))):
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
 
 		elif rows[0][4] == 45:
-			# Playoff verification
-			if 5 >= index2 >= 2 and ((p(1, index, index2) == 0 and (((p(0, index, 6) > (((46 - (rows[0][4])) * 3) ))) or ((p(0, index, 6) == (((46 - (rows[0][4])) * 3))) ) and p(2, index, 6) > 7 ) )):
+			# First position
+			if p(1, index, 0) == 0 and ((p(0, index, 1) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 1) == ((46 - (rows[0][4])) * 3) and p(2, index, 1) > 7 ))):
+				index1 = index1 + 1
 				if index not in list_to_delete:
-					index2 = index2 + 1
 					list_to_delete.append(index)
 					lista_times_delete.append(team)
 					if index % 2 == 0:
@@ -209,8 +308,8 @@ while contador < 20:
 
 
 
-			# First positions verification, should be after because of the index2
-			elif index2 < 2 and ((p(1, index, index2) == 0 and (((p(0, index, index2+1) > (((46 - (rows[0][4])) * 3) ))) or ((p(0, index, index2+1) == (((46 - (rows[0][4])) * 3))) ) and p(2, index, index2+1) > 7 ) )):
+			# Second position
+			elif index1 > 0 and p(1, index, 1) == 0 and ((p(0, index, 2) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 2) == ((46 - (rows[0][4])) * 3) and p(2, index, 2) > 7 ))):
 				index2 = index2 + 1
 				if index not in list_to_delete:
 					list_to_delete.append(index)
@@ -225,10 +324,54 @@ while contador < 20:
 							lista_times_delete.append(temp[index-1])
 
 
-
-			# Last positions verification
-			elif 2 >= index3  and (((p(1, index, 23-index3) == 0 and abs(p(0, index, 20)) > (((46 - (rows[0][4])) * 3))) or (((abs((p(0, index, 20)))) == (((46 - (rows[0][4])) * 3))) ) and (p(2, index, 20) < (-7))  )):
+			# Third position
+			elif  index2 > 0 and p(1, index, 2) == 0 and ((p(0, index, 6) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 6) == ((46 - (rows[0][4])) * 3) and p(2, index, 6) > 7 ))):
 				index3 = index3 + 1
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
+			# Fourth position
+			elif  index3 > 0 and p(1, index, 3) == 0 and ((p(0, index, 6) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 6) == ((46 - (rows[0][4])) * 3) and p(2, index, 6) > 7 ))):
+				index4 = index4 + 1
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
+			# Fifth position
+			elif  index4 > 0 and p(1, index, 4) == 0 and ((p(0, index, 6) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 6) == ((46 - (rows[0][4])) * 3) and p(2, index, 6) > 7 ))):
+				index5 = index5 + 1
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
+			# Sixth position
+			elif  index5 > 0 and p(1, index, 5) == 0 and ((p(0, index, 6) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 6) == ((46 - (rows[0][4])) * 3) and p(2, index, 6) > 7 ))):
+				index6 = index6 + 1
 				if index not in list_to_delete:
 					list_to_delete.append(index)
 					lista_times_delete.append(team)
@@ -243,6 +386,50 @@ while contador < 20:
 
 
 
+
+			# Last position verification
+			elif p(1, index, 23) == 0 and ((abs(p(0, index, 20))) > (((46 - (rows[0][4])) * 3)) or ((abs(p(0, index, 20))) == (((46 - (rows[0][4])) * 3)) and p(2, index, 20) < (-7))):
+				index24 = index24 + 1
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
+			# Position 23 verification
+			elif index24 > 0  and p(1, index, 22) == 0 and ((abs(p(0, index, 20))) > (((46 - (rows[0][4])) * 3)) or ((abs(p(0, index, 20))) == (((46 - (rows[0][4])) * 3)) and p(2, index, 20) < (-7))):
+				index23 = index23 + 1
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
+
+			# Position 22 verification
+			elif index23 > 0  and p(1, index, 21) == 0 and ((abs(p(0, index, 20))) > (((46 - (rows[0][4])) * 3)) or ((abs(p(0, index, 20))) == (((46 - (rows[0][4])) * 3)) and p(2, index, 20) < (-7))):
+				if index not in list_to_delete:
+					list_to_delete.append(index)
+					lista_times_delete.append(team)
+					if index % 2 == 0:
+						if index+1 not in list_to_delete:
+							list_to_delete.append(index+1)
+							lista_times_delete.append(temp[index+1])
+					else:
+						if index-1 not in list_to_delete:
+							list_to_delete.append(index-1)
+							lista_times_delete.append(temp[index-1])
 
 
 
@@ -251,34 +438,73 @@ while contador < 20:
 		# if index == 23:
 		# pdb.set_trace()
 		if rows[0][4] < 45:
-			# Playoff verification
-			if 5 >= index2 >= 2 and ((q(1, index, index2) == 0 and q(0, index, 6) > (((46 - (rows[0][4])) * 3) ))):
+			# First position
+			if ((p(1, index, 0) == 0 and p(0, index, 1) > (((46 - (rows[0][4])) * 3)))):
+				index1 = index1 + 1
+
+			# Second position
+			elif index1 > 0 and ((p(1, index, 1) == 0 and p(0, index, 2) > (((46 - (rows[0][4])) * 3)))):
 				index2 = index2 + 1
 
 
-			# First positions verification, should be after because of the index2
-			elif index2 < 2 and ((q(1, index, index2) == 0 and q(0, index, index2+1) > (((46 - (rows[0][4])) * 3)))):
-				index2 = index2 + 1
-
-			# Last positions verification
-			elif 2 >= index3  and ((q(1, index, 23-index3) == 0 and abs(q(0, index, 20)) > (((46 - (rows[0][4])) * 3)))):
+			# Third position 3
+			elif  index2 > 0 and ((p(1, index, 2) == 0 and p(0, index, 6) > (((46 - (rows[0][4])) * 3)))):
 				index3 = index3 + 1
+
+			# Fourth position
+			elif  index3 > 0 and ((p(1, index, 3) == 0 and p(0, index, 6) > (((46 - (rows[0][4])) * 3)))):
+				index4 = index4 + 1
+
+			# Fifth position
+			elif  index4 > 0 and ((p(1, index, 4) == 0 and p(0, index, 6) > (((46 - (rows[0][4])) * 3)))):
+				index5 = index5 + 1
+
+			# Sixth position
+			elif  index5 > 0 and ((p(1, index, 5) == 0 and p(0, index, 6) > (((46 - (rows[0][4])) * 3)))):
+				index6 = index6 + 1
+
+
+			# Last position verification
+			elif ((p(1, index, 23) == 0 and abs(p(0, index, 20)) > (((46 - (rows[0][4])) * 3)))):
+				index24 = index24 + 1
+
+			# Position 23 verification
+			elif index24 > 0  and ((p(1, index, 22) == 0 and abs(p(0, index, 20)) > (((46 - (rows[0][4])) * 3)))):
+				index23 = index23 + 1
 
 		elif rows[0][4] == 45:
-			# Playoff verification
-			if 5 >= index2 >= 2 and ((q(1, index, index2) == 0 and (((q(0, index, 6) > (((46 - (rows[0][4])) * 3) ))) or ((q(0, index, 6) == (((46 - (rows[0][4])) * 3))) ) and q(2, index, 6) > 7 ) )):
+
+			# First position
+			if p(1, index, 0) == 0 and ((p(0, index, 1) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 1) == ((46 - (rows[0][4])) * 3) and p(2, index, 1) > 7 ))):
+				index1 = index1 + 1
+
+			# Second position
+			elif index1 > 0 and p(1, index, 1) == 0 and ((p(0, index, 2) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 2) == ((46 - (rows[0][4])) * 3) and p(2, index, 2) > 7 ))):
 				index2 = index2 + 1
 
-			# First positions verification, should be after because of the index2
-			elif index2 < 2 and ((q(1, index, index2) == 0 and (((q(0, index, index2+1) > (((46 - (rows[0][4])) * 3) ))) or ((q(0, index, index2+1) == (((46 - (rows[0][4])) * 3))) ) and q(2, index, index2+1) > 7 ) )):
-				index2 = index2 + 1
-
-
-			# Last positions verification
-			elif 2 >= index3  and (((q(1, index, 23-index3) == 0 and abs(q(0, index, 20)) > (((46 - (rows[0][4])) * 3))) or (((abs((q(0, index, 20)))) == (((46 - (rows[0][4])) * 3))) ) and (q(2, index, 20) < (-7))  )):
+			# Third position
+			elif  index2 > 0 and p(1, index, 2) == 0 and ((p(0, index, 6) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 6) == ((46 - (rows[0][4])) * 3) and p(2, index, 6) > 7 ))):
 				index3 = index3 + 1
 
+			# Fourth position
+			elif  index3 > 0 and p(1, index, 3) == 0 and ((p(0, index, 6) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 6) == ((46 - (rows[0][4])) * 3) and p(2, index, 6) > 7 ))):
+				index4 = index4 + 1
 
+			# Fifth position
+			elif  index4 > 0 and p(1, index, 4) == 0 and ((p(0, index, 6) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 6) == ((46 - (rows[0][4])) * 3) and p(2, index, 6) > 7 ))):
+				index5 = index5 + 1
+
+			# Sixth position
+			elif  index5 > 0 and p(1, index, 5) == 0 and ((p(0, index, 6) > ((46 - (rows[0][4])) * 3)) or ((p(0, index, 6) == ((46 - (rows[0][4])) * 3) and p(2, index, 6) > 7 ))):
+				index6 = index6 + 1
+
+			# Last position verification
+			elif p(1, index, 23) == 0 and ((abs(p(0, index, 20))) > (((46 - (rows[0][4])) * 3)) or ((abs(p(0, index, 20))) == (((46 - (rows[0][4])) * 3)) and p(2, index, 20) < (-7))):
+				index24 = index24 + 1
+
+			# Position 23 verification
+			elif index24 > 0  and p(1, index, 22) == 0 and ((abs(p(0, index, 20))) > (((46 - (rows[0][4])) * 3)) or ((abs(p(0, index, 20))) == (((46 - (rows[0][4])) * 3)) and p(2, index, 20) < (-7))):
+				index23 = index23 + 1
 
 	contador = contador + 1
 
@@ -289,12 +515,18 @@ for index in sorted(list_to_delete, reverse=True):
 	del temp[index]
 	contador = contador + 1
 
-# print(index2, index3)
-# print(teams_not_listed)
+
+temp = []
+
+for y in x:
+	parts = y.split(" x ")
+	part1 = parts[0]
+	part2 = parts[1].split(" - ")
+	part3 = part2[0]
+	temp.append(part1)
+	temp.append(part3)
 
 
-# for jogo in x:
-# 	print(jogo)
 
 temp1 = []
 
