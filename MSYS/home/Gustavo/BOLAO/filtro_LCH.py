@@ -13,9 +13,9 @@ with open('TIMES_PRIMEIRA_RODADA.yml', 'r') as f:
 with open('Configuracoes.yml', 'r') as f:
 	data0 = yaml.load(f, Loader=yaml.FullLoader)
 
-# x = sys.argv[1:]
+x = sys.argv[1:]
 
-x = ['Blackburn Rovers x Burnley - P2 (LCH) - 25/04 - 16:00', 'Sheffield United x West Bromwich Albion - P1 (LCH) - 26/04 - 16:00', 'Rotherham United x Cardiff City - P1 (LCH) - 27/04 - 16:00', 'Huddersfield Town x Sheffield United - P1 (LCH) - 04/05 - 15:45', 'Blackpool x Millwall - P1 (LCH) - 28/04 - 16:00', 'Sunderland x Watford - P1 (LCH) - 29/04 - 11:00', 'Bristol City x Burnley - P1 (LCH) - 29/04 - 11:00', 'Coventry City x Birmingham City - P1 (LCH) - 29/04 - 11:00', 'Reading x Wigan Athletic - P1 (LCH) - 29/04 - 11:00', 'Hull City x Swansea City - P1 (LCH) - 29/04 - 11:00', 'Sheffield United x Preston North End - P1 (LCH) - 29/04 - 11:00', 'Stoke City x Queens Park Rangers - P1 (LCH) - 29/04 - 11:00', 'West Bromwich Albion x Norwich City - P1 (LCH) - 29/04 - 13:30', 'Cardiff City x Huddersfield Town - P1 (LCH) - 30/04 - 08:00', 'Rotherham United x Middlesbrough - P1 (LCH) - 01/05 - 09:00', 'Blackburn Rovers x Luton Town - P1 (LCH) - 01/05 - 13:30']
+# x = ['Blackburn Rovers x Burnley - P2 (LCH) - 25/04 - 16:00', 'Sheffield United x West Bromwich Albion - P1 (LCH) - 26/04 - 16:00', 'Rotherham United x Cardiff City - P1 (LCH) - 27/04 - 16:00', 'Huddersfield Town x Sheffield United - P1 (LCH) - 04/05 - 15:45', 'Blackpool x Millwall - P1 (LCH) - 28/04 - 16:00', 'Sunderland x Watford - P1 (LCH) - 29/04 - 11:00', 'Bristol City x Burnley - P1 (LCH) - 29/04 - 11:00', 'Coventry City x Birmingham City - P1 (LCH) - 29/04 - 11:00', 'Reading x Wigan Athletic - P1 (LCH) - 29/04 - 11:00', 'Hull City x Swansea City - P1 (LCH) - 29/04 - 11:00', 'Sheffield United x Preston North End - P1 (LCH) - 29/04 - 11:00', 'Stoke City x Queens Park Rangers - P1 (LCH) - 29/04 - 11:00', 'West Bromwich Albion x Norwich City - P1 (LCH) - 29/04 - 13:30', 'Cardiff City x Huddersfield Town - P1 (LCH) - 30/04 - 08:00', 'Rotherham United x Middlesbrough - P1 (LCH) - 01/05 - 09:00', 'Blackburn Rovers x Luton Town - P1 (LCH) - 01/05 - 13:30']
 
 
 # x = ['Blackburn Rovers x Burnley - P2 (LCH) - 25/04 - 16:00', 'Sheffield United x West Bromwich Albion - P1 (LCH) - 26/04 - 16:00', 'Rotherham United x Cardiff City - P1 (LCH) - 27/04 - 16:00', 'Birmingham City x Blackpool - P1 (LCH) - 22/04 - 11:00', 'Bristol City x Rotherham United - P1 (LCH) - 22/04 - 11:00', 'Cardiff City x Stoke City - P1 (LCH) - 22/04 - 11:00', 'Coventry City x Reading - P1 (LCH) - 22/04 - 11:00', 'Burnley x Queens Park Rangers - P1 (LCH) - 22/04 - 11:00', 'Hull City x Watford - P1 (LCH) - 22/04 - 11:00', 'Norwich City x Swansea City - P1 (LCH) - 22/04 - 11:00', 'Wigan Athletic x Millwall - P1 (LCH) - 22/04 - 11:00', 'Preston North End x Blackburn Rovers - P1 (LCH) - 22/04 - 13:30', 'West Bromwich Albion x Sunderland - P1 (LCH) - 23/04 - 08:00', 'Luton Town x Middlesbrough - P1 (LCH) - 24/04 - 16:00']
@@ -756,25 +756,14 @@ for index, j in enumerate(temp):
 
 
 		#critehrio do primeiro colocado
-				if (pointstofirst_1 <= 3 and pointstofirst_2 <= 3) and (p(2, index, 0) >= (-6) and p(2, index+1, 0) >=(-6)):
-					temp0.append(255)
-					x[index//2] = x[index//2].replace("P1", "P3")
-					x[index//2] = x[index//2].replace("P2", "P3")
-					temp_classi.append(points1+points2)
-				elif (pointstofirst_1 <= 2 and pointstofirst_2 <= 2):
+				if ((pointstofirst_1 == 3 and p(2, index, 0) >= (-7)) or pointstofirst_1 <= 2)  and ((pointstofirst_2 == 3 and p(2, index+1, 0) >=(-7)) or pointstofirst_2 <= 2):
 					temp0.append(255)
 					x[index//2] = x[index//2].replace("P1", "P3")
 					x[index//2] = x[index//2].replace("P2", "P3")
 					temp_classi.append(points1+points2)
 
 		#critehrio do segundo colocado
-				elif (0 >= pointstosecond_1 >= (-3) and 0 >= pointstosecond_2 >= (-3)) and (p(2, index, 1) >= (-6) and p(2, index+1, 1) >= (-6)):
-					temp0.append(254)
-					x[index//2] = x[index//2].replace("P1", "P3")
-					x[index//2] = x[index//2].replace("P2", "P3")
-					temp_classi.append(points1+points2)
-
-				elif (0 >= pointstosecond_1 >= (-2) and 0 >= pointstosecond_2 >= (-2)):
+				elif ((0 >= pointstosecond_1 == (-3) and p(2, index, 1) >= (-7)) or 0 >= pointstosecond_1 >= (-2)) and ((0 >= pointstosecond_2 == (-3) and p(2, index+1, 1) >= (-7)) or 0 >= pointstosecond_2 >= (-2)):
 					temp0.append(254)
 					x[index//2] = x[index//2].replace("P1", "P3")
 					x[index//2] = x[index//2].replace("P2", "P3")
@@ -782,72 +771,43 @@ for index, j in enumerate(temp):
 
 		# critehrio do playoff
 			# OS DOIS TIMES DENTRO SEPARADOS DO PRIMEIRO FORA DELA POR ATÉ 3 PONTOS
-				elif (0 <= p(0, index, 6) <= 3 and 0 <= p(0, index+1, 6) <= 3) and (p(2, index,6) >= 6 and p(2, index+1,6) >= 6 ) and 6 > (p(1, index, 0) > 1 and 6 > p(1, index+1,0) > 1):
-					temp0.append(253)
-					x[index//2] = x[index//2].replace("P1", "P3")
-					temp_classi.append(points1+points2)
-
-				elif (0 <= p(0, index, 6) <=2 and 0 <= p(0, index+1, 6) <= 2) and 6 > (p(1, index, 0) > 1 and 6 > p(1, index+1,0) > 1):
+				elif (((0 <= p(0, index, 6) == 3 and p(2, index,6) >= 7) or 0 <= p(0, index, 6) <=2) and p(1, index, 0) > 1) and (((0 <= p(0, index+1, 6) == 3 and p(2, index+1,6) >= 7) or 0 <= p(0, index+1, 6) <=2) and p(1, index+1, 0) > 1):
 					temp0.append(253)
 					x[index//2] = x[index//2].replace("P1", "P3")
 					temp_classi.append(points1+points2)
 
 			# UM DENTRO E OUTRO FORA SEPARADOS POR ATÉ 3 PONTOS
-				elif  ((1 < p(1, index, 0) < 6 and 0 <= (p(0, index, 0)-p(0, index+1, 0)) <= 3 and (p(2, index, 0)-p(2, index+1, 0)) <= 6) and (1 < p(1, index+1, 0) >= 6)) or ((1 < p(1, index+1, 0) < 6 and 0 <= (p(0, index+1, 0)-p(0, index, 0)) <= 3 and (p(2, index+1, 0)-p(2, index, 0)) <= 6) and (1 < p(1, index, 0) >= 6)):
+				elif  ((1 < p(1, index, 0) < 6 and p(1, index+1, 0) >= 6) and ((0 <= (p(0, index, 0)-p(0, index+1, 0)) == 3 and (p(2, index, 0)-p(2, index+1, 0)) <= 7) or 0 <= (p(0, index, 0)-p(0, index+1, 0)) <= 2)) or ((1 < p(1, index+1, 0) < 6 and p(1, index, 0) >= 6) and ((0 <= (p(0, index+1, 0)-p(0, index, 0)) == 3 and (p(2, index+1, 0)-p(2, index, 0)) <= 7) or 0 <= (p(0, index+1, 0)-p(0, index, 0)) <= 2)):
 					temp0.append(253)
 					x[index//2] = x[index//2].replace("P1", "P3")
 					temp_classi.append(points1+points2)
-
-				elif  ((1 < p(1, index, 0) < 6 and 0 <= (p(0, index, 0)-p(0, index+1, 0)) <= 2) and (1 < p(1, index+1, 0) >= 6)) or ((1 < p(1, index+1, 0) < 6 and 0 <= (p(0, index+1, 0)-p(0, index, 0)) <= 2) and (1 < p(1, index, 0) >= 6)):
-					temp0.append(253)
-					x[index//2] = x[index//2].replace("P1", "P3")
-					temp_classi.append(points1+points2)
-
 
 			# OS DOIS FORA COM ATÉ 3 PONTOS PARA ENTRAR NA ZONA DE PLAYOFF
-				elif(p(1, index, 5) > 0 and p(1, index+1, 5) > 0) and (p(0, index, 5) >= (-3) and p(0, index+1, 5) >= (-3)) and (p(2, index, 5) >= (-6) and p(2, index+1, 5) >= (-6)):
-					temp0.append(253)
-					x[index//2] = x[index//2].replace("P1", "P3")
-					temp_classi.append(points1+points2)
-
-				elif(p(1, index, 5) > 0 and p(1, index+1, 5) > 0) and (p(0, index, 5) >= (-2) and p(0, index+1, 5) >= (-2)):
+				elif(p(1, index, 5) > 0 and p(1, index+1, 5) > 0) and ((p(0, index, 5) == (-3) and p(2, index, 5) >= (-7)) or p(0, index, 5) >= (-2)) and ((p(0, index+1, 5) == (-3) and p(2, index+1, 5) >= (-7)) or p(0, index+1, 5) >= (-2)) :
 					temp0.append(253)
 					x[index//2] = x[index//2].replace("P1", "P3")
 					temp_classi.append(points1+points2)
 
 		# critehrio da zona de rebaixamento
 			# OS DOIS TIMES DENTRO SEPARADOS DO PRIMEIRO FORA DELA POR ATÉ 3 PONTOS
-				elif (0 >= p(0, index, 20) >= (-3) and 0 >= p(0, index+1, 20) >= (-3)) and (p(1, index, 20) >= 1 and p(1, index+1, 20) >= 1) and (p(2, index, 20) >= (-6) and p(2, index+1, 20) >= (-6)):
-					temp0.append(252)
-					x[index//2] = x[index//2].replace("P1", "P2")
-					temp_classi.append(points1+points2)
-
-				elif (0 >= p(0, index, 20) >= (-2) and 0 >= p(0, index+1, 20) >= (-2)) and (p(1, index, 20) >= 1 and p(1, index+1, 20) >= 1):
+				elif ((0 >= p(0, index, 20) >= (-3) and p(2, index, 20) >= (-7)) or 0 >= p(0, index, 20) >= (-2)) and ((0 >= p(0, index+1, 20) >= (-3) and p(2, index+1, 20) >= (-7)) or 0 >= p(0, index+1, 20) >= (-2)) and (p(1, index, 20) >= 1 and p(1, index+1, 20) >= 1):
 					temp0.append(252)
 					x[index//2] = x[index//2].replace("P1", "P2")
 					temp_classi.append(points1+points2)
 
 			# UM DENTRO E OUTRO FORA SEPARADOS POR ATÉ 3 PONTOS
-				elif  ((p(1, index, 20) > 0 and 0 <= (p(0, index+1, 0)-p(0, index, 0)) <= 3 and (p(2, index+1, 0)-p(2, index, 0)) <= 6) and (p(1, index+1, 20) <= 0)) or ((p(1, index+1, 20) > 0 and 0 <= (p(0, index, 0)-p(0, index+1, 0)) <= 3 and (p(2, index, 0)-p(2, index+1, 0)) <= 6) and (p(1, index, 20) <= 0)):
+				elif  ((p(1, index, 20) > 0 and ((0 <= (p(0, index+1, 0)-p(0, index, 0)) == 3 and (p(2, index+1, 0)-p(2, index, 0)) <= 7) or (0 <= (p(0, index+1, 0)-p(0, index, 0)) <= 2)) and (p(1, index+1, 20) <= 0))) or ((p(1, index+1, 20) > 0 and ((0 <= (p(0, index, 0)-p(0, index+1, 0)) == 3 and (p(2, index, 0)-p(2, index+1, 0)) <= 7) or (0 <= (p(0, index, 0)-p(0, index+1, 0)) <= 2)) and (p(1, index, 20) <= 0))):
 					temp0.append(252)
 					x[index//2] = x[index//2].replace("P1", "P2")
 					temp_classi.append(points1+points2)
 
-				elif  (p(1, index, 20) > 0 and 0 <= (p(0, index+1, 0)-p(0, index, 0)) <= 2) and (p(1, index+1, 20) <= 0) or (p(1, index+1, 20) > 0 and 0 <= (p(0, index, 0)-p(0, index+1, 0)) <= 2) and (p(1, index, 20) <= 0):
-					temp0.append(252)
-					x[index//2] = x[index//2].replace("P1", "P2")
-					temp_classi.append(points1+points2)
 
 			# OS DOIS FORA COM ATÉ 3 PONTOS PARA ENTRAR NA ZONA DA DEGOLA
-				elif(p(1, index, 20) <= 0 and p(1, index+1, 20) <= 0) and (p(0, index, 21) <= 3 and p(0, index+1, 21) <= 3) and (p(2, index, 21) <= 6 and p(2, index+1, 21) <= 6):
+				elif(p(1, index, 20) <= 0 and p(1, index+1, 20) <= 0) and ((p(0, index, 21) == 3 and p(2, index, 21) <= 7) or p(0, index, 21) <= 2) and ((p(0, index+1, 21) == 3 and p(2, index+1, 21) <= 7) or p(0, index+1, 21) <= 2):
 					temp0.append(252)
 					x[index//2] = x[index//2].replace("P1", "P2")
 					temp_classi.append(points1+points2)
 
-				elif(p(1, index, 20) <= 0 and p(1, index+1, 20) <= 0) and (p(0, index, 21) <= 2 and p(0, index+1, 21) <= 2):
-					temp0.append(252)
-					x[index//2] = x[index//2].replace("P1", "P2")
-					temp_classi.append(points1+points2)
 		# critehrio de colocacao
 
 				else:
