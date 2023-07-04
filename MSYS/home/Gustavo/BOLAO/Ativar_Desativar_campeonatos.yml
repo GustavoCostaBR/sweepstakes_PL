@@ -1,0 +1,44 @@
+# Utilize 1 para manter essa parte do código ligada e 0 para desligar:
+#SOH RECOMENDO DESLIGAR SE TIVER APRESENTANDO PROBLEMAS PARA RODAR UMA PARTE ESPECIFICA. O PROGRAMA FOI DESENHADO PARA ESCOLHER ENTRE OS CAMPEONATOS.
+
+# Atualizar tabelas dos campeonatos de pontos
+TABELAS: 1
+
+#Capturar a data inicial do bolão e adicionar FACS, esse, porenquanto, não deve ser desativado:
+FACS: 0
+
+PL: 0
+
+# SPFL, SPFL playoffs, championship e relegation
+SPFL: 1
+
+# LCH, LCH PLAYOFFS
+LCH: 0
+
+FAC: 0
+
+EFL: 0
+
+SC: 0
+
+SLC: 0
+
+USC: 0
+
+QUAL_UCL: 0
+
+UCL: 0
+
+QUAL_UEL: 0
+
+UEL: 0
+
+QUAL_UECL: 0
+
+UECL: 0
+
+FCWC: 0
+
+LANCAR_FORMS: 0
+
+RESULTADOS_NO_EXCEL: 0

@@ -1,0 +1,89 @@
+#A data deve ser editada dentro do formato pré-estabelecido, aconselho usar o dia imediatamente anterior ao início da rodada, tendo em vista que a versào atual do programa considera todos os jogos começando meia noite (exato início do dia), apesar dele jogar a informação certa de hora no forms (falta ajustar o horário de verão). O formato da data é ano, mês (sem o zero, abril é 4 e não 04), dia (sem o zero), hora, minutos.
+# Inicio_Rodada: ['2022', '8', '19', '20', '30']
+# Inicio_Rodada: ['2023', '5', '10', '20', '30']
+Inicio_Rodada: ['2023', '5', '19', '20', '30']
+
+#Para o fim recomendo usar o dia imediatamente posterior, zerado na hora, podemos testar.
+# Fim_Rodada: ['2022', '8', '23', '20', '30']
+# Fim_Rodada: ['2023', '6', '5', '20', '30']
+Fim_Rodada: ['2023', '5', '20', '20', '30']
+
+Nome_Rodada: Rodada 30
+
+# EXCEL_DOWNLOADER
+ARQUIVO_EXCEL_ABRIR: BOLAO_PL_31.xlsm
+ARQUIVO_EXCEL_SALVAR: BOLAO_PL_30.xlsm
+
+# ROTINA_BUSCAR_RESULTADO
+ARQUIVO_EXCEL_ABRIR_2: BOLAO_PL_30.xlsm
+
+RODADA_TROCA_CRITERIO_LCH: 26
+
+#Sempre use a URL do schedule.
+URL_FACS: https://www.worldfootball.net/all_matches/eng-fa-community-shield-2023/
+
+URL_PL: https://www.worldfootball.net/all_matches/eng-premier-league-2022-2023/
+
+URL_SPFL: https://sco.worldfootball.net/all_matches/sco-premiership-2022-2023/
+
+URL_SPFL_CHAMPIONSHIP: https://sco.worldfootball.net/all_matches/sco-premiership-2023-championship/
+
+URL_SPFL_RELEGATION: https://sco.worldfootball.net/all_matches/sco-premiership-2023-relegation/
+
+URL_SPFL_PLAYOFFS: https://sco.worldfootball.net/all_matches/sco-playoffs-2022-2023-premiership/
+
+URL_LCH: https://www.worldfootball.net/all_matches/eng-championship-2022-2023/
+
+URL_LCH_PLAYOFFS: https://www.worldfootball.net/all_matches/eng-playoffs-2022-2023-championship/
+
+URL_FAC: https://www.worldfootball.net/all_matches/eng-fa-cup-2022-2023/
+
+URL_EFL: https://www.worldfootball.net/all_matches/eng-league-cup-2022-2023/
+
+URL_SC: https://sco.worldfootball.net/all_matches/sco-fa-cup-2022-2023/
+
+URL_SLC: https://sco.worldfootball.net/all_matches/sco-league-cup-2022-2023/
+
+URL_USC: https://www.worldfootball.net/all_matches/uefa-super-cup-2023/
+
+URL_QUAL_UCL: https://www.worldfootball.net/all_matches/champions-league-qual-2022-2023/
+
+URL_UCL: https://www.worldfootball.net/all_matches/champions-league-2022-2023/
+
+URL_QUAL_UEL: https://www.worldfootball.net/all_matches/europa-league-qual-2022-2023/
+
+URL_UEL: https://www.worldfootball.net/all_matches/europa-league-2022-2023/
+
+URL_QUAL_UECL: https://www.worldfootball.net/all_matches/europa-conference-league-qual-2022-2023/
+
+URL_UECL: https://www.worldfootball.net/all_matches/europa-conference-league-2022-2023/
+
+URL_FCWC: https://www.worldfootball.net/all_matches/klub-wm-2021/
+
+
+# Abaixo alguns campeonatos que podem ter times não listados nas listas de rivais, nesses casos o programa seleciona automaticamente, mas só irá considerar o jogo caso tenha ou um time escoces ou inglês envolvido
+# Prováveis times internacionais não listados
+# CAMPEONATOS_TIMES_DIFERENTES_WORLD:
+CTDW:
+  URL_TIMES_UCL: https://www.worldfootball.net/players/champions-league-2022-2023/
+  URL_TIMES_UEL: https://www.worldfootball.net/players/europa-league-2022-2023/
+  URL_TIMES_UECL: https://www.worldfootball.net/players/europa-conference-league-2022-2023/
+  URL_TIMES_USC: https://www.worldfootball.net/players/uefa-super-cup-2023/
+  URL_TIMES_FCWC: https://www.worldfootball.net/players/klub-wm-2021/
+  URL_TIMES_QUAL_UCL: https://www.worldfootball.net/players/champions-league-qual-2022-2023/
+  URL_TIMES_QUAL_UEL: https://www.worldfootball.net/players/europa-league-qual-2022-2023/
+  URL_TIMES_QUAL_UECL: https://www.worldfootball.net/players/europa-conference-league-qual-2022-2023/
+
+# Prováveis times ingleses não listados
+# CAMPEONATOS_TIMES_DIFERENTES_ENGLISH:
+CTDE:
+  URL_TIMES_FAC: https://www.worldfootball.net/players/eng-fa-cup-2022-2023/
+  URL_TIMES_EFL: https://www.worldfootball.net/players/eng-league-cup-2022-2023/
+
+
+# Prováveis times escoceses não listados
+# CAMPEONATOS_TIMES_DIFERENTES_SCOTTISH:
+CTDS:
+  URL_TIMES_SC: https://www.worldfootball.net/players/sco-fa-cup-2022-2023/
+  URL_TIMES_SLC: https://www.worldfootball.net/players/sco-league-cup-2022-2023/
+  URL_TIMES_SPFL_PLAYOFF: https://sco.worldfootball.net/players/sco-playoffs-2022-2023-premiership/
