@@ -1047,6 +1047,8 @@ if data0['FCWC'] == 1:
 
 for o in range(len(Jogos)):
 	Jogos[o] = Jogos[o].replace("_QUAL", '')
+	Jogos[o] = Jogos[o].replace("Wolverhampton Wanderers", "Wolverhampton")
+	Jogos[o] = Jogos[o].replace("Heart of Midlothian", "Hearts")
 	print(Jogos[o])
 
 
