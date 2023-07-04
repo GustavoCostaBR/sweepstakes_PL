@@ -7,6 +7,10 @@ conn = sqlite3.connect('championships.db')
 cursor = conn.cursor()
 
 x = sys.argv[1:]
+
+# x = ['Heart of Midlothian x Aberdeen - P1 (SPFL) - 20/05 - 08:30', 'Celtic x St. Mirren - P1 (SPFL) - 20/05 - 11:00', 'Kilmarnock x St. Johnstone - P1 (SPFL) - 20/05 - 11:00', 'Livingston x Dundee United - P1 (SPFL) - 20/05 - 11:00', 'Motherwell x Ross County - P1 (SPFL) - 20/05 - 11:00']
+
+
 # x = ['Rangers x Celtic - P2 (SPFL) - 13/05 - 08:30', 'Aberdeen x Hibernian - P1 (SPFL) - 13/05 - 11:00', 'St. Mirren x Heart of Midlothian - P1 (SPFL) - 13/05 - 11:00', 'Dundee United x Ross County - P1 (SPFL) - 13/05 - 11:00', 'Kilmarnock x Livingston - P1 (SPFL) - 13/05 - 11:00', 'St. Johnstone x Motherwell - P1 (SPFL) - 13/05 - 11:00']
 # x = ['Aberdeen x Hibernian - P2 (SPFL) - 20/05 - 15:45']
 temp = []
@@ -78,6 +82,10 @@ for index, j in enumerate(temp):
 				pointstolast_2 = 1000
 				goalstolast_1 = 1000
 				goalstolast_2 = 1000
+				pointstosecondlast_1 = 1000
+				pointstosecondlast_2 = 1000
+				goalstosecondlast_1 = 1000
+				goalstosecondlast_2 = 1000
 			# Os 1000 escritos aqui são uma gambiarra para não confundir relegation com championship, tive que adapatar o código e essa foi a forma mais rápida de corrigir o problema sem pensar.
 
 			#para o relegation
@@ -101,6 +109,10 @@ for index, j in enumerate(temp):
 				pointstolast_2 = (temp1[index+1][2] - rows[5][2])
 				goalstolast_1 = (temp1[index][3] - rows[5][3])
 				goalstolast_2 = (temp1[index+1][3] - rows[5][3])
+				pointstosecondlast_1 = (temp1[index][2] - rows[4][2])
+				pointstosecondlast_2 =(temp1[index+1][2] - rows[4][2])
+				goalstosecondlast_1 = (temp1[index][3] - rows[4][3])
+				goalstosecondlast_2 =(temp1[index+1][3] - rows[4][3])
 
 
 			#rodada 33 a 36
@@ -108,20 +120,26 @@ for index, j in enumerate(temp):
 				# print("aqui")
 			# critehrio 3 pontos/uel
 				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
-					temp0.append(11)
+					temp0.append(12)
 					x[index//2] = x[index//2].replace("P1", "P2")
 
 			#critehrio primeiro colocado
 				elif (positionto_1 == 0 and diff <=5) or (positionto_1_2 == 0 and diff <=5) or (pointstofirst_1 <= 3 and pointstofirst_2 <= 3):
 					# print(diff)
-					temp0.append(12)
+					temp0.append(13)
 					x[index//2] = x[index//2].replace("P1", "P3")
 					x[index//2] = x[index//2].replace("P2", "P3")
 
 			# critehrio do ultimo colocado
-				elif rows[0][4] > 34 and pointstolast_1 <= 3 and pointstolast_2 <= 3:
+				elif rows[0][4] > 33 and pointstolast_1 <= 3 and pointstolast_2 <= 3:
+					temp0.append(11)
+					x[index//2] = x[index//2].replace("P1", "P2")
+
+			# critehrio do penultimo colocado
+				elif rows[0][4] > 34 and pointstosecondlast_1 <= 3 and pointstosecondlast_2 <= 3:
 					temp0.append(10)
 					x[index//2] = x[index//2].replace("P1", "P2")
+
 
 				else:
 					temp0.append(1)
@@ -131,17 +149,23 @@ for index, j in enumerate(temp):
 
 			# critehrio 3 pontos/uel
 				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
-					temp0.append(11)
+					temp0.append(12)
 					x[index//2] = x[index//2].replace("P1", "P2")
 
 			# critehrio do ultimo colocado
 				elif rows[0][4] > 34 and pointstolast_1 <= 3 and pointstolast_2 <= 3:
+					temp0.append(11)
+					x[index//2] = x[index//2].replace("P1", "P2")
+
+			# critehrio do penultimo colocado
+				elif rows[0][4] > 34 and pointstosecondlast_1 <= 3 and pointstosecondlast_2 <= 3:
 					temp0.append(10)
 					x[index//2] = x[index//2].replace("P1", "P2")
 
+
 			#critehrio primeiro colocado (creio haver redundancia nesse critehrio, o ultimo jah garantiria, mas nao estou mais no ponto de mexer nisso)
 				elif (positionto_1 == 0 and diff <=3) or (positionto_1_2 == 0 and diff <=3) or (pointstofirst_1 <= 3 and pointstofirst_2 <= 3):
-					temp0.append(12)
+					temp0.append(13)
 					x[index//2] = x[index//2].replace("P1", "P3")
 					x[index//2] = x[index//2].replace("P2", "P3")
 
@@ -154,21 +178,28 @@ for index, j in enumerate(temp):
 			# Aqui eu abri espaço para 10 times na disputa do terceiro lugar, não faz sentido limitarmos isso, creio
 				if 0 <= positionto_3 <= 10 and 0 <= positionto_3_2 <= 10 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
 					if (goalstothird_1 <= 7 or pointstothird_1 < 3) and (goalstothird_2 <= 7 or pointstothird_2 < 3):
-						temp0.append(11)
+						temp0.append(12)
 						x[index//2] = x[index//2].replace("P1", "P2")
 					else:
 						temp0.append(1)
 
 			# critehrio do ultimo colocado
-				elif ((pointstolast_1 == 3 and goalstolast_1 <= 7) or pointstolast_1 <=2) and ((pointstolast_2 == 3 and goalstolast_2 <= 7) or pointstolast_2):
-					temp0.append(10)
+				elif ((pointstolast_1 == 3 and goalstolast_1 <= 7) or pointstolast_1 <=2) and ((pointstolast_2 == 3 and goalstolast_2 <= 7) or pointstolast_2 <= 2):
+					temp0.append(11)
 					x[index//2] = x[index//2].replace("P1", "P2")
+
+
+			# critehrio do penultimo colocado
+				elif ((pointstosecondlast_1 == 3 and goalstosecondlast_1 <= 7) or pointstosecondlast_1 <=2) and ((pointstosecondlast_2 == 3 and goalstosecondlast_2 <= 7) or pointstosecondlast_2 <= 2):
+					temp0.append(11)
+					x[index//2] = x[index//2].replace("P1", "P2")
+
 
 
 			#critehrio primeiro colocado
 
 				elif ((pointstofirst_1 == 3 and goalstofirst_1 <= 7) or pointstofirst_1 <= 2) and ((pointstofirst_2 == 3 and goalstofirst_2 <= 7) or pointstofirst_2 <= 2):
-					temp0.append(12)
+					temp0.append(13)
 					x[index//2] = x[index//2].replace("P1", "P3")
 					x[index//2] = x[index//2].replace("P2", "P3")
 				else:
