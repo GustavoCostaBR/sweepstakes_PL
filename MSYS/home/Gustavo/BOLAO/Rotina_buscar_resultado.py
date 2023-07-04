@@ -178,7 +178,10 @@ if data0['PL'] == 1:
 			variavel = result2_1.stdout.split('\n')
 			while "" in variavel:
 				variavel.remove("")
-			for o in variavel:
+
+			sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+
+			for o in sorted_Jogos:
 				Jogos.append(o)
 
 		else:
@@ -224,7 +227,8 @@ if data0['SPFL'] == 1:
 						variavel = result3_1.stdout.split('\n')
 						while "" in variavel:
 							variavel.remove("")
-						for o in variavel:
+						sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+						for o in sorted_Jogos:
 							Jogos.append(o)
 
 			else:
@@ -282,7 +286,8 @@ if data0['SPFL'] == 1:
 			variavel = result3_1.stdout.split('\n')
 			while "" in variavel:
 				variavel.remove("")
-			for o in variavel:
+			sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+			for o in sorted_Jogos:
 				Jogos.append(o)
 
 		temp=[]
@@ -305,7 +310,8 @@ if data0['SPFL'] == 1:
 				variavel = subst_P("P1", "P2", variavel)
 				while "" in variavel:
 					variavel.remove("")
-				for o in variavel:
+				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 			else:
 				print('Nenhum resultado para SPFL_playoffs')
@@ -340,7 +346,8 @@ if data0['LCH'] == 1:
 				while "" in variavel:
 					variavel.remove("")
 				# print(variavel)
-				for o in variavel:
+				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 			else:
 				print('Nenhum resultado para LCH')
@@ -363,7 +370,7 @@ if data0['LCH'] == 1:
 				print('Jogo LCH_PLAYOFF adicionado')
 				variavel = result4.stdout.split('\n')
 				for o in variavel:
-						temp.append(o)
+					temp.append(o)
 				while "" in temp:
 					temp.remove("")
 				# print(temp)
@@ -375,7 +382,8 @@ if data0['LCH'] == 1:
 				temp = subst_P("P1", "P2", temp)
 
 				# print(temp)
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 			else:
@@ -398,7 +406,7 @@ if data0['FAC'] == 1:
 			zz=0
 			variavel = result5.stdout.split('\n')
 			for o in variavel:
-					temp.append(o)
+				temp.append(o)
 			while "" in temp:
 				temp.remove("")
 			# print(temp)
@@ -414,7 +422,9 @@ if data0['FAC'] == 1:
 				index1 = 0
 				print('Jogo FAC semi-final adicionado')
 				temp = subst_P("P1", "P2", temp)
-				for o in temp:
+
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 
@@ -423,7 +433,8 @@ if data0['FAC'] == 1:
 				print('Jogo FAC final adicionado')
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 			# print(temp)
 			if len(temp) > 0 and zz == 2:
@@ -434,7 +445,8 @@ if data0['FAC'] == 1:
 				while "" in variavel:
 					variavel.remove("")
 				# print(variavel)
-				for o in variavel:
+				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 		else:
@@ -471,8 +483,8 @@ if data0['EFL'] == 1:
 				temp.remove("j1=1")
 				print('Jogo EFL semi-final adicionado')
 				temp = subst_P("P1", "P2", temp)
-
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 
@@ -481,7 +493,8 @@ if data0['EFL'] == 1:
 				print('Jogo EFL final adicionado')
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 			# print(temp)
 			if len(temp) > 0 and zz == 2:
@@ -491,7 +504,8 @@ if data0['EFL'] == 1:
 				while "" in variavel:
 					variavel.remove("")
 				# print(variavel)
-				for o in variavel:
+				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 		else:
@@ -513,7 +527,7 @@ if data0['SC'] == 1:
 			zz=0
 			variavel = result7.stdout.split('\n')
 			for o in variavel:
-					temp.append(o)
+				temp.append(o)
 			while "" in temp:
 				temp.remove("")
 			# print(temp)
@@ -524,7 +538,8 @@ if data0['SC'] == 1:
 				zz=2
 				temp.remove("j1=3")
 				print('Jogos SC quartas-de-final adicionados')
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 			elif "j1=1" in temp:
@@ -533,7 +548,8 @@ if data0['SC'] == 1:
 
 				temp = subst_P("P1", "P2", temp)
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 
@@ -545,7 +561,8 @@ if data0['SC'] == 1:
 
 				temp = subst_P("P2", "P3", temp)
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 		else:
@@ -578,7 +595,8 @@ if data0['SLC'] == 1:
 				zz=2
 				temp.remove("j1=3")
 				print('Jogos SLC quartas-de-final adicionados')
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 			elif "j1=1" in temp:
@@ -587,7 +605,8 @@ if data0['SLC'] == 1:
 				print('Jogo SLC semi-final adicionado')
 				temp = subst_P("P1", "P2", temp)
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 
@@ -599,7 +618,8 @@ if data0['SLC'] == 1:
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 		else:
@@ -631,7 +651,8 @@ if data0['USC'] == 1:
 
 			temp = after_FACS_filter(temp, inicio_bolao_date)
 
-			for o in temp:
+			sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+			for o in sorted_Jogos:
 				Jogos.append(o)
 
 		else:
@@ -663,7 +684,8 @@ if data0['QUAL_UCL'] == 1:
 
 			temp = subst_P("P2", "P1", temp)
 
-			for o in temp:
+			sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+			for o in sorted_Jogos:
 				Jogos.append(o)
 
 		else:
@@ -696,7 +718,8 @@ if data0['UCL'] == 1:
 				# pdb.set_trace()
 				temp = subst_P("P2", "P1", temp)
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 			elif "j1=3" in temp:
@@ -707,7 +730,8 @@ if data0['UCL'] == 1:
 
 				print('Jogo UCL oitavas/quartas adicionado')
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 			elif "j1=1" in temp:
@@ -716,7 +740,8 @@ if data0['UCL'] == 1:
 				print('Jogo UCL semi-final adicionado')
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 
@@ -728,7 +753,8 @@ if data0['UCL'] == 1:
 				temp = subst_P("P1", "P4", temp)
 				temp = subst_P("P2", "P4", temp)
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 		else:
@@ -762,7 +788,8 @@ if data0['QUAL_UEL'] == 1:
 
 			if len(temp) > 0:
 				temp = subst_P("P2", "P1", temp)
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 		else:
 			print('Nenhum resultado para QUAL-UEL')
@@ -796,7 +823,8 @@ if data0['UEL'] == 1:
 				# pdb.set_trace()
 				temp = subst_P("P2", "P1", temp)
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 			elif "j1=3" in temp:
@@ -807,7 +835,8 @@ if data0['UEL'] == 1:
 
 				print('Jogo UEL oitavas/quartas adicionado')
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 			elif "j1=1" in temp:
@@ -816,7 +845,8 @@ if data0['UEL'] == 1:
 				print('Jogo UEL semi-final adicionado')
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 
@@ -827,8 +857,8 @@ if data0['UEL'] == 1:
 
 				temp = subst_P("P1", "P4", temp)
 				temp = subst_P("P2", "P4", temp)
-
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 		else:
@@ -859,7 +889,8 @@ if data0['QUAL_UECL'] == 1:
 
 			if len(temp) > 0:
 				temp = subst_P("P2", "P1", temp)
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 		else:
 			print('Nenhum resultado para QUAL-UECL')
@@ -894,7 +925,8 @@ if data0['UECL'] == 1:
 				temp = subst_P("P2", "P1", temp)
 
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 			elif "j1=3" in temp:
@@ -905,7 +937,8 @@ if data0['UECL'] == 1:
 
 				print('Jogo UECL oitavas/quartas adicionado')
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 			elif "j1=1" in temp:
@@ -913,7 +946,8 @@ if data0['UECL'] == 1:
 				index1 = 0
 				print('Jogo UECL semi-final adicionado')
 				temp = subst_P("P1", "P2", temp)
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 
@@ -926,7 +960,8 @@ if data0['UECL'] == 1:
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 		else:
@@ -948,7 +983,7 @@ if data0['FCWC'] == 1:
 			zz=0
 			variavel = result16.stdout.split('\n')
 			for o in variavel:
-					temp.append(o)
+				temp.append(o)
 			while "" in temp:
 				temp.remove("")
 			# print(temp)
@@ -959,7 +994,8 @@ if data0['FCWC'] == 1:
 				temp = subst_P("P2", "P1", temp)
 
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 			elif "j1=3" in temp:
@@ -970,7 +1006,8 @@ if data0['FCWC'] == 1:
 
 				print('Jogo FCWC semi adicionado')
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 			elif "j1=1" in temp:
@@ -978,7 +1015,8 @@ if data0['FCWC'] == 1:
 				index1 = 0
 				print('Jogo FCWC terceiro adicionado')
 				temp = subst_P("P2", "P1", temp)
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 
@@ -990,12 +1028,12 @@ if data0['FCWC'] == 1:
 				temp = subst_P("P1", "P2", temp)
 
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 		else:
 			print('Nenhum resultado para FCWC')
-
 
 
 # print(Jogos)
