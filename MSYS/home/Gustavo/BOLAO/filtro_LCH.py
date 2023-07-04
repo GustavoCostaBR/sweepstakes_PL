@@ -13,21 +13,11 @@ with open('TIMES_PRIMEIRA_RODADA.yml', 'r') as f:
 with open('Configuracoes.yml', 'r') as f:
 	data0 = yaml.load(f, Loader=yaml.FullLoader)
 
+with open('tabelas.yml', 'r') as f:
+	data1 = yaml.load(f, Loader=yaml.FullLoader)
+
 x = sys.argv[1:]
-
-# x = ['Blackburn Rovers x Burnley - P2 (LCH) - 25/04 - 16:00', 'Sheffield United x West Bromwich Albion - P1 (LCH) - 26/04 - 16:00', 'Rotherham United x Cardiff City - P1 (LCH) - 27/04 - 16:00', 'Huddersfield Town x Sheffield United - P1 (LCH) - 04/05 - 15:45', 'Blackpool x Millwall - P1 (LCH) - 28/04 - 16:00', 'Sunderland x Watford - P1 (LCH) - 29/04 - 11:00', 'Bristol City x Burnley - P1 (LCH) - 29/04 - 11:00', 'Coventry City x Birmingham City - P1 (LCH) - 29/04 - 11:00', 'Reading x Wigan Athletic - P1 (LCH) - 29/04 - 11:00', 'Hull City x Swansea City - P1 (LCH) - 29/04 - 11:00', 'Sheffield United x Preston North End - P1 (LCH) - 29/04 - 11:00', 'Stoke City x Queens Park Rangers - P1 (LCH) - 29/04 - 11:00', 'West Bromwich Albion x Norwich City - P1 (LCH) - 29/04 - 13:30', 'Cardiff City x Huddersfield Town - P1 (LCH) - 30/04 - 08:00', 'Rotherham United x Middlesbrough - P1 (LCH) - 01/05 - 09:00', 'Blackburn Rovers x Luton Town - P1 (LCH) - 01/05 - 13:30']
-
-
-# x = ['Blackburn Rovers x Burnley - P2 (LCH) - 25/04 - 16:00', 'Sheffield United x West Bromwich Albion - P1 (LCH) - 26/04 - 16:00', 'Rotherham United x Cardiff City - P1 (LCH) - 27/04 - 16:00', 'Birmingham City x Blackpool - P1 (LCH) - 22/04 - 11:00', 'Bristol City x Rotherham United - P1 (LCH) - 22/04 - 11:00', 'Cardiff City x Stoke City - P1 (LCH) - 22/04 - 11:00', 'Coventry City x Reading - P1 (LCH) - 22/04 - 11:00', 'Burnley x Queens Park Rangers - P1 (LCH) - 22/04 - 11:00', 'Hull City x Watford - P1 (LCH) - 22/04 - 11:00', 'Norwich City x Swansea City - P1 (LCH) - 22/04 - 11:00', 'Wigan Athletic x Millwall - P1 (LCH) - 22/04 - 11:00', 'Preston North End x Blackburn Rovers - P1 (LCH) - 22/04 - 13:30', 'West Bromwich Albion x Sunderland - P1 (LCH) - 23/04 - 08:00', 'Luton Town x Middlesbrough - P1 (LCH) - 24/04 - 16:00']
-
-# x =['Sunderland x Luton Town - P1 (LCH) - 18/03 - 11:00', 'Blackpool x Coventry City - P1 (LCH) - 18/03 - 11:00', 'Middlesbrough x Preston North End - P1 (LCH) - 18/03 - 11:00', 'Millwall x Huddersfield Town - P1 (LCH) - 18/03 - 11:00', 'Reading x Hull City - P1 (LCH) - 18/03 - 11:00', 'Watford x Wigan Athletic - P1 (LCH) - 18/03 - 11:00', 'Queens Park Rangers x Birmingham City - P1 (LCH) - 18/03 - 11:00', 'Stoke City x Norwich City - P1 (LCH) - 18/03 - 11:00', 'Swansea City x Bristol City - P1 (LCH) - 19/03 - 08:30']
-
-# x = ['Time5 x Time6 - P1 (PL) - 20/05 - 08:30','Time7 x Time8 - P1 (PL) - 20/05 - 08:30','Time9 x Time10 - P1 (PL) - 20/05 - 08:30','Time11 x Time12 - P1 (PL) - 20/05 - 08:30','Time13 x Time14 - P1 (PL) - 20/05 - 08:30', 'Time3 x Time4 - P1 (PL) - 20/05 - 08:30', 'Time15 x Time16 - P1 (PL) - 20/05 - 08:30','Time17 x Time18 - P1 (PL) - 20/05 - 08:30','Time1 x Time2 - P1 (PL) - 20/05 - 08:30','Time19 x Time20 - P1 (PL) - 20/05 - 08:30','Time21 x Time22 - P1 (PL) - 20/05 - 08:30','Time23 x Time24 - P1 (PL) - 20/05 - 08:30']
-
-# x = ['Time5 x Time6 - P1 (PL) - 20/05 - 08:30','Time7 x Time8 - P1 (PL) - 20/05 - 08:30','Time9 x Time10 - P1 (PL) - 20/05 - 08:30','Time11 x Time12 - P1 (PL) - 20/05 - 08:30','Time13 x Time14 - P1 (PL) - 20/05 - 08:30', 'Time3 x Time4 - P1 (PL) - 20/05 - 08:30', 'Time15 x Time16 - P1 (PL) - 20/05 - 08:30','Time17 x Time18 - P1 (PL) - 20/05 - 08:30','Time19 x Time20 - P1 (PL) - 20/05 - 08:30','Time21 x Time22 - P1 (PL) - 20/05 - 08:30','Time23 x Time24 - P1 (PL) - 20/05 - 08:30']
-
-# x = ['Rotherham United x Blackburn Rovers - P1 (LCH) - 14/01 - 08:30', 'Sunderland x Swansea City - P1 (LCH) - 14/01 - 11:00', 'Bristol City x Birmingham City - P1 (LCH) - 14/01 - 11:00', 'Cardiff City x Wigan Athletic - P1 (LCH) - 14/01 - 11:00', 'Burnley x Coventry City - P1 (LCH) - 14/01 - 11:00', 'Middlesbrough x Millwall - P1 (LCH) - 14/01 - 11:00', 'Reading x Queens Park Rangers - P1 (LCH) - 14/01 - 11:00', 'Watford x Blackpool - P1 (LCH) - 14/01 - 11:00', 'Hull City x Huddersfield Town - P1 (LCH) - 14/01 - 11:00', 'Luton Town x West Bromwich Albion - P1 (LCH) - 14/01 - 11:00', 'Preston North End x Norwich City - P1 (LCH) - 14/01 - 11:00', 'Sheffield United x Stoke City - P1 (LCH) - 14/01 - 11:00']
-
+# x = ['Blackburn Rovers x Bristol City - P1 (LCH) - 03/09 - 11:00', 'Millwall x Cardiff City - P1 (LCH) - 03/09 - 11:00', 'Luton Town x Wigan Athletic - P1 (LCH) - 03/09 - 11:00', 'Norwich City x Coventry City - P1 (LCH) - 03/09 - 11:00', 'Preston North End x Birmingham City - P1 (LCH) - 03/09 - 11:00', 'Rotherham United x Watford - P1 (LCH) - 03/09 - 11:00', 'Swansea City x Queens Park Rangers - P1 (LCH) - 03/09 - 11:00', 'Reading x Stoke City - P1 (LCH) - 04/09 - 08:00', 'Huddersfield Town x Blackpool - P1 (LCH) - 04/09 - 11:00', 'Hull City x Sheffield United - P1 (LCH) - 04/09 - 11:00']
 
 ones_list = [1] * 12
 temp = []
@@ -532,7 +522,8 @@ temp1 = []
 
 for index, j in enumerate(temp):
 	if index % 2 == 0:
-		if rows[0][4] == 0:
+		if data1['RODADA_LCH'] == 1:
+		# if rows[0][4] == 0:
 			if data['FIRST_ROUND_LCH']['TIME1'] in x[index//2]:
 				temp0.append(9)
 			elif data['FIRST_ROUND_LCH']['TIME2'] in x[index//2]:
@@ -552,7 +543,9 @@ for index, j in enumerate(temp):
 			else:
 				temp0.append(1)
 		# rodada 2 a 33
-		if rows[0][4] >= 1:
+		if data1['RODADA_LCH'] >= 2:
+
+		# if rows[0][4] >= 1:
 
 			for row in rows:
 				if j in row:
@@ -584,13 +577,16 @@ for index, j in enumerate(temp):
 
 
 		# rodada 2 a 12
-			if rows[0][4] <=11:
+			if data1['RODADA_LCH'] <= 12:
+			# if rows[0][4] <=11:
 				temp0.append(int(points1+points2))
 				temp_classi.append(min(int(positionto_1),int(positionto_1_2)))
 
 
 			# rodada 13 ateh critério de troca
-			elif rows[0][4] < data0['RODADA_TROCA_CRITERIO_LCH']:
+			elif data1['RODADA_LCH'] < data0['RODADA_TROCA_CRITERIO_LCH']:
+
+			# elif rows[0][4] < data0['RODADA_TROCA_CRITERIO_LCH']:
 
 
 		#critehrio do primeiro colocado
@@ -623,7 +619,8 @@ for index, j in enumerate(temp):
 					# marcadorcri = 1
 
 		# rodada escolhida a 44
-			elif rows[0][4] < 44:
+			elif data1['RODADA_LCH'] <= 44:
+			# elif rows[0][4] < 44:
 
 				# if temp[index] == 'Rotherham United':
 				# 	pdb.set_trace()
@@ -667,21 +664,24 @@ for index, j in enumerate(temp):
 			# OS DOIS TIMES DENTRO SEPARADOS DO PRIMEIRO FORA DELA POR ATÉ 3 PONTOS
 				elif (0 >= p(0, index, 20) >= (-3) and 0 >= p(0, index+1, 20) >= (-3)) and (p(1, index, 20) >= 1 and p(1, index+1, 20) >= 1):
 					temp0.append(252)
-					if rows[0][4] >= 43:
+					if data1['RODADA_LCH'] == 44:
+					# if rows[0][4] >= 43:
 						x[index//2] = x[index//2].replace("P1", "P2")
 						temp_classi.append(points1+points2)
 
 			# UM DENTRO E OUTRO FORA SEPARADOS POR ATÉ 3 PONTOS
 				elif  ((p(1, index, 20) > 0 and 0 <= (p(0, index+1, 0)-p(0, index, 0)) <= 3) and (p(1, index+1, 20) <= 0)) or ((p(1, index+1, 20) > 0 and 0 <= (p(0, index, 0)-p(0, index+1, 0)) <= 3) and (p(1, index, 20) <= 0)):
 					temp0.append(252)
-					if rows[0][4] >= 43:
+					if data1['RODADA_LCH'] == 44:
+					# if rows[0][4] >= 43:
 						x[index//2] = x[index//2].replace("P1", "P2")
 						temp_classi.append(points1+points2)
 
 			# OS DOIS FORA COM ATÉ 3 PONTOS PARA ENTRAR NA ZONA DA DEGOLA
 				elif(p(1, index, 20) <= 0 and p(1, index+1, 20) <= 0) and (p(0, index, 21) <= 3 and p(0, index+1, 21) <= 3):
 					temp0.append(252)
-					if rows[0][4] >= 43:
+					if data1['RODADA_LCH'] == 44:
+					# if rows[0][4] >= 43:
 						x[index//2] = x[index//2].replace("P1", "P2")
 						temp_classi.append(points1+points2)
 		# critehrio de colocacao
@@ -692,7 +692,8 @@ for index, j in enumerate(temp):
 
 
 		# rodada 45
-			elif rows[0][4] < 45:
+			elif data1['RODADA_LCH'] == 45:
+			# elif rows[0][4] < 45:
 
 
 		#critehrio do primeiro colocado
@@ -752,7 +753,8 @@ for index, j in enumerate(temp):
 
 
 		# rodada 46
-			elif rows[0][4] == 45:
+			elif data1['RODADA_LCH'] == 46:
+			# elif rows[0][4] == 45:
 
 
 		#critehrio do primeiro colocado
@@ -843,7 +845,8 @@ b = "z"
 c = "z"
 d = "z"
 index2 = 0
-if 1 <= rows[0][4]:
+if data1['RODADA_LCH'] >= 2:
+# if 1 <= rows[0][4]:
 	sorted_values = sorted(zip(temp0, x, temp_classi), reverse=True)
 	temp0_sorted, x_sorted, temp_classi_sorted = map(list, zip(*sorted_values))
 else:
@@ -857,7 +860,8 @@ filtrado = []
 # print(temp0_sorted)
 # print(x_sorted)
 # print(len(temp0_sorted))
-if rows[0][4] <=11:
+if data1['RODADA_LCH'] <= 12:
+# if rows[0][4] <=11:
 	if temp0_sorted[2] == temp0_sorted[3]:
 		while index2 < 5:
 			if len(temp0_sorted) % 2 == 0:
@@ -889,7 +893,8 @@ if rows[0][4] <=11:
 					break
 			index2 = index2 + 1
 
-if  11 < rows[0][4]:
+if data1['RODADA_LCH'] > 12:
+# if  11 < rows[0][4]:
 	indx = 0
 	while indx < 7:
 		for index in range(len(temp0_sorted)-1):

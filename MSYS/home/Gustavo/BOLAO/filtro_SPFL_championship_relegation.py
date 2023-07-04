@@ -2,9 +2,13 @@ import sys
 import sqlite3
 import var_dump
 import pdb
+import yaml
 
 conn = sqlite3.connect('championships.db')
 cursor = conn.cursor()
+
+with open('tabelas.yml', 'r') as f:
+	data1 = yaml.load(f, Loader=yaml.FullLoader)
 
 x = sys.argv[1:]
 
@@ -46,7 +50,8 @@ for index, j in enumerate(temp):
 	# pdb.set_trace()
 	if index % 2 == 0:
 		#a partir da rodada 33
-		if rows2[0][4] > 32:
+		if data1['RODADA_SPFL_CHAMPIONSHIP'] >= 33:
+		# if rows2[0][4] > 32:
 			for row in rows2:
 				if j in row:
 					temp1.append(row)
@@ -116,7 +121,8 @@ for index, j in enumerate(temp):
 
 
 			#rodada 33 a 36
-			if rows2[0][4] < 36:
+			if data1['RODADA_SPFL_CHAMPIONSHIP'] <= 36:
+			# if rows2[0][4] < 36:
 				# print("aqui")
 			# critehrio 3 pontos/uel
 				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
@@ -145,7 +151,8 @@ for index, j in enumerate(temp):
 					temp0.append(1)
 			#rodada 37
 
-			elif rows2[0][4] == 36:
+			elif data1['RODADA_SPFL_CHAMPIONSHIP'] == 37:
+			# elif rows2[0][4] == 36:
 
 			# critehrio 3 pontos/uel
 				if 0 <= positionto_3 <= 2 and 0 <= positionto_3_2 <= 2 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
@@ -172,7 +179,8 @@ for index, j in enumerate(temp):
 				else:
 					temp0.append(1)
 			#rodada 38
-			elif rows2[0][4] == 37:
+			elif data1['RODADA_SPFL_CHAMPIONSHIP'] == 38:
+			# elif rows2[0][4] == 37:
 
 			# critehrio 3 pontos/uel
 			# Aqui eu abri espaço para 10 times na disputa do terceiro lugar, não faz sentido limitarmos isso, creio

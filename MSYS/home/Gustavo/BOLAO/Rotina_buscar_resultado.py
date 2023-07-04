@@ -15,6 +15,9 @@ with open('Configuracoes.yml', 'r') as f:
 with open('Ativar_Desativar_campeonatos.yml', 'r') as f:
 	data0 = yaml.load(f, Loader=yaml.FullLoader)
 
+with open('tabelas.yml', 'r') as f:
+	data1 = yaml.load(f, Loader=yaml.FullLoader)
+
 gmt = pytz.timezone('GMT')
 dt = []
 dt2 = []
@@ -186,12 +189,13 @@ if data0['PL'] == 1:
 	# print(Jogos)
 
 if data0['SPFL'] == 1:
-	cursor.execute("SELECT [Número de jogos] FROM scottish_premiership_table_championship")
-	resultado1 = cursor.fetchone()[0]
+	# cursor.execute("SELECT [Número de jogos] FROM scottish_premiership_table_championship")
+	# resultado1 = cursor.fetchone()[0]
 	temp = []
-	cursor.execute("SELECT [Número de jogos] FROM scottish_premiership_table")
-	resultado = cursor.fetchone()[0]
-	if resultado < 33:
+	# cursor.execute("SELECT [Número de jogos] FROM scottish_premiership_table")
+	# resultado = cursor.fetchone()[0]
+	# if resultado < 33:
+	if data1['RODADA_SPFL'] <= 33:
 		# Start third program
 		result3 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_SPFL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
@@ -226,7 +230,7 @@ if data0['SPFL'] == 1:
 			else:
 				print('Nenhum resultado para SPFL')
 
-	elif resultado1 < 38:
+	elif data1['RODADA_SPFL_CHAMPIONSHIP'] <= 38:
 		temp=[]
 		# Start third program
 		result3 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_SPFL_championship], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -308,10 +312,10 @@ if data0['SPFL'] == 1:
 
 
 if data0['LCH'] == 1:
-	cursor.execute("SELECT [Número de jogos] FROM eng_championship_table")
-	resultado = cursor.fetchone()[0]
-	if resultado < 46:
-
+	# cursor.execute("SELECT [Número de jogos] FROM eng_championship_table")
+	# resultado = cursor.fetchone()[0]
+	# if resultado < 46:
+	if data1['RODADA_LCH'] <= 46:
 		# # Start fourth program
 		result4 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_LCH], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)

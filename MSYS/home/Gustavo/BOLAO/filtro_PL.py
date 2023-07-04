@@ -10,6 +10,9 @@ cursor = conn.cursor()
 with open('TIMES_PRIMEIRA_RODADA.yml', 'r') as f:
 	data = yaml.load(f, Loader=yaml.FullLoader)
 
+with open('tabelas.yml', 'r') as f:
+	data1 = yaml.load(f, Loader=yaml.FullLoader)
+
 x = sys.argv[1:]
 
 # x = ['Time1 x Time10 - P1 (PL) - 20/05 - 08:30', 'Time2 x Time15 - P1 (PL) - 20/05 - 08:30', 'Time3 x Time4 - P1 (PL) - 20/05 - 08:30','Time5 x Time6 - P1 (PL) - 20/05 - 08:30','Time7 x Time17 - P1 (PL) - 20/05 - 08:30','Time8 x Time14 - P1 (PL) - 20/05 - 08:30','Time9 x Time13 - P1 (PL) - 20/05 - 08:30','Time11 x Time12 - P1 (PL) - 20/05 - 08:30','Time16 x Time20 - P1 (PL) - 20/05 - 08:30','Time18 x Time19 - P1 (PL) - 20/05 - 08:30']
@@ -70,7 +73,8 @@ for index, j in enumerate(temp):
 	if index % 2 == 0:
 
 		# rodada 2 a 33
-		if rows[0][4] >= 1:
+		if data1['RODADA_PL'] >= 2:
+		# if rows[0][4] >= 1:
 
 			for row in rows:
 				if j in row:
@@ -103,9 +107,10 @@ for index, j in enumerate(temp):
 
 			# if temp[index] == "Tottenham Hotspur":
 			# 	pdb.set_trace()
-
+			Rodadas_iniciais = 5
 			# Primeiro turno
-			if 4 <= rows[0][4] <= 18:
+			if Rodadas_iniciais < data1['RODADA_PL'] <= 19:
+			# if 4 <= rows[0][4] <= 18:
 			#critehrio do primeiro colocado
 				if pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
 					x[index//2] = x[index//2].replace("P1", "P3")
@@ -130,7 +135,8 @@ for index, j in enumerate(temp):
 
 
 			# rodada 19 a 36
-			elif 4 <=rows[0][4] <= 35:
+			elif data1['RODADA_PL'] <= 36:
+			# elif 4 <=rows[0][4] <= 35:
 
 			#critehrio do primeiro colocado
 				# 3 pontos
@@ -167,26 +173,30 @@ for index, j in enumerate(temp):
 
 
 			# forçando para sempre verificar
-				if rows[0][4] >= 33:
+				if data1['RODADA_PL'] >= 34:
+				# if rows[0][4] >= 33:
 
 			# critehrio da zona de rebaixamento
 			# OS DOIS TIMES DENTRO SEPARADOS DO PRIMEIRO FORA DELA POR ATÉ 3 PONTOS
 					if (0 >= p(0, index, 16) >= (-3) and 0 >= p(0, index+1, 16) >= (-3)) and (p(1, index, 16) >= 1 and p(1, index+1, 16) >= 1):
 						x[index//2] = x[index//2].replace("P1", "P2")
-						if rows[0][4] >= 35:
+						if data1['RODADA_PL'] >= 36:
+						# if rows[0][4] >= 35:
 							x[index//2] = x[index//2].replace("P2", "P3")
 
 
 				# UM DENTRO E OUTRO FORA SEPARADOS POR ATÉ 3 PONTOS
 					elif  (p(1, index, 17) >= 0 and 0 <= (p(0, index+1, 0)-p(0, index, 0)) <= 3 and p(1, index+1, 17) < 0) or (p(1, index+1, 17) >= 0 and 0 <= (p(0, index, 0)-p(0, index+1, 0)) <= 3 and p(1, index, 17) < 0):
 						x[index//2] = x[index//2].replace("P1", "P2")
-						if rows[0][4] >= 35:
+						if data1['RODADA_PL'] >= 36:
+						# if rows[0][4] >= 35:
 							x[index//2] = x[index//2].replace("P2", "P3")
 
 				# OS DOIS FORA COM ATÉ 3 PONTOS PARA ENTRAR NA ZONA DA DEGOLA
 					elif(p(1, index, 16) <= 0 and p(1, index+1, 16) <= 0) and (p(0, index, 17) <= 3 and p(0, index+1, 17) <= 3):
 						x[index//2] = x[index//2].replace("P1", "P2")
-						if rows[0][4] >= 35:
+						if data1['RODADA_PL'] >= 36:
+						# if rows[0][4] >= 35:
 							x[index//2] = x[index//2].replace("P2", "P3")
 
 
@@ -196,7 +206,8 @@ for index, j in enumerate(temp):
 
 
 
-					if rows[0][4] == 35:
+					if data1['RODADA_PL'] == 36:
+						# if rows[0][4] == 35:
 
 					# critehrio do champions
 					# OS DOIS TIMES DENTRO SEPARADOS DO PRIMEIRO FORA DELA POR ATÉ 3 PONTOS
@@ -231,7 +242,8 @@ for index, j in enumerate(temp):
 
 
 			# RODADA 37
-			elif rows[0][4] == 36:
+			if data1['RODADA_PL'] == 37:
+			# elif rows[0][4] == 36:
 
 			#critehrio do primeiro colocado
 				# 3 pontos
@@ -296,7 +308,8 @@ for index, j in enumerate(temp):
 
 
 			# RODADA 38
-			elif rows[0][4] == 37:
+			elif data1['RODADA_PL'] == 38:
+			# elif rows[0][4] == 37:
 				# if index == 6:
 					# pdb.set_trace()
 			#critehrio do primeiro colocado

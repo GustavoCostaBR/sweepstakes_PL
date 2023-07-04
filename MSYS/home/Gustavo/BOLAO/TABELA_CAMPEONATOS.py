@@ -22,6 +22,8 @@ with open('tabelas.yml', 'r') as f:
 
 links = data['Links']
 table_names = data['Table_Names']
+replaces = []
+replaces.extend([data['RODADA_PL'], data['RODADA_SPFL'], data['RODADA_LCH'], data['RODADA_SPFL_CHAMPIONSHIP'], data['RODADA_SPFL_RELEGATION'], data['RODADA_LEAGUE_ONE'], data['RODADA_LEAGUE_TWO'], data['RODADA_NATIONAL_LEAGUE']])
 
 
 for index2,table in enumerate(table_names):
@@ -41,8 +43,16 @@ for index2,table in enumerate(table_names):
 
 	headers = {
 	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/110.0'}
-	url = links[index2]
-
+	if (replaces[index2]-1) == 0:
+		if "z99" in links[index2]:
+			url = links[index2].replace("z99", str(replaces[index2]))
+		else:
+			url = links[index2]
+	else:
+		if "z99" in links[index2]:
+			url = links[index2].replace("z99", str(replaces[index2]-1))
+		else:
+			url = links[index2]
 	req = urllib.request.Request(url, headers=headers)
 	html1 = urllib.request.urlopen(req, context=ctx).read()
 	zz=0

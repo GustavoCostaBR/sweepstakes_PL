@@ -10,6 +10,10 @@ cursor = conn.cursor()
 with open('TIMES_PRIMEIRA_RODADA.yml', 'r') as f:
 	data = yaml.load(f, Loader=yaml.FullLoader)
 
+
+with open('tabelas.yml', 'r') as f:
+	data1 = yaml.load(f, Loader=yaml.FullLoader)
+
 x = sys.argv[1:]
 
 temp = []
@@ -36,7 +40,8 @@ for index, j in enumerate(temp):
 	# pdb.set_trace()
 	if index % 2 == 0:
 		# rodada inicial
-		if rows[0][4] == 0:
+		if data1['RODADA_SPFL'] == 1:
+		# if rows[0][4] == 0:
 			if data['FIRST_ROUND_SPFL']['TIME1'] in x[index//2]:
 				# print('jorge')
 				temp0.append(9)
@@ -51,7 +56,8 @@ for index, j in enumerate(temp):
 			else:
 				temp0.append(1)
 		# rodada 2 a 33
-		if rows[0][4] >= 1:
+		elif data1['RODADA_SPFL'] >= 2:
+		# if rows[0][4] >= 1:
 			for row in rows:
 				if j in row:
 					temp1.append(row)
@@ -69,12 +75,14 @@ for index, j in enumerate(temp):
 			positionto_3_2 =  temp1[index+1][0] - rows[2][0]
 			pointstothird_1 = (rows[2][2] - temp1[index][2])
 			pointstothird_2 = (rows[2][2] - temp1[index+1][2])
-			# rodada 3 a 11
-
-			if rows[0][4] < 4:
+			# rodada escolhida a 11
+			Rodadas_iniciais = 5
+			if data1['RODADA_SPFL'] <= Rodadas_iniciais:
+			# if rows[0][4] < 4:
 				temp0.append(1)
 
-			if 4 <= rows[0][4] <11:
+			elif  data1['RODADA_SPFL'] <= 11:
+			# if 4 <= rows[0][4] <11:
 			# critehrio do primeiro colocado
 				if positionto_1 == 0 and diff <=3:
 					temp0.append(12)
@@ -92,12 +100,14 @@ for index, j in enumerate(temp):
 				else:
 					temp0.append(1)
 
-			# rodada 11 a 33
-			elif rows[0][4] > 10 and rows[0][4] <33:
+			# rodada 12 a 33
+			elif  data1['RODADA_SPFL'] <= 33:
+			# elif rows[0][4] > 10 and rows[0][4] <33:
 
 			# critehrio 3 pontos/uel. A conferencia de posicoes eu coloquei um valor alto, mas nem fazia sentido conferir no sentido superior, somente deve indicar que o time tah depois do terceiro ou eh o terceiro
 				if 0 <= positionto_3 <= 10 and 0 <= positionto_3_2 <= 10 and pointstothird_1 <= 3 and pointstothird_2 <= 3:
-					if rows[0][4] >= 22:
+					if  data1['RODADA_SPFL'] >= 23:
+					# if rows[0][4] >= 22:
 						temp0.append(11)
 						x[index//2] = x[index//2].replace("P1", "P2")
 					else:
