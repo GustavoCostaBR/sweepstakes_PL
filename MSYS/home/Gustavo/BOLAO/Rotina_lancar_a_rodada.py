@@ -1030,7 +1030,8 @@ if data0['FCWC'] == 1:
 				temp = subst_P("P1", "P2", temp)
 
 
-				for o in temp:
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
+				for o in sorted_Jogos:
 					Jogos.append(o)
 
 		else:
