@@ -172,9 +172,6 @@ if data0['PL'] == 1:
 			variavel = result2.stdout.split('\n')
 			while "" in variavel:
 				variavel.remove("")
-			while "hora ainda nao definida, setada como padrão, meio dia" in variavel:
-				print("hora ainda nao definida, setada como padrão, meio dia")
-				variavel.remove("hora ainda nao definida, setada como padrão, meio dia")
 			for o in variavel:
 				temp.append(o)
 

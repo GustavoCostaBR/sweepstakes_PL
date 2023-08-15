@@ -2,7 +2,7 @@
 #SOH RECOMENDO DESLIGAR SE TIVER APRESENTANDO PROBLEMAS PARA RODAR UMA PARTE ESPECIFICA. O PROGRAMA FOI DESENHADO PARA ESCOLHER ENTRE OS CAMPEONATOS.
 
 # Atualizar tabelas dos campeonatos de pontos
-TABELAS: 1
+TABELAS: 0
 
 #Capturar a data inicial do bolão e adicionar FACS, esse, porenquanto, não deve ser desativado:
 FACS: 1
@@ -23,17 +23,17 @@ SC: 0
 
 SLC: 0
 
-USC: 0
+USC: 1
 
-QUAL_UCL: 0
+QUAL_UCL: 1
 
 UCL: 0
 
-QUAL_UEL: 0
+QUAL_UEL: 1
 
 UEL: 0
 
-QUAL_UECL: 0
+QUAL_UECL: 1
 
 UECL: 0
 

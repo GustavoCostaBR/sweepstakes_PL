@@ -7,16 +7,13 @@ import yaml
 conn = sqlite3.connect('championships.db')
 cursor = conn.cursor()
 
-with open('Configuracoes.yml', 'r') as f:
+with open('TIMES_PRIMEIRA_RODADA.yml', 'r') as f:
 	data = yaml.load(f, Loader=yaml.FullLoader)
 
 with open('tabelas.yml', 'r') as f:
 	data1 = yaml.load(f, Loader=yaml.FullLoader)
 
 x = sys.argv[1:]
-
-# x = ['Luton Town x Burnley - P1 (PL) - 19/08 - 12:00', 'Fulham x Brentford - P2 (PL) - 19/08 - 11:00', 'Liverpool x Bournemouth - P1 (PL) - 19/08 - 11:00', 'Wolverhampton Wanderers x Brighton & Hove Albion - P1 (PL) - 19/08 - 11:00', 'Tottenham Hotspur x Manchester United - P1 (PL) - 19/08 - 13:30', 'Manchester City x Newcastle United - P1 (PL) - 19/08 - 16:00', 'Aston Villa x Everton - P1 (PL) - 20/08 - 10:00', 'West Ham United x Chelsea - P1 (PL) - 20/08 - 12:30', 'Crystal Palace x Arsenal - P1 (PL) - 21/08 - 16:00', 'Chelsea x Luton Town - P1 (PL) - 25/08 - 16:00']
-
 
 # x = ['Time1 x Time10 - P1 (PL) - 20/05 - 08:30', 'Time2 x Time15 - P1 (PL) - 20/05 - 08:30', 'Time3 x Time4 - P1 (PL) - 20/05 - 08:30','Time5 x Time6 - P1 (PL) - 20/05 - 08:30','Time7 x Time17 - P1 (PL) - 20/05 - 08:30','Time8 x Time14 - P1 (PL) - 20/05 - 08:30','Time9 x Time13 - P1 (PL) - 20/05 - 08:30','Time11 x Time12 - P1 (PL) - 20/05 - 08:30','Time16 x Time20 - P1 (PL) - 20/05 - 08:30','Time18 x Time19 - P1 (PL) - 20/05 - 08:30']
 
@@ -110,11 +107,9 @@ for index, j in enumerate(temp):
 
 			# if temp[index] == "Tottenham Hotspur":
 			# 	pdb.set_trace()
-			Rodadas_iniciais = data['N_RODADAS_INICIAIS_PL']
+			Rodadas_iniciais = 5
 			# Primeiro turno
 			if Rodadas_iniciais < data1['RODADA_PL'] <= 19:
-
-				# pdb.set_trace()
 			# if 4 <= rows[0][4] <= 18:
 			#critehrio do primeiro colocado
 				if pointstofirst_1 <= 3 and pointstofirst_2 <= 3:
@@ -140,9 +135,9 @@ for index, j in enumerate(temp):
 
 
 			# rodada 19 a 36
-			elif 19 <= data1['RODADA_PL'] <= 36:
+			elif data1['RODADA_PL'] <= 36:
 			# elif 4 <=rows[0][4] <= 35:
-				# pdb.set_trace()
+
 			#critehrio do primeiro colocado
 				# 3 pontos
 				if pointstofirst_1 <= 3 and pointstofirst_2 <= 3:

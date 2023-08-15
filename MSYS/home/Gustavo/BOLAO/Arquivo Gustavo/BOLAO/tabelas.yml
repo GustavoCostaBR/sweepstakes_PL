@@ -5,13 +5,13 @@ Table_Names: ['premiere_league_table', 'scottish_premiership_table', 'eng_champi
 
 #As tabelas devem seguir a mesma ordem, tanto nos links quanto nomes, ou o programa apresentará problemas.
 
-RODADA_PL: 2
+RODADA_PL: 1
 
 # Usar 34 para quando a SPFL for dividida
-RODADA_SPFL: 3
+RODADA_SPFL: 2
 
 # Usar 47 quando a LCH tiver terminado e quiser procurar os playoffs
-RODADA_LCH: 3
+RODADA_LCH: 2
 
 # Usar 39 quando a SPFL_championship e relegation acabarem, daí não irá nem procurar por esses campeonatos
 RODADA_SPFL_CHAMPIONSHIP: 39

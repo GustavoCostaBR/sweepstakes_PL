@@ -137,9 +137,11 @@ if data0['FACS'] == 1:
 
 
 			if len(variavel) > 1:
-				print(variavel[1])
+				# print(variavel[1])
 				print('Jogo adicionado para FACS')
-				Jogos.append(variavel[1])
+				# variavel = subst_P("P1", "P2", variavel)
+				AA = variavel[1].replace("P1", "P2")
+				Jogos.append(AA)
 			else:
 				print("Nenhum jogo adicionado para FACS")
 
@@ -162,10 +164,14 @@ if data0['PL'] == 1:
 		# Print the stdout output if the subprocess ran successfully
 		if result2.stdout != '':
 			temp = []
-			print('Jogo adicionado para PL')
+			print('Jogos adicionados para PL')
 			variavel = result2.stdout.split('\n')
 			while "" in variavel:
 				variavel.remove("")
+			while "hora ainda nao definida, setada como padrão, meio dia" in variavel:
+				print("hora ainda nao definida, setada como padrão, meio dia")
+				variavel.remove("hora ainda nao definida, setada como padrão, meio dia")
+
 			for o in variavel:
 				temp.append(o)
 
@@ -334,7 +340,7 @@ if data0['LCH'] == 1:
 		else:
 			# Print the stdout output if the subprocess ran successfully
 			if result4.stdout != '':
-				print('Jogo LCH encaminhado ao filtro')
+				print('Jogos LCH encaminhados para o filtro')
 				variavel = result4.stdout.split('\n')
 				for o in variavel:
 						temp.append(o)
@@ -1049,21 +1055,37 @@ for o in range(len(Jogos)):
 	Jogos[o] = Jogos[o].replace("_QUAL", '')
 	Jogos[o] = Jogos[o].replace("Wolverhampton Wanderers", "Wolverhampton")
 	Jogos[o] = Jogos[o].replace("Heart of Midlothian", "Hearts")
+	Jogos[o] = Jogos[o].replace("Rosenborg BK", "Rosenborg")
+
 	print(Jogos[o])
 
 
 
 
 
-if data0['LANCAR_FORMS'] == 1:
-	result17 = subprocess.run(['python', 'forms.py', *Jogos], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-	if result17.returncode != 0:
-		print(result17.stderr)
-	else:
-		# Print the stdout output if the subprocess ran successfully
-		if result17.stdout != '':
-			variavel = result17.stdout.split('\n')
-			for o in variavel:
-				print(o)
+if data0['LANCAR_FORMS'] == 1:
+	from forms_func import main2, forms2
+	forms2(Jogos)
+# 	process = subprocess.Popen(['python', 'forms.py', *Jogos], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+# 	while True:
+# 		line = process.stdout.readline()
+# 		if not line:
+# 			break
+# 		print(line.strip())
+
+# # Wait for the process to finish and get the return code
+# return_code = process.wait()
+
+	# result17 = subprocess.run(['python', 'forms.py', *Jogos], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+	# if result17.returncode != 0:
+	# 	print(result17.stderr)
+	# else:
+	# 	# Print the stdout output if the subprocess ran successfully
+	# 	if result17.stdout != '':
+	# 		variavel = result17.stdout.split('\n')
+	# 		for o in variavel:
+	# 			print(o)
 

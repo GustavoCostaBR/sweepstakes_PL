@@ -1,14 +1,14 @@
 #A data deve ser editada dentro do formato pré-estabelecido, aconselho usar o dia imediatamente anterior ao início da rodada, tendo em vista que a versào atual do programa considera todos os jogos começando meia noite (exato início do dia), apesar dele jogar a informação certa de hora no forms (falta ajustar o horário de verão). O formato da data é ano, mês (sem o zero, abril é 4 e não 04), dia (sem o zero), hora, minutos.
 # Inicio_Rodada: ['2022', '8', '19', '20', '30']
 # Inicio_Rodada: ['2023', '5', '10', '20', '30']
-Inicio_Rodada: ['2023', '8', '18', '20', '30']
+Inicio_Rodada: ['2023', '08', '11', '20', '30']
 
 #Para o fim recomendo usar o dia imediatamente posterior, zerado na hora, podemos testar.
 # Fim_Rodada: ['2022', '8', '23', '20', '30']
 # Fim_Rodada: ['2023', '6', '5', '20', '30']
-Fim_Rodada: ['2023', '8', '25', '20', '30']
+Fim_Rodada: ['2023', '08', '18', '20', '30']
 
-Nome_Rodada: Rodada 2
+Nome_Rodada: Rodada 1
 
 # EXCEL_DOWNLOADER
 ARQUIVO_EXCEL_ABRIR: Bolão_Premier_League_2023-24_vP.xlsm
@@ -18,8 +18,6 @@ ARQUIVO_EXCEL_SALVAR: Bolão_Premier_League_2023-24_v1.xlsm
 ARQUIVO_EXCEL_ABRIR_2: Bolão_Premier_League_2023-24_v1.xlsm
 
 RODADA_TROCA_CRITERIO_LCH: 26 #classificação com 25 jogos (entre 13 e 44)
-
-N_RODADAS_INICIAIS_PL: 5
 
 #Sempre use a URL do schedule.
 URL_FACS: https://www.worldfootball.net/all_matches/eng-fa-community-shield-2023/

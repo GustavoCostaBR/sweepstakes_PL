@@ -4,8 +4,6 @@ import yaml
 from datetime import datetime, timedelta
 import pytz
 import sqlite3
-import openpyxl
-from openpyxl import load_workbook
 # import pdb
 # import sys
 
@@ -88,9 +86,8 @@ temp1 = []
 Jogos = []
 Jogos_final = []
 # var_dump.var_dump(dt)
-tabelas = 0
 
-if tabelas == 1:
+if data0['TABELAS'] == 1:
 	# Start program 0
 	result0 = subprocess.run(['python', 'TABELA_CAMPEONATOS.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	if result0.returncode != 0:
@@ -107,7 +104,6 @@ if tabelas == 1:
 			# var_dump.var_dump(result.stdout)
 
 
-
 # connect to the database
 conn = sqlite3.connect('championships.db')
 
@@ -116,7 +112,7 @@ cursor = conn.cursor()
 
 if data0['FACS'] == 1:
 	# Start first program
-	result = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_FACS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_FACS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
@@ -137,7 +133,7 @@ if data0['FACS'] == 1:
 			inicio_bolao = variavel[0]
 			print(inicio_bolao)
 			inicio_bolao_date_ = datetime.strptime(inicio_bolao, "%Y-%m-%d %H:%M:%S%z")
-			inicio_bolao_date = inicio_bolao_date_ - timedelta(days=2)
+			inicio_bolao_date = inicio_bolao_date_ - timedelta(days=4)
 
 
 			if len(variavel) > 1:
@@ -158,7 +154,7 @@ if data0['PL'] == 1:
 	# # Start second program
 
 	# # pdb.set_trace()
-	result2 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_PL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result2 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_PL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 
 	# Wait for the program to finish
@@ -168,15 +164,14 @@ if data0['PL'] == 1:
 		# Print the stdout output if the subprocess ran successfully
 		if result2.stdout != '':
 			temp = []
-			print('Jogo adicionado para PL')
+			print('Jogos adicionados para PL')
 			variavel = result2.stdout.split('\n')
 			while "" in variavel:
 				variavel.remove("")
-			while "hora ainda nao definida, setada como padrão, meio dia" in variavel:
-				print("hora ainda nao definida, setada como padrão, meio dia")
-				variavel.remove("hora ainda nao definida, setada como padrão, meio dia")
 			for o in variavel:
 				temp.append(o)
+
+			# print(temp)
 
 			result2_1 = subprocess.run(['python', 'filtro_PL.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
@@ -184,7 +179,7 @@ if data0['PL'] == 1:
 			while "" in variavel:
 				variavel.remove("")
 
-			sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+			sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(' - ')[-2:]))
 
 			for o in sorted_Jogos:
 				Jogos.append(o)
@@ -205,7 +200,7 @@ if data0['SPFL'] == 1:
 	# if resultado < 33:
 	if data1['RODADA_SPFL'] <= 33:
 		# Start third program
-		result3 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_SPFL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+		result3 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 		# Wait for the program to finish
 		if result3.returncode != 0:
@@ -232,7 +227,7 @@ if data0['SPFL'] == 1:
 						variavel = result3_1.stdout.split('\n')
 						while "" in variavel:
 							variavel.remove("")
-						sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+						sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(' - ')[-2:]))
 						for o in sorted_Jogos:
 							Jogos.append(o)
 
@@ -242,7 +237,7 @@ if data0['SPFL'] == 1:
 	elif data1['RODADA_SPFL_CHAMPIONSHIP'] <= 38:
 		temp=[]
 		# Start third program
-		result3 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_SPFL_championship], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+		result3 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL_championship], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 		# Wait for the program to finish
 		if result3.returncode != 0:
@@ -262,7 +257,7 @@ if data0['SPFL'] == 1:
 				print('Nenhum resultado para SPFL_championship')
 
 		# Start third program (part2)
-		result3_2 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_SPFL_relegation], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+		result3_2 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL_relegation], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 		# Wait for the program to finish
 		if result3_2.returncode != 0:
@@ -287,11 +282,12 @@ if data0['SPFL'] == 1:
 
 		# print((temp))
 		if len(temp) > 0:
+			# print(temp)
 			result3_1 = subprocess.run(['python', 'filtro_SPFL_championship_relegation.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 			variavel = result3_1.stdout.split('\n')
 			while "" in variavel:
 				variavel.remove("")
-			sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+			sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(' - ')[-2:]))
 			for o in sorted_Jogos:
 				Jogos.append(o)
 
@@ -302,7 +298,7 @@ if data0['SPFL'] == 1:
 
 	# # Remove the else for now for testing propose
 	else:
-		result3 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_SPFL_PLAYOFFS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+		result3 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SPFL_PLAYOFFS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 		# Wait for the program to finish
 		if result3.returncode != 0:
@@ -315,7 +311,7 @@ if data0['SPFL'] == 1:
 				variavel = subst_P("P1", "P2", variavel)
 				while "" in variavel:
 					variavel.remove("")
-				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 			else:
@@ -327,8 +323,9 @@ if data0['LCH'] == 1:
 	# resultado = cursor.fetchone()[0]
 	# if resultado < 46:
 	if data1['RODADA_LCH'] <= 46:
+
 		# # Start fourth program
-		result4 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_LCH], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+		result4 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_LCH], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 		temp=[]
@@ -339,7 +336,7 @@ if data0['LCH'] == 1:
 		else:
 			# Print the stdout output if the subprocess ran successfully
 			if result4.stdout != '':
-				print('Jogo LCH encaminhado ao filtro')
+				print('Jogos LCH encaminhados para o filtro')
 				variavel = result4.stdout.split('\n')
 				for o in variavel:
 						temp.append(o)
@@ -351,7 +348,7 @@ if data0['LCH'] == 1:
 				while "" in variavel:
 					variavel.remove("")
 				# print(variavel)
-				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 			else:
@@ -361,7 +358,7 @@ if data0['LCH'] == 1:
 	else:
 
 		# # Start fourth program
-		result4 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_LCH_PLAYOFFS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+		result4 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_LCH_PLAYOFFS], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 		temp=[]
@@ -387,7 +384,7 @@ if data0['LCH'] == 1:
 				temp = subst_P("P1", "P2", temp)
 
 				# print(temp)
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -397,7 +394,7 @@ if data0['LCH'] == 1:
 
 if data0['FAC'] == 1:
 	# # Start fifth program
-	result5 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_FAC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result5 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_FAC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 	temp=[]
@@ -428,7 +425,7 @@ if data0['FAC'] == 1:
 				print('Jogo FAC semi-final adicionado')
 				temp = subst_P("P1", "P2", temp)
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -438,11 +435,12 @@ if data0['FAC'] == 1:
 				print('Jogo FAC final adicionado')
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 			# print(temp)
 			if len(temp) > 0 and zz == 2:
+				print(temp)
 				result5_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 					# # var_dump.var_dump(variavel[0])
 					# print(result3_1.stdout)
@@ -450,7 +448,7 @@ if data0['FAC'] == 1:
 				while "" in variavel:
 					variavel.remove("")
 				# print(variavel)
-				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -459,7 +457,7 @@ if data0['FAC'] == 1:
 
 
 if data0['EFL'] == 1:
-	result6 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_EFL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result6 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_EFL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 	temp=[]
@@ -488,7 +486,7 @@ if data0['EFL'] == 1:
 				temp.remove("j1=1")
 				print('Jogo EFL semi-final adicionado')
 				temp = subst_P("P1", "P2", temp)
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -498,7 +496,7 @@ if data0['EFL'] == 1:
 				print('Jogo EFL final adicionado')
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 			# print(temp)
@@ -509,7 +507,7 @@ if data0['EFL'] == 1:
 				while "" in variavel:
 					variavel.remove("")
 				# print(variavel)
-				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -518,7 +516,7 @@ if data0['EFL'] == 1:
 
 
 if data0['SC'] == 1:
-	result7 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_SC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result7 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 	temp=[]
@@ -543,7 +541,7 @@ if data0['SC'] == 1:
 				zz=2
 				temp.remove("j1=3")
 				print('Jogos SC quartas-de-final adicionados')
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -553,7 +551,7 @@ if data0['SC'] == 1:
 
 				temp = subst_P("P1", "P2", temp)
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -566,7 +564,7 @@ if data0['SC'] == 1:
 
 				temp = subst_P("P2", "P3", temp)
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -575,7 +573,7 @@ if data0['SC'] == 1:
 
 
 if data0['SLC'] == 1:
-	result8 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_SLC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result8 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SLC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 	temp=[]
@@ -600,7 +598,7 @@ if data0['SLC'] == 1:
 				zz=2
 				temp.remove("j1=3")
 				print('Jogos SLC quartas-de-final adicionados')
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -610,7 +608,7 @@ if data0['SLC'] == 1:
 				print('Jogo SLC semi-final adicionado')
 				temp = subst_P("P1", "P2", temp)
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -623,7 +621,7 @@ if data0['SLC'] == 1:
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -631,7 +629,7 @@ if data0['SLC'] == 1:
 			print('Nenhum resultado para SLC')
 
 if data0['USC'] == 1:
-	result9 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_USC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result9 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_USC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 	temp=[]
@@ -656,7 +654,7 @@ if data0['USC'] == 1:
 
 			temp = after_FACS_filter(temp, inicio_bolao_date)
 
-			sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+			sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 			for o in sorted_Jogos:
 				Jogos.append(o)
 
@@ -664,7 +662,7 @@ if data0['USC'] == 1:
 			print('Nenhum resultado para USC')
 
 if data0['QUAL_UCL'] == 1:
-	result10 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_QUAL_UCL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result10 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UCL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 	temp=[]
@@ -689,7 +687,7 @@ if data0['QUAL_UCL'] == 1:
 
 			temp = subst_P("P2", "P1", temp)
 
-			sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+			sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 			for o in sorted_Jogos:
 				Jogos.append(o)
 
@@ -698,7 +696,7 @@ if data0['QUAL_UCL'] == 1:
 
 
 if data0['UCL'] == 1:
-	result11 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_UCL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result11 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_UCL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 	temp=[]
@@ -723,7 +721,7 @@ if data0['UCL'] == 1:
 				# pdb.set_trace()
 				temp = subst_P("P2", "P1", temp)
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -735,7 +733,7 @@ if data0['UCL'] == 1:
 
 				print('Jogo UCL oitavas/quartas adicionado')
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -745,7 +743,7 @@ if data0['UCL'] == 1:
 				print('Jogo UCL semi-final adicionado')
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -758,7 +756,7 @@ if data0['UCL'] == 1:
 				temp = subst_P("P1", "P4", temp)
 				temp = subst_P("P2", "P4", temp)
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -768,7 +766,7 @@ if data0['UCL'] == 1:
 
 
 if data0['QUAL_UEL'] == 1:
-	result12 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_QUAL_UEL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result12 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UEL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 	temp=[]
@@ -793,7 +791,7 @@ if data0['QUAL_UEL'] == 1:
 
 			if len(temp) > 0:
 				temp = subst_P("P2", "P1", temp)
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 		else:
@@ -802,7 +800,7 @@ if data0['QUAL_UEL'] == 1:
 
 
 if data0['UEL'] == 1:
-	result13 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_UEL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result13 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_UEL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 	temp=[]
@@ -828,7 +826,7 @@ if data0['UEL'] == 1:
 				# pdb.set_trace()
 				temp = subst_P("P2", "P1", temp)
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -840,7 +838,7 @@ if data0['UEL'] == 1:
 
 				print('Jogo UEL oitavas/quartas adicionado')
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -850,7 +848,7 @@ if data0['UEL'] == 1:
 				print('Jogo UEL semi-final adicionado')
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -862,7 +860,8 @@ if data0['UEL'] == 1:
 
 				temp = subst_P("P1", "P4", temp)
 				temp = subst_P("P2", "P4", temp)
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -870,7 +869,7 @@ if data0['UEL'] == 1:
 			print('Nenhum resultado para UEL')
 
 if data0['QUAL_UECL'] == 1:
-	result14 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_QUAL_UECL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result14 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UECL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 	temp=[]
 	variavel=[]
@@ -894,7 +893,7 @@ if data0['QUAL_UECL'] == 1:
 
 			if len(temp) > 0:
 				temp = subst_P("P2", "P1", temp)
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 		else:
@@ -903,7 +902,7 @@ if data0['QUAL_UECL'] == 1:
 
 
 if data0['UECL'] == 1:
-	result15 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_UECL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result15 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_UECL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 	# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 	temp=[]
@@ -930,7 +929,7 @@ if data0['UECL'] == 1:
 				temp = subst_P("P2", "P1", temp)
 
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -942,7 +941,7 @@ if data0['UECL'] == 1:
 
 				print('Jogo UECL oitavas/quartas adicionado')
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -951,7 +950,7 @@ if data0['UECL'] == 1:
 				index1 = 0
 				print('Jogo UECL semi-final adicionado')
 				temp = subst_P("P1", "P2", temp)
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -965,7 +964,7 @@ if data0['UECL'] == 1:
 				temp = subst_P("P1", "P3", temp)
 				temp = subst_P("P2", "P3", temp)
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -975,7 +974,7 @@ if data0['UECL'] == 1:
 
 
 if data0['FCWC'] == 1:
-	result16 = subprocess.run(['python', 'buscador_resultados.py', *dt, *dt2, url_FCWC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+	result16 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_FCWC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 	temp=[]
 	variavel=[]
@@ -999,7 +998,7 @@ if data0['FCWC'] == 1:
 				temp = subst_P("P2", "P1", temp)
 
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -1011,7 +1010,7 @@ if data0['FCWC'] == 1:
 
 				print('Jogo FCWC semi adicionado')
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -1020,7 +1019,7 @@ if data0['FCWC'] == 1:
 				index1 = 0
 				print('Jogo FCWC terceiro adicionado')
 				temp = subst_P("P2", "P1", temp)
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -1033,7 +1032,7 @@ if data0['FCWC'] == 1:
 				temp = subst_P("P1", "P2", temp)
 
 
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(" zzz")[0].split(' - ')[-2:]))
+				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
 				for o in sorted_Jogos:
 					Jogos.append(o)
 
@@ -1041,58 +1040,48 @@ if data0['FCWC'] == 1:
 			print('Nenhum resultado para FCWC')
 
 
+
 # print(Jogos)
+
+# for o in range(len(sorted_Jogos)):
+# 	sorted_Jogos[o] = sorted_Jogos[o].replace("_QUAL", '')
+# 	print(sorted_Jogos[o])
+
 for o in range(len(Jogos)):
 	Jogos[o] = Jogos[o].replace("_QUAL", '')
 	Jogos[o] = Jogos[o].replace("Wolverhampton Wanderers", "Wolverhampton")
 	Jogos[o] = Jogos[o].replace("Heart of Midlothian", "Hearts")
+	Jogos[o] = Jogos[o].replace("Rosenborg BK", "Rosenborg")
+
 	print(Jogos[o])
 
 
-# print(Jogos)
 
-if data0['RESULTADOS_NO_EXCEL'] == 1:
 
-	workbook_name = data['ARQUIVO_EXCEL_ABRIR_2']
-	workbook_future_name = data['ARQUIVO_EXCEL_SALVAR']
 
-	placares = []
-	for index, o in enumerate(Jogos):
-		# z=Jogos[index].split("zzz")
-		# print(z[1])
-		if "aet" in Jogos[index].split("zzz")[1]:
-			placares.append(Jogos[index].split("zzz")[1].split(" (")[0].split(":")[0])
-			placares.append(Jogos[index].split("zzz")[1].split(" (")[0].split(":")[1])
-		if "pso" in Jogos[index].split("zzz")[1]:
-			placares.append(Jogos[index].split("zzz")[1].split(") ")[0].split(", ", 2)[1].split(":")[0])
-			placares.append(Jogos[index].split("zzz")[1].split(") ")[0].split(", ", 2)[1].split(":")[1])
-		else:
-			placares.append(Jogos[index].split("zzz")[1].split(" (")[0].split(":")[0])
-			placares.append(Jogos[index].split("zzz")[1].split(" (")[0].split(":")[1])
 
-	lista = []
-	for i in range(len(placares)):
-		temp = []
-		if i % 2 == 0:
-			temp.extend([int(placares[i]), "x", int(placares[i+1])])
-			lista.append(temp)
+if data0['LANCAR_FORMS'] == 1:
+	from forms_func import main2, forms2
+	forms2(Jogos)
+# 	process = subprocess.Popen(['python', 'forms.py', *Jogos], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-		else:
-			continue
+# 	while True:
+# 		line = process.stdout.readline()
+# 		if not line:
+# 			break
+# 		print(line.strip())
 
-	workbook = load_workbook(filename = workbook_name, read_only=False,keep_vba=True)
-	sheet = workbook['Tabela']
-	for x in range(5000):
-		if sheet[('A'+str(x+1))].value == data['Nome_Rodada']:
-			position = ('A'+str(x+1))
+# # Wait for the process to finish and get the return code
+# return_code = process.wait()
 
-	start_row = (int(position[1:])+1)
-	start_column = openpyxl.utils.column_index_from_string("B")
+	# result17 = subprocess.run(['python', 'forms.py', *Jogos], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-	for i, value in enumerate(lista):
-		for i1 in range(len(lista[i])):
+	# if result17.returncode != 0:
+	# 	print(result17.stderr)
+	# else:
+	# 	# Print the stdout output if the subprocess ran successfully
+	# 	if result17.stdout != '':
+	# 		variavel = result17.stdout.split('\n')
+	# 		for o in variavel:
+	# 			print(o)
 
-			cell = sheet.cell(row=(start_row+i), column=(start_column+i1))
-			cell.value = lista[i][i1]
-
-	workbook.save(workbook_future_name)
