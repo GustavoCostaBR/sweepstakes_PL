@@ -685,6 +685,10 @@ if data0['QUAL_UCL'] == 1:
 
 			print("Jogo encaminhado ao filtro para qualificatorias UCL")
 
+			while "hora ainda nao definida, setada como padrão, meio dia" in temp:
+				temp.remove("hora ainda nao definida, setada como padrão, meio dia")
+				print("hora ainda nao definida, setada como padrão, meio dia")
+
 			temp = after_FACS_filter(temp, inicio_bolao_date)
 
 			temp = subst_P("P2", "P1", temp)
@@ -786,6 +790,11 @@ if data0['QUAL_UEL'] == 1:
 				temp.append(o)
 			while "" in temp:
 				temp.remove("")
+
+			while "hora ainda nao definida, setada como padrão, meio dia" in temp:
+				temp.remove("hora ainda nao definida, setada como padrão, meio dia")
+				print("hora ainda nao definida, setada como padrão, meio dia")
+
 
 			print("Jogo encaminhado ao filtro para qualificatorias UEL")
 

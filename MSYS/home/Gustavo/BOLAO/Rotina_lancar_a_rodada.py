@@ -7,6 +7,8 @@ import sqlite3
 # import pdb
 # import sys
 
+
+
 with open('Configuracoes.yml', 'r') as f:
 	data = yaml.load(f, Loader=yaml.FullLoader)
 
@@ -168,14 +170,13 @@ if data0['PL'] == 1:
 			variavel = result2.stdout.split('\n')
 			while "" in variavel:
 				variavel.remove("")
-			while "hora ainda nao definida, setada como padrão, meio dia" in variavel:
-				print("hora ainda nao definida, setada como padrão, meio dia")
-				variavel.remove("hora ainda nao definida, setada como padrão, meio dia")
-
 			for o in variavel:
 				temp.append(o)
 
 			# print(temp)
+			while "hora ainda nao definida, setada como padrão, meio dia" in temp:
+				temp.remove("hora ainda nao definida, setada como padrão, meio dia")
+				print("hora ainda nao definida, setada como padrão, meio dia")
 
 			result2_1 = subprocess.run(['python', 'filtro_PL.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
@@ -444,7 +445,7 @@ if data0['FAC'] == 1:
 					Jogos.append(o)
 			# print(temp)
 			if len(temp) > 0 and zz == 2:
-				print(temp)
+				# print(temp)
 				result5_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 					# # var_dump.var_dump(variavel[0])
 					# print(result3_1.stdout)
@@ -687,6 +688,12 @@ if data0['QUAL_UCL'] == 1:
 
 			print("Jogo encaminhado ao filtro para qualificatorias UCL")
 
+			# print(temp)
+
+			while "hora ainda nao definida, setada como padrão, meio dia" in temp:
+				temp.remove("hora ainda nao definida, setada como padrão, meio dia")
+				print("hora ainda nao definida, setada como padrão, meio dia")
+
 			temp = after_FACS_filter(temp, inicio_bolao_date)
 
 			temp = subst_P("P2", "P1", temp)
@@ -788,6 +795,10 @@ if data0['QUAL_UEL'] == 1:
 				temp.append(o)
 			while "" in temp:
 				temp.remove("")
+
+			while "hora ainda nao definida, setada como padrão, meio dia" in temp:
+				temp.remove("hora ainda nao definida, setada como padrão, meio dia")
+				print("hora ainda nao definida, setada como padrão, meio dia")
 
 			print("Jogo encaminhado ao filtro para qualificatorias UEL")
 

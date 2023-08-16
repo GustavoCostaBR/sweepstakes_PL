@@ -275,10 +275,26 @@ def selecting_matchs_by_data(url, dt3, dt2, dt, liga_url, j1, special_dates):
 
 
 def set_date(data3, j, Rivalidades, contador, tags):
-	# for u0 in Rivalidades:
-	# 	if j in u0:
+	checker = 1
+
+	if " , " in j:
+		temp = j.split(" , ")
+		team_1_temp = temp[0]
+		team_2_temp = temp[1]
+
+	# In case the scraped site are providing two teams in place of one
+	try:
+		if j in Rivalidades[0] or j in Rivalidades[1] or j in Rivalidades[2] or j in Rivalidades[3]:
+			checker = 0
+		elif team_1_temp in Rivalidades[0] or team_1_temp in Rivalidades[1] or team_1_temp in Rivalidades[2] or team_1_temp in Rivalidades[3]:
+			checker = 0
+		elif team_2_temp in Rivalidades[0] or team_2_temp in Rivalidades[1] or team_2_temp in Rivalidades[2] or team_2_temp in Rivalidades[3]:
+			checker = 0
+	except:
+		checker = 1
+
 	esquema = []
-	if j in Rivalidades[0] or j in Rivalidades[1] or j in Rivalidades[2] or j in Rivalidades[3]:
+	if checker == 0:
 		if contador % 2 == 0:
 			esquema = tags.find_previous_sibling('td')
 			# try except para o caso de não ter ainda a hora disponível do jogo
@@ -531,10 +547,21 @@ for tag in body:
 		x = tag.find_all('td')
 		for tags in x:
 			try:
+				checker = 1
 				if tags.find('a') is None:
-					continue
+					try:
+						temp = tags.text.split(" / ")
+						team_1_temp = temp[0]
+						team_2_temp = temp[1]
+						team_1_temp = replace_abv(team_1_temp)
+						team_2_temp = replace_abv(team_2_temp)
+					except:
+						team_1_temp = ""
+						team_2_temp = ""
+						continue
 
 				y = tags.find('a').text
+				checker = 0
 				dt3 = gmt.localize(datetime.strptime(y, "%d/%m/%Y"))
 
 				#Selecionando a parte do campeonanto que vamos pegar, tratamento especial para copas
@@ -552,7 +579,10 @@ for tag in body:
 						rescheduling_count = rescheduling_count + 1
 						result.append(y)
 					else:
-						j = replace_abv(y)
+						if checker == 0:
+							j = replace_abv(y)
+						if checker == 1:
+							j = team_1_temp + " , " + team_2_temp
 
 						# montando os jogos com as datas setadas
 						time0, hora_brasil_str, dia_mes_str, contador = set_date(data3, j, Rivalidades, contador, tags)
@@ -585,20 +615,21 @@ for x in range(len(time)):
 					peso.append('P1')
 
 			except:
-				continue
-		jogos.append(time[x] + " x " + time[x+1])
+				# continue
+				peso.append("P1")
+		try:
+			jogos.append(time[x] + " x " + time[x+1])
 
-		jogos_semana.append(jogos[contadorx] + " - " + peso[contadorx] + " (" + liga + ") - " + dia[contadorx] + " - " +hora[contadorx]+" zzz"+ result[contadorx])
-		contadorx = contadorx + 1
+			jogos_semana.append(jogos[contadorx] + " - " + peso[contadorx] + " (" + liga + ") - " + dia[contadorx] + " - " +hora[contadorx]+" zzz"+ result[contadorx])
+			contadorx = contadorx + 1
+		except:
+			contadorx = contadorx + 1
 	else:
 		continue
 contadory = 0
 lista_delete_time = []
-lista_delete_peso = []
-lista_delete_jogos = []
-lista_delete_dia = []
-lista_delete_hora = []
 lista_delete_jogos_semana = []
+
 
 # Removing rescheduled game
 if len(rescheduling) > 0:
@@ -609,15 +640,15 @@ if len(rescheduling) > 0:
 for u in range(len(time)):
 	if u % 2 == 0:
 		# print(time[u])
-		if not time[u] in Rivalidades[0] and not time[u+1] in Rivalidades[0] and not time[u] in Rivalidades[1] and not time[u+1] in Rivalidades[1] and not time[u] in Rivalidades[2] and not time[u+1] in Rivalidades[2]:
+		try:
+			if not time[u] in Rivalidades[0] and not time[u+1] in Rivalidades[0] and not time[u] in Rivalidades[1] and not time[u+1] in Rivalidades[1] and not time[u] in Rivalidades[2] and not time[u+1] in Rivalidades[2]:
 
-			lista_delete_time.extend([u, u+1])
-			lista_delete_peso.append(int(u/2))
-			lista_delete_jogos.append(int(u/2))
-			lista_delete_dia.append(int(u/2))
-			lista_delete_hora.append(int(u/2))
-			lista_delete_jogos_semana.append(int(u/2))
+				lista_delete_time.extend([u, u+1])
+				lista_delete_jogos_semana.append(int(u/2))
 
+
+		except:
+			continue
 			# print(time[u])
 	# contadory = contadory + 1
 	# print(u)

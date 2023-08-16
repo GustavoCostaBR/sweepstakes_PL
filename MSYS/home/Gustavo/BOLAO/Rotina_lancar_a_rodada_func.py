@@ -13,6 +13,84 @@ from buscador_jogosv3_func import main_buscador_jogosv3
 # Global variables
 gmt = pytz.timezone('GMT')
 
+def weights(championshipName, returnVariable, result):
+	bool_call_filter = True
+	if championshipName == "FAC" or championshipName == "EFL" or championshipName == "SC" or championshipName == "SLC" or championshipName == "UCL":
+			if "j1=3" in result:
+				bool_call_filter = True
+				if championshipName == "SC" or championshipName == "SLC":
+					bool_call_filter = False
+					result.remove("j1=3")
+				elif championshipName == "UCL":
+					bool_call_filter = False
+					result.remove("j1=3")
+					result = subst_P("P1", "P2", result)
+
+			elif "j1=1" in result:
+				returnVariable.append("SEMI-FINAL")
+				result.remove("j1=1")
+				result = subst_P("P1", "P2", result)
+				bool_call_filter = False
+				if championshipName == "UCL":
+					result = subst_P("P2", "P3", result)
+
+			elif "j1=2" in result:
+				returnVariable.append("FINAL")
+				result.remove("j1=2")
+				result = subst_P("P1", "P3", result)
+				result = subst_P("P2", "P3", result)
+				bool_call_filter = False
+				if championshipName == "UCL":
+					result = subst_P("P3", "P4", result)
+
+			elif "j1=0" in result:
+				if championshipName == "FAC":
+					returnVariable.append("Jogo anterior ao terceiro round não adicionado")
+					result = []
+				elif championshipName == "EFL":
+					returnVariable.append("Jogo anterior as oitavas não adicionado")
+					result = []
+				elif championshipName == "SC":
+					returnVariable.append("Jogo anterior as quartas não adicionado")
+					result = []
+				elif championshipName == "UCL":
+					result = subst_P("P2", "P1", result)
+				bool_call_filter = False
+
+	elif championshipName == "SPFL_PLAYOFFS":
+		result = subst_P("P1", "P2", result)
+		bool_call_filter = False
+
+	elif championshipName == "LCH_PLAYOFFS":
+		if "j1=3" in result:
+			result.remove("j1=3")
+			result[(len(result)-1)] = result[(len(result)-1)].replace("P1", "P3")
+		result = subst_P("P1", "P2", result)
+		bool_call_filter = False
+
+	elif championshipName == "USC":
+		bool_call_filter = False
+		result = subst_P("P1", "P2", result)
+		result = after_FACS_filter(result, inicio_bolao_date)
+
+	elif championshipName == "QUAL_UCL" or championshipName == "QUAL_UCL":
+		bool_call_filter = False
+		result = subst_P("P2", "P1", result)
+		result = after_FACS_filter(result, inicio_bolao_date)
+
+
+
+
+	return returnVariable, result, bool_call_filter
+
+def custom_key(match):
+    parts = match.split(' - ')
+    date_parts = parts[-2].split('/')
+    day = int(date_parts[0])
+    month = int(date_parts[1])
+    time = parts[-1]
+    return (month, day, time)
+
 def load_data(filename):
 	with open(filename, 'r') as f:
 		return yaml.load(f, Loader=yaml.FullLoader)
@@ -60,9 +138,13 @@ def run_championship(dt, dt2, url, championshipName):
 			result.remove("hora ainda nao definida, setada como padrão, meio dia")
 		returnVariable.append("Jogos " + championshipName + " encaminhados para o filtro")
 
+	bool_call_filter = True
+
+	if championshipName in ["FAC", "SPFL_PLAYOFFS", "LCH_PLAYOFFS", "EFL", "SC", "SLC", "USC", "QUAL_UCL", "UCL", "QUAL_UEL"]:
+		returnVariable, result, bool_call_filter = weights(championshipName, returnVariable, result)
 
 
-	return returnVariable, result
+	return returnVariable, result, bool_call_filter
 
 def championship_filter(championshipName, result):
 
@@ -82,6 +164,12 @@ def championship_filter(championshipName, result):
 		from filtro_LCH_func import main_filtro_LCH
 		result = main_filtro_LCH(result)
 
+	elif championshipName == "FAC" or championshipName == "EFL":
+		if "j1=3" in result:
+			from filtro_FAC_func import main_filtro_FAC
+			result.remove("j1=3")
+			result = main_filtro_FAC(result)
+
 	# elif championshipName == "SPFL_PLAYOFFS":
 	# 	from filtro_SPFL_championship_relegation_func import main_SPFL_champ_rele
 	# 	result = main_SPFL_champ_rele(result)
@@ -90,17 +178,21 @@ def championship_filter(championshipName, result):
 
 def run_championship_plus_filter(dt, dt2, url, championshipName):
 
-	returnVariable, result = run_championship(dt, dt2, url, championshipName)
+	returnVariable, result, bool_call_filter = run_championship(dt, dt2, url, championshipName)
 
 	if len(result) == 0:
 		returnVariable.append("Nenhum resultado para " + championshipName)
 
 	else:
+		# By coding standard I would like to evaluate the weight ("Ps") of the matchs in the end of the program, but here is a multi threading environment complex to build, so I will use tha maximum I can.
 
-		result = championship_filter(championshipName, result)
+		if bool_call_filter == True:
+			result = championship_filter(championshipName, result)
 
 		if len(result) > 0:
-			sorted_Jogos = sorted(result, key=lambda s: tuple(s.split(' - ')[-2:]))
+			# Sort by date
+			# print(result)
+			sorted_Jogos = sorted(result, key=custom_key)
 			returnVariable.append(sorted_Jogos)
 		else:
 			returnVariable.append("Filtro não retornou nenhum jogo para ", championshipName)
@@ -108,7 +200,7 @@ def run_championship_plus_filter(dt, dt2, url, championshipName):
 	return returnVariable
 
 def run_championship_worker(queue, dt, dt2, url, championshipName):
-	returnVariable, result = run_championship(dt, dt2, url, championshipName)
+	returnVariable, result, bool_call_filter  = run_championship(dt, dt2, url, championshipName)
 	queue.put((championshipName, result, returnVariable))
 
 def run_championship_plus_filter_worker(queue, dt, dt2, url, championshipName):
@@ -129,13 +221,12 @@ def get_championships(dt, dt2, urls, championshipNames):
 	championshipNames_deep = []
 	for idx, championshipName in enumerate(championshipNames):
 		#  special treatment for double order double thread
-		if championshipName == "SPFL_championship_relegation" or championshipName == "SPFL_relegation" or championshipName == "SPFL_PLAYOFFS":
+		if championshipName == "SPFL_championship_relegation" or championshipName == "SPFL_relegation" or championshipName == "SPFL_PLAYOFFS" or championshipName == "LCH_PLAYOFFS":
 			t = threading.Thread(target=run_championship_worker, args=(result_queue_deep, dt, dt2, urls[idx], championshipName))
 			threads_deep.append(t)
 			t.start()
 			championshipNames_deep.append(championshipName)
-		elif championshipName == "SPFL_PLAYOFFS":
-			t = threading.Thread(target=run_championship_worker, args=(result_queue_deep, dt, dt2, urls[idx], championshipName))
+
 		else:
 			t = threading.Thread(target=run_championship_plus_filter_worker, args=(result_queue, dt, dt2, urls[idx], championshipName))
 			threads.append(t)
@@ -153,36 +244,40 @@ def get_championships(dt, dt2, urls, championshipNames):
 
 	results_deep.sort(key=lambda x: championshipNames_deep.index(x[0]))
 
-	if "SPFL_championship_relegation" in championshipNames:
+	playoffs = []
+	if "SPFL_championship_relegation" in championshipNames or "SPFL_PLAYOFFS" in championshipNames or "LCH_PLAYOFFS" in championshipNames:
 		returnVariable = []
 		result_deep = []
 
 		for championshipName, result, returnVariable_ in results_deep:
+			return_Variable2 = []
 			if championshipName == "SPFL_championship_relegation" or championshipName == "SPFL_relegation":
 				result_deep.extend(result)
 				returnVariable.extend(returnVariable_)
+			elif "SPFL_PLAYOFFS" in championshipNames or "LCH_PLAYOFFS" in championshipNames:
+				return_Variable2.extend(returnVariable_)
+				if result != []:
+					return_Variable2.append(result)
 
-# special treatment for double order double thread
+				if championshipName == "SPFL_PLAYOFFS":
+					result_SPFL_PLAY = ["SPFL_PLAYOFFS", return_Variable2]
+					playoffs.append(result_SPFL_PLAY)
+				elif championshipName == "LCH_PLAYOFFS":
+					result_LCH_PLAY = ["LCH_PLAYOFFS", return_Variable2]
+					playoffs.append(result_LCH_PLAY)
+
+		# special treatment for double order double thread
 		if len(result_deep) != 0:
 			t = threading.Thread(target=championship_filter_worker, args=(result_queue, result_deep, "SPFL_championship_relegation"))
 			threads.append(t)
 			t.start()
 
-		else:
+		elif "SPFL_championship_relegation" in championshipNames:
 			results.append(list(("SPFL_championship_relegation", returnVariable)))
 
-	elif "SPFL_PLAYOFFS" in championshipNames:
-		returnVariable = []
-		result_deep = []
-		(championshipName, result, returnVariable_) = results_deep[0]
-		returnVariable.extend(returnVariable_)
-		if result != []:
-			returnVariable.append(result)
-		result_SPFL_PLAY = ["SPFL_PLAYOFFS", returnVariable]
 
 	for t in threads:
 		t.join()
-
 
 	count_ = 0
 
@@ -196,18 +291,16 @@ def get_championships(dt, dt2, urls, championshipNames):
 			if "SPFL" not in championshipNames:
 				if len(result_deep) !=0 and a[0] == "SPFL_championship_relegation":
 					results.append([[[]]])
-					# print(a)
 					temp_name, temp_result = a
 					results[count_].insert(0, temp_name)
-					print(results)
 					results[count_][1].insert(0, returnVariable[0])
-					print(results)
 					sorted_results = sorted(temp_result, key=lambda s: tuple(s.split(' - ')[-2:]))
 					results[count_][1][1].extend(sorted_results)
 		count_ = count_ + 1
 
-	if "SPFL_PLAYOFFS" in championshipNames:
-		results.append(result_SPFL_PLAY)
+	if len(playoffs) > 0:
+		for matchs in playoffs:
+			results.append(matchs)
 
 
 	if "SPFL_relegation" in championshipNames:
@@ -323,6 +416,7 @@ def main():
 	# create a cursor object
 	cursor = conn.cursor()
 
+	# Only program not in a multiple thread environment because all other programs need data from here.
 	if data0['FACS'] == 1:
 		# Start first program
 		result = main_buscador_jogosv3(dt, dt2, url_FACS)
@@ -342,6 +436,7 @@ def main():
 				# Printing the starting date
 				inicio_bolao = result[0]
 				print(inicio_bolao)
+				global inicio_bolao_date
 				inicio_bolao_date = inicio_bolao - timedelta(days=4)
 
 				# Veryfieng if there are any game in the championship for the specified date
@@ -383,419 +478,45 @@ def main():
 		if data1['RODADA_LCH'] <= 46:
 			championshipNames.append("LCH")
 			urls.append(url_LCH)
-
-
 		else:
 			championshipNames.append("LCH_PLAYOFFS")
 			urls.append(url_LCH_PLAYOFFS)
-			# # Start fourth program
-
-
 
 	if data0['FAC'] == 1:
-		# # Start fifth program
-		result5 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_FAC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-		temp=[]
-		variavel=[]
-		# Wait for the program to finish
-		if result5.returncode != 0:
-			print(result5.stderr)
-		else:
-			# Print the stdout output if the subprocess ran successfully
-			if result5.stdout != '':
-				zz=0
-				variavel = result5.stdout.split('\n')
-				for o in variavel:
-					temp.append(o)
-				while "" in temp:
-					temp.remove("")
-				# print(temp)
-				if "j1=0" in temp:
-					print('Jogo FAC anterior ao Round 3, nao adicionado')
-					temp = []
-				elif "j1=3" in temp:
-					zz=2
-					temp.remove("j1=3")
-					print('Jogo FAC encaminhado ao filtro')
-				elif "j1=1" in temp:
-					temp.remove("j1=1")
-					index1 = 0
-					print('Jogo FAC semi-final adicionado')
-					temp = subst_P("P1", "P2", temp)
-
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-
-				elif "j1=2" in temp:
-					temp.remove("j1=2")
-					print('Jogo FAC final adicionado')
-					temp = subst_P("P1", "P3", temp)
-					temp = subst_P("P2", "P3", temp)
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-				# print(temp)
-				if len(temp) > 0 and zz == 2:
-					print(temp)
-					result5_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-						# # var_dump.var_dump(variavel[0])
-						# print(result3_1.stdout)
-					variavel = result5_1.stdout.split('\n')
-					while "" in variavel:
-						variavel.remove("")
-					# print(variavel)
-					sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-			else:
-				print('Nenhum resultado para FAC')
-
+		championshipNames.append("FAC")
+		urls.append(url_FAC)
 
 	if data0['EFL'] == 1:
-		result6 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_EFL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-		temp=[]
-		variavel=[]
-		# Wait for the program to finish
-		if result6.returncode != 0:
-			print(result6.stderr)
-		else:
-			# Print the stdout output if the subprocess ran successfully
-			if result6.stdout != '':
-				zz=0
-				variavel = result6.stdout.split('\n')
-				for o in variavel:
-						temp.append(o)
-				while "" in temp:
-					temp.remove("")
-				# print(temp)
-				if "j1=0" in temp:
-					print('Jogo EFL anterior as oitavas, nao adicionado')
-					temp = []
-				elif "j1=3" in temp:
-					zz=2
-					temp.remove("j1=3")
-					print('Jogo EFL encaminhado ao filtro')
-				elif "j1=1" in temp:
-					temp.remove("j1=1")
-					print('Jogo EFL semi-final adicionado')
-					temp = subst_P("P1", "P2", temp)
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-
-				elif "j1=2" in temp:
-					temp.remove("j1=2")
-					print('Jogo EFL final adicionado')
-					temp = subst_P("P1", "P3", temp)
-					temp = subst_P("P2", "P3", temp)
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-				# print(temp)
-				if len(temp) > 0 and zz == 2:
-					result6_1 = subprocess.run(['python', 'filtro_FAC.py', *temp], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-					variavel = result6_1.stdout.split('\n')
-					while "" in variavel:
-						variavel.remove("")
-					# print(variavel)
-					sorted_Jogos = sorted(variavel, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-			else:
-				print('Nenhum resultado para EFL')
+		championshipNames.append("EFL")
+		urls.append(url_EFL)
 
 
 	if data0['SC'] == 1:
-		result7 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-		temp=[]
-		variavel=[]
-		# Wait for the program to finish
-		if result7.returncode != 0:
-			print(result7.stderr)
-		else:
-			# Print the stdout output if the subprocess ran successfully
-			if result7.stdout != '':
-				zz=0
-				variavel = result7.stdout.split('\n')
-				for o in variavel:
-					temp.append(o)
-				while "" in temp:
-					temp.remove("")
-				# print(temp)
-				if "j1=0" in temp:
-					print('Jogo SC anterior as quartas, nao adicionado')
-					temp = []
-				elif "j1=3" in temp:
-					zz=2
-					temp.remove("j1=3")
-					print('Jogos SC quartas-de-final adicionados')
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-				elif "j1=1" in temp:
-					temp.remove("j1=1")
-					print('Jogo SC semi-final adicionado')
-
-					temp = subst_P("P1", "P2", temp)
-
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-
-				elif "j1=2" in temp:
-					temp.remove("j1=2")
-					print('Jogo SC final adicionado')
-
-					temp = subst_P("P1", "P3", temp)
-
-					temp = subst_P("P2", "P3", temp)
-
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-			else:
-				print('Nenhum resultado para SC')
+		championshipNames.append("SC")
+		urls.append(url_SC)
 
 
 	if data0['SLC'] == 1:
-		result8 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_SLC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-		temp=[]
-		variavel=[]
-		# Wait for the program to finish
-		if result8.returncode != 0:
-			print(result8.stderr)
-		else:
-			# Print the stdout output if the subprocess ran successfully
-			if result8.stdout != '':
-				zz=0
-				variavel = result8.stdout.split('\n')
-				for o in variavel:
-					temp.append(o)
-				while "" in temp:
-					temp.remove("")
-				# print(temp)
-				if "j1=0" in temp:
-					print('Jogo SLC anterior as quartas, nao adicionado')
-					temp = []
-				elif "j1=3" in temp:
-					zz=2
-					temp.remove("j1=3")
-					print('Jogos SLC quartas-de-final adicionados')
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-				elif "j1=1" in temp:
-					temp.remove("j1=1")
-					index1 = 0
-					print('Jogo SLC semi-final adicionado')
-					temp = subst_P("P1", "P2", temp)
-
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-
-				elif "j1=2" in temp:
-					temp.remove("j1=2")
-					index1=0
-					print('Jogo SLC final adicionado')
-
-					temp = subst_P("P1", "P3", temp)
-					temp = subst_P("P2", "P3", temp)
-
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-			else:
-				print('Nenhum resultado para SLC')
+		championshipNames.append("SLC")
+		urls.append(url_SLC)
 
 	if data0['USC'] == 1:
-		result9 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_USC], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-		temp=[]
-		variavel=[]
-		index1 = 0
-		# Wait for the program to finish
-		if result9.returncode != 0:
-			print(result9.stderr)
-		else:
-			# Print the stdout output if the subprocess ran successfully
-			if result9.stdout != '':
-				zz=0
-				variavel = result9.stdout.split('\n')
-				for o in variavel:
-					temp.append(o)
-				while "" in temp:
-					temp.remove("")
-
-				temp = subst_P("P1", "P2", temp)
-
-				print("Jogo adicionado para USC")
-
-				temp = after_FACS_filter(temp, inicio_bolao_date)
-
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-				for o in sorted_Jogos:
-					Jogos.append(o)
-
-			else:
-				print('Nenhum resultado para USC')
+		championshipNames.append("USC")
+		urls.append(url_USC)
 
 	if data0['QUAL_UCL'] == 1:
-		result10 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UCL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-		temp=[]
-		variavel=[]
-		index1 = 0
-		# Wait for the program to finish
-		if result10.returncode != 0:
-			print(result10.stderr)
-		else:
-			# Print the stdout output if the subprocess ran successfully
-			if result10.stdout != '':
-				zz=0
-				variavel = result10.stdout.split('\n')
-				for o in variavel:
-					temp.append(o)
-				while "" in temp:
-					temp.remove("")
-
-				print("Jogo encaminhado ao filtro para qualificatorias UCL")
-
-				temp = after_FACS_filter(temp, inicio_bolao_date)
-
-				temp = subst_P("P2", "P1", temp)
-
-				sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-				for o in sorted_Jogos:
-					Jogos.append(o)
-
-			else:
-				print('Nenhum resultado para QUAL-UCL')
-
+		championshipNames.append("QUAL_UCL")
+		urls.append(url_QUAL_UCL)
 
 	if data0['UCL'] == 1:
-		result11 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_UCL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-		temp=[]
-		variavel=[]
-		# Wait for the program to finish
-		if result11.returncode != 0:
-			print(result11.stderr)
-		else:
-			# Print the stdout output if the subprocess ran successfully
-			if result11.stdout != '':
-				zz=0
-				variavel = result11.stdout.split('\n')
-				for o in variavel:
-						temp.append(o)
-				while "" in temp:
-					temp.remove("")
-				# print(temp)
-				if "j1=0" in temp:
-					temp.remove("j1=0")
-					print('Jogo UCL adicionado')
-
-					# pdb.set_trace()
-					temp = subst_P("P2", "P1", temp)
-
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-				elif "j1=3" in temp:
-					zz=2
-					temp.remove("j1=3")
-
-					temp = subst_P("P1", "P2", temp)
-
-					print('Jogo UCL oitavas/quartas adicionado')
-
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-				elif "j1=1" in temp:
-					temp.remove("j1=1")
-					index1 = 0
-					print('Jogo UCL semi-final adicionado')
-					temp = subst_P("P1", "P3", temp)
-					temp = subst_P("P2", "P3", temp)
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-
-				elif "j1=2" in temp:
-					temp.remove("j1=2")
-					index1=0
-					print('Jogo UCL final adicionado')
-
-					temp = subst_P("P1", "P4", temp)
-					temp = subst_P("P2", "P4", temp)
-
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-
-			else:
-				print('Nenhum resultado para UCL')
-
-
+		championshipNames.append("UCL")
+		urls.append(url_UCL)
 
 	if data0['QUAL_UEL'] == 1:
-		result12 = subprocess.run(['python', 'buscador_jogosv3.py', *dt, *dt2, url_QUAL_UEL], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-		# # p1 = subprocess.Popen(['python', 'iniciador_de_string.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		championshipNames.append("QUAL_UEL")
+		urls.append(url_QUAL_UEL)
 
-		temp=[]
-		variavel=[]
-		index1 = 0
-		# Wait for the program to finish
-		if result12.returncode != 0:
-			print(result12.stderr)
-		else:
-			# Print the stdout output if the subprocess ran successfully
-			if result12.stdout != '':
-				zz=0
-				variavel = result12.stdout.split('\n')
-				for o in variavel:
-					temp.append(o)
-				while "" in temp:
-					temp.remove("")
 
-				print("Jogo encaminhado ao filtro para qualificatorias UEL")
-
-				temp = after_FACS_filter(temp, inicio_bolao_date)
-
-				if len(temp) > 0:
-					temp = subst_P("P2", "P1", temp)
-					sorted_Jogos = sorted(temp, key=lambda s: tuple(s.split(' - ')[-2:]))
-					for o in sorted_Jogos:
-						Jogos.append(o)
-			else:
-				print('Nenhum resultado para QUAL-UEL')
 
 
 

@@ -280,10 +280,28 @@ def main_buscador_jogosv3(dt, dt2, url):
 
 
 	def set_date(data3, j, Rivalidades, contador, tags):
-		# for u0 in Rivalidades:
-		# 	if j in u0:
+
+
+		checker = 1
+
+		if " , " in j:
+			temp = j.split(" , ")
+			team_1_temp = temp[0]
+			team_2_temp = temp[1]
+
+			# In case the scraped site are providing two teams in place of one
+		try:
+			if j in Rivalidades[0] or j in Rivalidades[1] or j in Rivalidades[2] or j in Rivalidades[3]:
+				checker = 0
+			elif team_1_temp in Rivalidades[0] or team_1_temp in Rivalidades[1] or team_1_temp in Rivalidades[2] or team_1_temp in Rivalidades[3]:
+				checker = 0
+			elif team_2_temp in Rivalidades[0] or team_2_temp in Rivalidades[1] or team_2_temp in Rivalidades[2] or team_2_temp in Rivalidades[3]:
+				checker = 0
+		except:
+			checker = 1
+
 		esquema = []
-		if j in Rivalidades[0] or j in Rivalidades[1] or j in Rivalidades[2] or j in Rivalidades[3]:
+		if checker == 0:
 			if contador % 2 == 0:
 				esquema = tags.find_previous_sibling('td')
 				# try except para o caso de não ter ainda a hora disponível do jogo
@@ -526,9 +544,20 @@ def main_buscador_jogosv3(dt, dt2, url):
 			for tags in x:
 				try:
 					if tags.find('a') is None:
-						continue
+						try:
+							temp = tags.text.split(" / ")
+							team_1_temp = temp[0]
+							team_2_temp = temp[1]
+							team_1_temp = replace_abv(team_1_temp)
+							team_2_temp = replace_abv(team_2_temp)
+							checker = 1
+						except:
+							team_1_temp = ""
+							team_2_temp = ""
+							continue
 
 					y = tags.find('a').text
+					checker = 0
 					dt3 = gmt.localize(datetime.strptime(y, "%d/%m/%Y"))
 
 					#Selecionando a parte do campeonanto que vamos pegar, tratamento especial para copas
@@ -545,7 +574,12 @@ def main_buscador_jogosv3(dt, dt2, url):
 						elif checking_rescheduling(y) == "normal":
 							rescheduling_count = rescheduling_count + 1
 						else:
-							j = replace_abv(y)
+							if checker == 0:
+								j = replace_abv(y)
+								# pdb.set_trace()
+							if checker == 1:
+								# pdb.set_trace()
+								j = team_1_temp + " , " + team_2_temp
 
 							# montando os jogos com as datas setadas
 							time0, hora_brasil_str, dia_mes_str, contador = set_date(data3, j, Rivalidades, contador, tags)
@@ -571,6 +605,7 @@ def main_buscador_jogosv3(dt, dt2, url):
 			for y in range(len(Rivalidades)):
 
 				try:
+					# pdb.set_trace()
 					if time[x+1] in Rivalidades[y][(time[x])]:
 						peso.append('P2')
 
@@ -578,41 +613,44 @@ def main_buscador_jogosv3(dt, dt2, url):
 						peso.append('P1')
 
 				except:
-					continue
-			jogos.append(time[x] + " x " + time[x+1])
+					# continue
+					peso.append('P1')
+			try:
+				jogos.append(time[x] + " x " + time[x+1])
 
-			jogos_semana.append(jogos[contadorx] + " - " + peso[contadorx] + " (" + liga + ") - " + dia[contadorx] + " - " +hora[contadorx])
-			contadorx = contadorx + 1
+				jogos_semana.append(jogos[contadorx] + " - " + peso[contadorx] + " (" + liga + ") - " + dia[contadorx] + " - " +hora[contadorx])
+				contadorx = contadorx + 1
+			except:
+				contadorx = contadorx + 1
+				continue
 		else:
 			continue
 	contadory = 0
 	lista_delete_time = []
-	lista_delete_peso = []
-	lista_delete_jogos = []
-	lista_delete_dia = []
-	lista_delete_hora = []
 	lista_delete_jogos_semana = []
 
 	# Removing rescheduled game
+
+
 	if len(rescheduling) > 0:
 		for index in reversed(range(len(rescheduling))):
 			del jogos_semana[int(rescheduling[index])]
 
-
+	for u in range(len(jogos_semana)):
+		print(jogos_semana[u])
 
 	# Casos especiais em que os times não estão nas listas de times ingleses e escoceses, se nenhum dos times do jogo está nessas listas, o jogo é removido
 	for u in range(len(time)):
 		if u % 2 == 0:
 			# print(time[u])
-			if not time[u] in Rivalidades[0] and not time[u+1] in Rivalidades[0] and not time[u] in Rivalidades[1] and not time[u+1] in Rivalidades[1] and not time[u] in Rivalidades[2] and not time[u+1] in Rivalidades[2]:
+			# print(time[u+1])
+			try:
+				if not time[u] in Rivalidades[0] and not time[u+1] in Rivalidades[0] and not time[u] in Rivalidades[1] and not time[u+1] in Rivalidades[1] and not time[u] in Rivalidades[2] and not time[u+1] in Rivalidades[2]:
 
-				lista_delete_time.extend([u, u+1])
-				lista_delete_peso.append(int(u/2))
-				lista_delete_jogos.append(int(u/2))
-				lista_delete_dia.append(int(u/2))
-				lista_delete_hora.append(int(u/2))
-				lista_delete_jogos_semana.append(int(u/2))
-
+					lista_delete_time.extend([u, u+1])
+					lista_delete_jogos_semana.append(int(u/2))
+			except:
+				continue
 				# print(time[u])
 		# contadory = contadory + 1
 		# print(u)
